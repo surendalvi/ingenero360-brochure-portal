@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IngeneroX360AI | Marketing Brochure & Demos Portal</title>
+    <!-- Favicon for Address Bar -->
+    <link rel="icon" type="image/png" href="/static/favicon.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <!-- Fonts & Font Awesome (Matching ingenerox.ai) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="brand">
+                <div class="brand-logo">
+                    <img src="/static/logo.png" alt="IngeneroX360AI Logo" class="brand-logo-img">
+                </div>
+            </div>
+            
+            <div class="nav-actions">
+                <button class="btn btn-secondary" id="btnSync" title="Sync now with GitHub">
+                    <i class="fa-solid fa-rotate"></i>
+                    <span class="sync-text">Refresh & Sync</span>
+                </button>
+                <button class="btn btn-primary" id="btnBulkDownload" title="Mass Download selected or all brochures as ZIP">
+                    <i class="fa-solid fa-file-zipper"></i>
+                    <span id="btnBulkDownloadText">Mass Download ZIP</span> (<span id="selectedCount">0</span>)
+                </button>
+                <button class="btn btn-secondary" id="btnAdminAccess" title="Admin Login / Access">
+                    <i class="fa-solid fa-shield-halved" id="adminIcon"></i>
+                    <span id="adminBtnText">Admin Access</span>
+                </button>
+                <button class="btn btn-primary" id="btnOpenUpload">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <span>Upload Brochure</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <!-- Main Top-Level Navigation Tabs -->
+        <div class="main-tabs-wrapper">
+            <button class="main-tab-btn active" id="tabBrochures">
+                <i class="fa-solid fa-folder-open"></i> Product Brochures
+            </button>
+            <button class="main-tab-btn" id="tabDemos">
+                <i class="fa-solid fa-laptop-code"></i> Demos & Video Portals
+            </button>
+        </div>
+
+        <!-- BROCHURES SECTION -->
+        <div id="brochuresSection">
+            <!-- Hero & Stats Header -->
+            <section class="hero-section">
+                <div class="hero-content">
+                    <h1>Marketing Assets & Product Brochures</h1>
+                    <p>Centralized repository for all ingeneroX360AI Suite solution one-pagers, technical details, and product collateral. Download individually or as a complete bundle.</p>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon icon-blue"><i class="fa-solid fa-book-open"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="statTotal">0</span>
+                            <span class="stat-label">Total Brochures</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon icon-teal"><i class="fa-solid fa-layer-group"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="statProducts">0</span>
+                            <span class="stat-label">Product Lines</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon icon-purple"><i class="fa-solid fa-file-pdf"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="statFormats">PDF / PPTX</span>
+                            <span class="stat-label">Supported Formats</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Controls Toolbar -->
+            <section class="toolbar-section">
+                <div class="search-bar-container">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="searchInput" placeholder="Search brochures by title, product line, or extension (e.g. CDUX360, Energy, PPTX)...">
+                    <button class="clear-search" id="btnClearSearch" style="display:none;"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+
+                <div class="filter-controls">
+                    <div class="filter-group">
+                        <label><i class="fa-solid fa-filter"></i> Format:</label>
+                        <select id="formatFilter">
+                            <option value="ALL">All Formats</option>
+                            <option value="PDF">PDF Documents</option>
+                            <option value="PPTX">PowerPoint (PPTX)</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label><i class="fa-solid fa-arrow-down-short-wide"></i> Sort By:</label>
+                        <select id="sortSelect">
+                            <option value="newest">Date (Newest First)</option>
+                            <option value="title_asc">Title (A - Z)</option>
+                            <option value="size_desc">File Size (Largest)</option>
+                        </select>
+                    </div>
+
+                    <div class="view-toggle">
+                        <button class="view-btn active" id="btnGridView" title="Grid View"><i class="fa-solid fa-border-all"></i></button>
+                        <button class="view-btn" id="btnListView" title="List View"><i class="fa-solid fa-list"></i></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Product Category Filter Pills -->
+            <section class="category-pills-section">
+                <div class="pills-container" id="categoryPills">
+                    <button class="pill-btn active" data-category="ALL">All Products</button>
+                </div>
+            </section>
+
+            <!-- Bulk Selection Action Bar -->
+            <div class="selection-bar" id="selectionBar">
+                <div class="selection-info">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="selectAllCheckbox">
+                        <span class="checkmark"></span>
+                        <span style="margin-left: 28px; font-weight:700;">Select All</span>
+                    </label>
+                    <span>&bull;</span>
+                    <span><strong id="selectedItemsText">0 items selected</strong></span>
+                </div>
+                <div class="selection-actions">
+                    <button class="btn btn-sm btn-secondary" id="btnToggleSelectAll">
+                        <i class="fa-solid fa-check-double"></i> Select All Brochures
+                    </button>
+                    <button class="btn btn-sm btn-secondary" id="btnDownloadAll">
+                        <i class="fa-solid fa-cloud-arrow-down"></i> Download All as ZIP
+                    </button>
+                    <button class="btn btn-sm btn-primary" id="btnDownloadSelected">
+                        <i class="fa-solid fa-file-zipper"></i> Download Selected ZIP
+                    </button>
+                </div>
+            </div>
+
+            <!-- Brochure Display Container -->
+            <section class="brochures-container">
+                <!-- Grid View -->
+                <div class="brochures-grid" id="brochuresGrid">
+                    <!-- Dynamic Brochure Cards -->
+                </div>
+
+                <!-- List View (Table) -->
+                <div class="brochures-list-wrapper" id="brochuresListWrapper" style="display: none;">
+                    <table class="brochures-table">
+                        <thead>
+                            <tr>
+                                <th width="80">
+                                    <label class="checkbox-container">
+                                        <input type="checkbox" id="selectAllTableCheckbox">
+                                        <span class="checkmark"></span>
+                                        <span style="margin-left: 24px; font-size: 0.8rem; font-weight: 700;">Select</span>
+                                    </label>
+                                </th>
+                                <th width="80">Preview</th>
+                                <th>Brochure Title</th>
+                                <th>Product Line</th>
+                                <th>Format</th>
+                                <th>Size</th>
+                                <th>Date Modified</th>
+                                <th text-align="right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="brochuresTableBody">
+                            <!-- Dynamic Rows -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Empty State -->
+                <div class="empty-state" id="emptyState" style="display: none;">
+                    <i class="fa-regular fa-folder-open empty-icon"></i>
+                    <h3>No Brochures Found</h3>
+                    <p>No product brochures matched your search or category filter criteria.</p>
+                    <button class="btn btn-secondary" id="btnResetFilters">Reset Filters</button>
+                </div>
+            </section>
+        </div>
+
+        <!-- DEMOS SECTION -->
+        <div id="demosSection" style="display: none;">
+            <section class="demos-header-card">
+                <div class="demos-header-info">
+                    <h2><i class="fa-solid fa-desktop"></i> Interactive Demos & Video Portals</h2>
+                    <p>Access live prototype environments, real-time dashboard demos, and public video walkthroughs for ingeneroX360AI solutions. All links are backed up to GitHub.</p>
+                </div>
+                <button class="btn btn-primary" id="btnOpenAddDemo">
+                    <i class="fa-solid fa-plus"></i> Add Demo Link
+                </button>
+            </section>
+
+            <section class="demos-grid" id="demosGrid">
+                <!-- Dynamic Demo Cards -->
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <p>&copy; 2026 Ingenero Technologies. All rights reserved. &bull; Marketing Brochure & Demos Portal for <strong>ingeneroX360AI Suite</strong></p>
+        </div>
+    </footer>
+
+    <!-- Upload Brochure Modal -->
+    <div class="modal-overlay" id="uploadModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-cloud-arrow-up"></i> Upload New Brochure</h3>
+                <button class="modal-close" id="btnCloseUpload"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="drop-zone" id="dropZone">
+                    <i class="fa-solid fa-file-circle-plus drop-icon"></i>
+                    <p class="drop-text">Drag & drop your brochure file here</p>
+                    <span class="drop-subtext">Supports PDF and PowerPoint (.pptx) up to 100MB</span>
+                    <input type="file" id="fileInput" accept=".pdf,.pptx,.ppt,.doc,.docx" style="display:none;">
+                    <button class="btn btn-secondary btn-browse" onclick="document.getElementById('fileInput').click()">Browse File</button>
+                </div>
+
+                <div class="file-preview-area" id="selectedFileArea" style="display:none;">
+                    <div class="selected-file-info">
+                        <i class="fa-solid fa-file-pdf file-icon-large" id="selectedFileIcon"></i>
+                        <div>
+                            <h4 id="selectedFileName">filename.pdf</h4>
+                            <span id="selectedFileSize">0 KB</span>
+                        </div>
+                    </div>
+                    <button class="btn-remove-file" id="btnRemoveFile"><i class="fa-solid fa-trash-can"></i></button>
+                </div>
+
+                <div class="upload-progress-container" id="uploadProgressContainer" style="display:none;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <span id="uploadStatusText">Uploading...</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btnCancelUpload">Cancel</button>
+                <button class="btn btn-primary" id="btnSubmitUpload" disabled>
+                    <i class="fa-solid fa-upload"></i> Upload Brochure
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add / Edit Demo Modal -->
+    <div class="modal-overlay" id="demoModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="demoModalTitle"><i class="fa-solid fa-link"></i> Add New Demo Link</h3>
+                <button class="modal-close" id="btnCloseDemoModal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="filter-group" style="display:flex; flex-direction:column; align-items:stretch; gap:0.4rem; margin-bottom:1rem;">
+                    <label style="font-weight:700;">Demo / Dashboard Title:</label>
+                    <input type="text" id="demoTitleInput" placeholder="e.g. Furnace Dashboard Demo" style="padding:0.65rem 1rem; border:1px solid var(--slate-300); border-radius:var(--radius-sm); font-size:0.9rem;">
+                </div>
+                <div class="filter-group" style="display:flex; flex-direction:column; align-items:stretch; gap:0.4rem; margin-bottom:1rem;">
+                    <label style="font-weight:700;">Demo URL / Link:</label>
+                    <input type="url" id="demoUrlInput" placeholder="e.g. https://furnace.ingenero360.ai/" style="padding:0.65rem 1rem; border:1px solid var(--slate-300); border-radius:var(--radius-sm); font-size:0.9rem;">
+                </div>
+                <div class="filter-group" style="display:flex; flex-direction:column; align-items:stretch; gap:0.4rem; margin-bottom:1rem;">
+                    <label style="font-weight:700;">Category:</label>
+                    <select id="demoCategoryInput" style="padding:0.65rem 1rem; border:1px solid var(--slate-300); border-radius:var(--radius-sm); font-size:0.9rem;">
+                        <option value="Live Dashboard">Live Dashboard</option>
+                        <option value="Demo Videos">Demo Videos</option>
+                        <option value="Interactive Prototype">Interactive Prototype</option>
+                        <option value="Webinar & Walkthrough">Webinar & Walkthrough</option>
+                    </select>
+                </div>
+                <div class="filter-group" style="display:flex; flex-direction:column; align-items:stretch; gap:0.4rem;">
+                    <label style="font-weight:700;">Description:</label>
+                    <textarea id="demoDescInput" rows="3" placeholder="Brief description of the demo..." style="padding:0.65rem 1rem; border:1px solid var(--slate-300); border-radius:var(--radius-sm); font-size:0.9rem; font-family:var(--font);"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btnCancelDemoModal">Cancel</button>
+                <button class="btn btn-primary" id="btnSubmitDemo">
+                    <i class="fa-solid fa-floppy-disk"></i> Save & Sync to GitHub
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div class="modal-overlay" id="adminLoginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-user-shield"></i> Admin Access Authentication</h3>
+                <button class="modal-close" id="btnCloseAdminLogin"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 1rem; color: var(--slate-600); font-size: 0.9rem;">Enter the admin passcode to unlock file editing, renaming, uploading, demo management, and deleting capabilities.</p>
+                <div class="filter-group" style="display:flex; flex-direction:column; align-items:stretch; gap:0.5rem;">
+                    <label style="font-weight:700;">Admin Password:</label>
+                    <input type="password" id="adminPasswordInput" placeholder="Enter admin password (default: ingenero360)" style="padding:0.65rem 1rem; border:1px solid var(--slate-300); border-radius:var(--radius-sm); font-size:0.9rem;">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btnCancelAdminLogin">Cancel</button>
+                <button class="btn btn-primary" id="btnSubmitAdminLogin">
+                    <i class="fa-solid fa-key"></i> Unlock Admin Access
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Rename Modal -->
+    <div class="modal-overlay" id="adminRenameModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-pen-to-square"></i> Modify / Rename Brochure</h3>
+                <button class="modal-close" id="btnCloseAdminRename"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="filter-group" style="display:flex; flex-direction:column; align-items:stretch; gap:0.5rem; margin-bottom:1rem;">
+                    <label style="font-weight:700;">Original File:</label>
+                    <input type="text" id="renameOriginalInput" readonly disabled style="padding:0.65rem 1rem; background:var(--slate-100); border:1px solid var(--slate-300); border-radius:var(--radius-sm);">
+                </div>
+                <div class="filter-group" style="display:flex; flex-direction:column; align-items:stretch; gap:0.5rem;">
+                    <label style="font-weight:700;">New File Title / Name:</label>
+                    <input type="text" id="renameNewInput" placeholder="Enter new filename" style="padding:0.65rem 1rem; border:1px solid var(--slate-300); border-radius:var(--radius-sm);">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btnCancelAdminRename">Cancel</button>
+                <button class="btn btn-primary" id="btnSubmitRename">
+                    <i class="fa-solid fa-floppy-disk"></i> Save Changes & Sync
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Delete Confirmation Modal -->
+    <div class="modal-overlay" id="adminDeleteModal">
+        <div class="modal-content">
+            <div class="modal-header" style="background:var(--pdf-red);">
+                <h3><i class="fa-solid fa-triangle-exclamation"></i> Delete Brochure Confirmation</h3>
+                <button class="modal-close" id="btnCloseAdminDelete"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size:0.95rem; color:var(--slate-700);">Are you sure you want to permanently delete <strong id="deleteTargetFilename">file.pdf</strong>?</p>
+                <p style="font-size:0.82rem; color:var(--slate-500); margin-top:0.5rem;">This action will delete the file locally and sync the deletion to GitHub.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btnCancelAdminDelete">Cancel</button>
+                <button class="btn btn-primary" id="btnConfirmDelete" style="background:var(--pdf-red);">
+                    <i class="fa-solid fa-trash-can"></i> Permanently Delete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PDF Preview Modal -->
+    <div class="modal-overlay" id="previewModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3 id="previewTitle"><i class="fa-solid fa-file-pdf"></i> Brochure Preview</h3>
+                <div class="preview-actions">
+                    <a href="#" id="btnOpenNewTab" target="_blank" class="btn btn-sm btn-secondary" title="Open in New Tab">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Fullscreen
+                    </a>
+                    <a href="#" id="btnDownloadPreview" class="btn btn-sm btn-primary" download>
+                        <i class="fa-solid fa-download"></i> Download
+                    </a>
+                    <button class="modal-close" id="btnClosePreview"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+            <div class="modal-body modal-preview-body">
+                <iframe id="previewIframe" src="" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

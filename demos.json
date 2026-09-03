@@ -1,0 +1,16 @@
+[
+  {
+    "id": "demo-1",
+    "title": "Furnace Dashboard Demo",
+    "url": "https://furnace.ingenero360.ai/",
+    "category": "Live Dashboard",
+    "description": "Interactive real-time furnace optimization and process monitoring AI dashboard for plant operations."
+  },
+  {
+    "id": "demo-2",
+    "title": "Ingenero360 Demo Videos",
+    "url": "https://demos.ingenero360.ai/public/",
+    "category": "Demo Videos",
+    "description": "Library of public product walkthrough videos, AI feature demonstrations, and solution walkthroughs."
+  }
+]

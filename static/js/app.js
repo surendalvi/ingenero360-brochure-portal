@@ -44,6 +44,27 @@ document.addEventListener('DOMContentLoaded', () => {
         return (sizeInBytes / (1024 * 1024)).toFixed(1) + ' MB';
     }
 
+    async function generateClientPdfThumbnail(fileOrBlob) {
+        if (typeof pdfjsLib === 'undefined' || !fileOrBlob) return null;
+        try {
+            const arrayBuffer = await fileOrBlob.arrayBuffer();
+            const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+            const pdf = await loadingTask.promise;
+            if (!pdf || pdf.numPages < 1) return null;
+            const page = await pdf.getPage(1);
+            const viewport = page.getViewport({ scale: 1.5 });
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            await page.render({ canvasContext: context, viewport: viewport }).promise;
+            return canvas.toDataURL('image/png');
+        } catch(e) {
+            console.error('PDF.js thumbnail generation error:', e);
+            return null;
+        }
+    }
+
     // Static fallback data with cover page thumbnails for GitHub Pages hosting
     const staticBrochuresFallback = [
         { filename: 'cduX360.pdf', title: 'cduX360 Brochure', category: 'CDUX360', format: 'PDF', ext: '.pdf', size_formatted: '604.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/cduX360.png', download_url: 'brochures/cduX360.pdf', preview_url: 'brochures/cduX360.pdf' },
@@ -177,19 +198,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 b.category = getFileCategory(b.title);
             }
         });
-    }
-
-    function exportUpdatedBrochuresJSON() {
-        const jsonStr = JSON.stringify(brochures, null, 2);
-        const blob = new Blob([jsonStr], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'brochures.json';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
     }
 
     function updateAdminNavUI() {
@@ -629,7 +637,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!uploadFile) return;
 
                 btnSubmitUpload.disabled = true;
-                btnSubmitUpload.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Uploading...';
+                btnSubmitUpload.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing & Uploading...';
 
                 const formData = new FormData();
                 formData.append('file', uploadFile);
@@ -647,15 +655,20 @@ document.addEventListener('DOMContentLoaded', () => {
                         return;
                     }
                 } catch (err) {
-                    console.log('Backend upload route unavailable, adding to client state.');
+                    console.log('Backend upload route unavailable, rendering client side.');
                 }
 
-                // Client-side fallback for static hosting
+                // Client-side thumbnail generation using PDF.js
                 const ext = uploadFile.name.substring(uploadFile.name.lastIndexOf('.')).toLowerCase();
                 const format = ext.replace('.', '').toUpperCase();
                 const category = getFileCategory(uploadFile.name);
                 const title = uploadFile.name.replace(/\.[^/.]+$/, "").replace(/[_]/g, ' ');
                 const fileObjectUrl = URL.createObjectURL(uploadFile);
+
+                let clientThumbUrl = null;
+                if (ext === '.pdf') {
+                    clientThumbUrl = await generateClientPdfThumbnail(uploadFile);
+                }
 
                 const newBrochure = {
                     filename: uploadFile.name,
@@ -666,7 +679,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     size_formatted: formatFileSize(uploadFile.size),
                     modified_time: Math.floor(Date.now() / 1000),
                     modified_date: 'Just now',
-                    thumbnail_url: null,
+                    thumbnail_url: clientThumbUrl,
                     download_url: fileObjectUrl,
                     preview_url: fileObjectUrl
                 };
@@ -678,8 +691,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderBrochures();
 
                 closeUploadModal();
-                exportUpdatedBrochuresJSON();
-                showToast(`Brochure "${uploadFile.name}" added & updated brochures.json downloaded to commit to GitHub!`, 'success');
+                showToast(`Brochure "${uploadFile.name}" uploaded with generated cover thumbnail!`, 'success');
             });
         }
 
@@ -873,8 +885,7 @@ document.addEventListener('DOMContentLoaded', () => {
             renderCategoryPills();
             renderBrochures();
             adminRenameModal.classList.remove('active');
-            exportUpdatedBrochuresJSON();
-            showToast(`Title modified! Exported brochures.json — upload to GitHub so all visitors see it!`, 'success');
+            showToast(`Brochure title modified & product tag updated to "${item.category}"`, 'success');
         }
     }
 
@@ -901,8 +912,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderCategoryPills();
         renderBrochures();
         adminDeleteModal.classList.remove('active');
-        exportUpdatedBrochuresJSON();
-        showToast('Brochure removed & exported updated brochures.json!', 'success');
+        showToast('Brochure removed.', 'success');
     }
 
     async function handleSaveDemo() {

@@ -1,9 +1,13 @@
 /**
  * IngeneroX360AI Suite Brochure & Demos Portal JavaScript App
  * Supports both Flask Server API and GitHub Pages Static Hosting via brochures.json & demos.json
+ * Features GitHub REST API direct auto-sync for instant worldwide visitor updates
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+    const GITHUB_OWNER = 'surendalvi';
+    const GITHUB_REPO = 'ingenero360-brochure-portal';
+
     const PRODUCT_CATEGORIES = [
         'CDUX360', 'CokerX360', 'EnergyX360', 'OutlierX360', 
         'ReliabilityX360', 'VDUX360', 'controllerX360', 
@@ -13,6 +17,109 @@ document.addEventListener('DOMContentLoaded', () => {
     const LOCAL_RENAMES_KEY = 'ingenero_custom_titles';
     const LOCAL_UPLOADS_KEY = 'ingenero_custom_uploads';
     const LOCAL_DELETIONS_KEY = 'ingenero_custom_deletions';
+    const GITHUB_PAT_KEY = 'ingenero_github_pat';
+
+    function getGitHubPAT() {
+        return localStorage.getItem(GITHUB_PAT_KEY) || '';
+    }
+
+    function saveGitHubPAT(token) {
+        localStorage.setItem(GITHUB_PAT_KEY, token.trim());
+    }
+
+    function fileToBase64(fileOrBlob) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const dataUrl = reader.result;
+                const base64 = dataUrl.split(',')[1];
+                resolve(base64);
+            };
+            reader.onerror = error => reject(error);
+            reader.readAsDataURL(fileOrBlob);
+        });
+    }
+
+    async function syncFileToGitHub(repoPath, base64Content, commitMsg) {
+        const pat = getGitHubPAT();
+        if (!pat) return false;
+
+        const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${repoPath}`;
+        
+        let sha = null;
+        try {
+            const getRes = await fetch(url, {
+                headers: { 'Authorization': `token ${pat}` }
+            });
+            if (getRes.ok) {
+                const fileInfo = await getRes.json();
+                sha = fileInfo.sha;
+            }
+        } catch(e) {}
+
+        const payload = {
+            message: commitMsg,
+            content: base64Content
+        };
+        if (sha) payload.sha = sha;
+
+        try {
+            const putRes = await fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${pat}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+            return putRes.ok;
+        } catch(e) {
+            console.error('GitHub API upload error:', e);
+            return false;
+        }
+    }
+
+    async function deleteFileFromGitHub(repoPath, commitMsg) {
+        const pat = getGitHubPAT();
+        if (!pat) return false;
+
+        const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${repoPath}`;
+        let sha = null;
+        try {
+            const getRes = await fetch(url, {
+                headers: { 'Authorization': `token ${pat}` }
+            });
+            if (getRes.ok) {
+                const fileInfo = await getRes.json();
+                sha = fileInfo.sha;
+            }
+        } catch(e) {}
+
+        if (!sha) return false;
+
+        try {
+            const delRes = await fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `token ${pat}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: commitMsg, sha: sha })
+            });
+            return delRes.ok;
+        } catch(e) {
+            console.error('GitHub API delete error:', e);
+            return false;
+        }
+    }
+
+    async function syncCatalogToGitHub() {
+        const pat = getGitHubPAT();
+        if (!pat) return false;
+        const catalogJson = JSON.stringify(brochures, null, 2);
+        const catalogBase64 = btoa(unescape(encodeURIComponent(catalogJson)));
+        return await syncFileToGitHub('brochures.json', catalogBase64, 'Update brochures.json catalog');
+    }
 
     function getSavedCustomTitles() {
         try {
@@ -197,6 +304,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnCancelAdminLogin = document.getElementById('btnCancelAdminLogin');
     const btnSubmitAdminLogin = document.getElementById('btnSubmitAdminLogin');
     const adminPasswordInput = document.getElementById('adminPasswordInput');
+
+    const githubTokenModal = document.getElementById('githubTokenModal');
+    const btnCloseGitHubToken = document.getElementById('btnCloseGitHubToken');
+    const btnCancelGitHubToken = document.getElementById('btnCancelGitHubToken');
+    const btnSaveGitHubToken = document.getElementById('btnSaveGitHubToken');
+    const githubTokenInput = document.getElementById('githubTokenInput');
 
     const adminRenameModal = document.getElementById('adminRenameModal');
     const btnCloseAdminRename = document.getElementById('btnCloseAdminRename');
@@ -635,6 +748,21 @@ document.addEventListener('DOMContentLoaded', () => {
         btnCancelAdminLogin.addEventListener('click', () => adminLoginModal.classList.remove('active'));
         btnSubmitAdminLogin.addEventListener('click', handleAdminLogin);
 
+        if (btnCloseGitHubToken) btnCloseGitHubToken.addEventListener('click', () => githubTokenModal.classList.remove('active'));
+        if (btnCancelGitHubToken) btnCancelGitHubToken.addEventListener('click', () => githubTokenModal.classList.remove('active'));
+        if (btnSaveGitHubToken) {
+            btnSaveGitHubToken.addEventListener('click', () => {
+                const token = githubTokenInput.value.trim();
+                if (token) {
+                    saveGitHubPAT(token);
+                    githubTokenModal.classList.remove('active');
+                    showToast('GitHub Personal Access Token saved! Background Auto-Sync activated.', 'success');
+                } else {
+                    showToast('Please enter a valid GitHub token', 'error');
+                }
+            });
+        }
+
         adminPasswordInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') handleAdminLogin();
         });
@@ -744,8 +872,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     modified_time: Math.floor(Date.now() / 1000),
                     modified_date: 'Just now',
                     thumbnail_url: clientThumbUrl,
-                    download_url: fileObjectUrl,
-                    preview_url: fileObjectUrl
+                    download_url: `brochures/${uploadFile.name}`,
+                    preview_url: `brochures/${uploadFile.name}`
                 };
 
                 saveCustomUpload(newBrochure);
@@ -758,7 +886,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderBrochures();
 
                 closeUploadModal();
-                showToast(`Brochure "${uploadFile.name}" uploaded!`, 'success');
+
+                // GitHub REST API Background Sync if Token is set
+                const pat = getGitHubPAT();
+                if (pat) {
+                    try {
+                        const fileBase64 = await fileToBase64(uploadFile);
+                        await syncFileToGitHub(`brochures/${uploadFile.name}`, fileBase64, `Upload brochure ${uploadFile.name}`);
+                        if (clientThumbUrl && clientThumbUrl.startsWith('data:image')) {
+                            const thumbBase64 = clientThumbUrl.split(',')[1];
+                            const thumbStem = uploadFile.name.replace(/\.[^/.]+$/, "");
+                            await syncFileToGitHub(`static/thumbnails/${thumbStem}.png`, thumbBase64, `Add thumbnail for ${uploadFile.name}`);
+                        }
+                        await syncCatalogToGitHub();
+                        showToast(`Brochure "${uploadFile.name}" committed to GitHub! Live for all visitors in 30s.`, 'success');
+                    } catch(e) {
+                        console.error('GitHub Sync failed:', e);
+                        showToast(`Brochure added locally! Remember to upload ${uploadFile.name} to brochures/ on GitHub for worldwide visitors.`, 'info');
+                    }
+                } else {
+                    showToast(`Brochure "${uploadFile.name}" added locally! (To auto-sync uploads directly to GitHub for all visitors worldwide, configure GitHub PAT in Admin mode).`, 'info');
+                }
             });
         }
 
@@ -950,14 +1098,19 @@ document.addEventListener('DOMContentLoaded', () => {
             renderCategoryPills();
             renderBrochures();
             adminRenameModal.classList.remove('active');
-            showToast(`Brochure title modified & product tag updated to "${item.category}"`, 'success');
+            
+            if (getGitHubPAT()) {
+                syncCatalogToGitHub();
+                showToast(`Title modified and synced to GitHub!`, 'success');
+            } else {
+                showToast(`Brochure title modified & product tag updated to "${item.category}"`, 'success');
+            }
         }
     }
 
     async function handleAdminDelete() {
         if (!activeTargetFilename) return;
 
-        // Save deletion permanently into local storage
         saveCustomDeletion(activeTargetFilename);
 
         try {
@@ -973,9 +1126,10 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Backend delete route unavailable, updating local client state.');
         }
 
-        brochures = brochures.filter(b => b.filename !== activeTargetFilename);
+        const filenameToDelete = activeTargetFilename;
+        brochures = brochures.filter(b => b.filename !== filenameToDelete);
         brochures = filterOutSavedDeletions(brochures);
-        selectedFiles.delete(activeTargetFilename);
+        selectedFiles.delete(filenameToDelete);
 
         categories = sortedCategories(brochures);
         updateStats();
@@ -983,6 +1137,14 @@ document.addEventListener('DOMContentLoaded', () => {
         renderBrochures();
         adminDeleteModal.classList.remove('active');
         showToast('Brochure removed.', 'success');
+
+        if (getGitHubPAT()) {
+            deleteFileFromGitHub(`brochures/${filenameToDelete}`, `Delete brochure ${filenameToDelete}`);
+            const stem = filenameToDelete.replace(/\.[^/.]+$/, "");
+            deleteFileFromGitHub(`static/thumbnails/${stem}.png`, `Delete thumbnail for ${filenameToDelete}`);
+            syncCatalogToGitHub();
+            showToast('Brochure and catalog deletion synced directly to GitHub!', 'success');
+        }
     }
 
     async function handleSaveDemo() {
@@ -1001,6 +1163,11 @@ document.addEventListener('DOMContentLoaded', () => {
         renderDemos();
         demoModal.classList.remove('active');
         showToast('Demo link added!', 'success');
+
+        if (getGitHubPAT()) {
+            const demosBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(demos, null, 2))));
+            syncFileToGitHub('demos.json', demosBase64, `Add demo link: ${title}`);
+        }
     }
 
     function openPreview(filename, title, previewUrl, format) {

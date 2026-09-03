@@ -403,6 +403,29 @@
         </div>
     </div>
 
+    <!-- GitHub PAT Configuration Modal -->
+    <div class="modal-overlay" id="githubTokenModal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3><i class="fa-brands fa-github"></i> GitHub Auto-Sync Setup</h3>
+                <button class="modal-close" id="btnCloseGitHubToken"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size:0.9rem; color:var(--slate-600); margin-bottom:1rem;">
+                    Enter your GitHub Personal Access Token to enable <strong>automatic background uploads & deletions</strong> directly to GitHub Pages for all visitors worldwide.
+                </p>
+                <div class="form-group">
+                    <label style="font-weight:600; font-size:0.85rem;">GitHub Personal Access Token (PAT)</label>
+                    <input type="password" class="form-control" id="githubTokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" style="width:100%; padding:0.6rem; border:1px solid var(--slate-300); border-radius:6px; margin-top:0.4rem;">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btnCancelGitHubToken">Cancel</button>
+                <button class="btn btn-primary" id="btnSaveGitHubToken">Save Token & Enable Sync</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Notification Toast -->
     <div class="toast-container" id="toastContainer"></div>
 

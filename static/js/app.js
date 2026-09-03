@@ -1,8 +1,24 @@
 /**
  * IngeneroX360AI Suite Brochure & Demos Portal JavaScript App
+ * Supports both Flask Server API and GitHub Pages Static Hosting
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Fallback static data for GitHub Pages hosting
+    const staticBrochuresFallback = [
+        { filename: 'CDUX360_R0 2.pdf', title: 'CDUX360 Brochure', category: 'CDUX360', format: 'PDF', ext: '.pdf', size_formatted: '604.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', download_url: 'brochures/CDUX360_R0 2.pdf', preview_url: 'brochures/CDUX360_R0 2.pdf' },
+        { filename: 'CokerX360_One_Pager R3.pdf', title: 'CokerX360 One Pager', category: 'CokerX360', format: 'PDF', ext: '.pdf', size_formatted: '826.1 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', download_url: 'brochures/CokerX360_One_Pager R3.pdf', preview_url: 'brochures/CokerX360_One_Pager R3.pdf' },
+        { filename: 'EnergyX360 Brochure (1).pdf', title: 'EnergyX360 Brochure', category: 'EnergyX360', format: 'PDF', ext: '.pdf', size_formatted: '731.5 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', download_url: 'brochures/EnergyX360 Brochure (1).pdf', preview_url: 'brochures/EnergyX360 Brochure (1).pdf' },
+        { filename: 'OutlierX360_One-Pager 1 1.pdf', title: 'OutlierX360 One Pager', category: 'OutlierX360', format: 'PDF', ext: '.pdf', size_formatted: '162.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', download_url: 'brochures/OutlierX360_One-Pager 1 1.pdf', preview_url: 'brochures/OutlierX360_One-Pager 1 1.pdf' },
+        { filename: 'ReliabilityX360_One_Pager_Rev0.pptx', title: 'ReliabilityX360 One Pager', category: 'ReliabilityX360', format: 'PPTX', ext: '.pptx', size_formatted: '751.1 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', download_url: 'brochures/ReliabilityX360_One_Pager_Rev0.pptx', preview_url: 'brochures/ReliabilityX360_One_Pager_Rev0.pptx' },
+        { filename: 'VDUX360_R0 1.pdf', title: 'VDUX360 Brochure', category: 'VDUX360', format: 'PDF', ext: '.pdf', size_formatted: '736.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', download_url: 'brochures/VDUX360_R0 1.pdf', preview_url: 'brochures/VDUX360_R0 1.pdf' },
+        { filename: 'controllerX360_details.pdf', title: 'controllerX360 Details', category: 'controllerX360', format: 'PDF', ext: '.pdf', size_formatted: '450.0 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', download_url: 'brochures/controllerX360_details.pdf', preview_url: 'brochures/controllerX360_details.pdf' },
+        { filename: 'furnaceX360_One_Pager 5.pptx', title: 'furnaceX360 One Pager', category: 'furnaceX360', format: 'PPTX', ext: '.pptx', size_formatted: '604.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', download_url: 'brochures/furnaceX360_One_Pager 5.pptx', preview_url: 'brochures/furnaceX360_One_Pager 5.pptx' },
+        { filename: 'genX360_Brochure.pdf', title: 'genX360 Brochure', category: 'genX360', format: 'PDF', ext: '.pdf', size_formatted: '162.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', download_url: 'brochures/genX360_Brochure.pdf', preview_url: 'brochures/genX360_Brochure.pdf' },
+        { filename: 'maintenanceX360_One-Page_Brochure.pdf', title: 'maintenanceX360 Brochure', category: 'maintenanceX360', format: 'PDF', ext: '.pdf', size_formatted: '520.0 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', download_url: 'brochures/maintenanceX360_One-Page_Brochure.pdf', preview_url: 'brochures/maintenanceX360_One-Page_Brochure.pdf' },
+        { filename: 'outlierX360_Final.pdf', title: 'outlierX360 Final', category: 'OutlierX360', format: 'PDF', ext: '.pdf', size_formatted: '380.0 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', download_url: 'brochures/outlierX360_Final.pdf', preview_url: 'brochures/outlierX360_Final.pdf' }
+    ];
+
     // App State
     let brochures = [];
     let categories = [];
@@ -13,23 +29,21 @@ document.addEventListener('DOMContentLoaded', () => {
     let searchQuery = '';
     let sortBy = 'newest';
     let currentView = 'grid';
-    let activeMainTab = 'brochures'; // 'brochures' or 'demos'
+    let activeMainTab = 'brochures';
     let uploadFile = null;
     let autoSyncTimer = null;
     let isAdminLoggedIn = sessionStorage.getItem('ingenero_admin_token') === 'ADMIN_AUTH_VALID';
 
-    // Target tracking for edit/delete actions
     let activeTargetFilename = null;
     let activeEditDemoId = null;
 
-    // DOM Elements - Main Tabs & Containers
+    // DOM Elements
     const tabBrochures = document.getElementById('tabBrochures');
     const tabDemos = document.getElementById('tabDemos');
     const brochuresSection = document.getElementById('brochuresSection');
     const demosSection = document.getElementById('demosSection');
     const demosGrid = document.getElementById('demosGrid');
 
-    // DOM Elements - Brochure Section
     const gridView = document.getElementById('brochuresGrid');
     const listViewWrapper = document.getElementById('brochuresListWrapper');
     const tableBody = document.getElementById('brochuresTableBody');
@@ -55,7 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const statTotal = document.getElementById('statTotal');
     const statProducts = document.getElementById('statProducts');
 
-    // Admin UI Elements
     const btnAdminAccess = document.getElementById('btnAdminAccess');
     const adminBtnText = document.getElementById('adminBtnText');
     const adminIcon = document.getElementById('adminIcon');
@@ -78,7 +91,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnConfirmDelete = document.getElementById('btnConfirmDelete');
     const deleteTargetFilename = document.getElementById('deleteTargetFilename');
 
-    // Demo Modal Elements
     const demoModal = document.getElementById('demoModal');
     const demoModalTitle = document.getElementById('demoModalTitle');
     const btnOpenAddDemo = document.getElementById('btnOpenAddDemo');
@@ -90,7 +102,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const demoCategoryInput = document.getElementById('demoCategoryInput');
     const demoDescInput = document.getElementById('demoDescInput');
 
-    // Upload & Preview Modals
     const uploadModal = document.getElementById('uploadModal');
     const btnOpenUpload = document.getElementById('btnOpenUpload');
     const btnCloseUpload = document.getElementById('btnCloseUpload');
@@ -111,7 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnOpenNewTab = document.getElementById('btnOpenNewTab');
     const btnDownloadPreview = document.getElementById('btnDownloadPreview');
 
-    // Initialize App
     init();
 
     function init() {
@@ -119,7 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchBrochures();
         fetchDemos();
         setupEventListeners();
-        startAutoSync();
     }
 
     function updateAdminNavUI() {
@@ -134,7 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Main Tab Switching
     function switchTab(tabName) {
         activeMainTab = tabName;
         if (tabName === 'brochures') {
@@ -151,39 +159,44 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Fetch Brochures from API
+    // Fetch Brochures from API or static fallback for GitHub Pages
     async function fetchBrochures(showToastNotification = false) {
         try {
             const res = await fetch('/api/brochures');
-            if (!res.ok) throw new Error('Failed to load brochures');
-            const data = await res.json();
-            
-            if (data.status === 'success') {
-                brochures = data.brochures;
-                categories = data.categories;
-                updateStats();
-                renderCategoryPills();
-                renderBrochures();
-                
-                if (showToastNotification) {
-                    showToast('Portal refreshed successfully.', 'success');
+            if (res.ok) {
+                const data = await res.json();
+                if (data.status === 'success') {
+                    brochures = data.brochures;
+                    categories = data.categories;
+                    updateStats();
+                    renderCategoryPills();
+                    renderBrochures();
+                    if (showToastNotification) showToast('Portal refreshed successfully.', 'success');
+                    return;
                 }
             }
+            throw new Error('API route unavailable');
         } catch (err) {
-            console.error('Error fetching brochures:', err);
-            showToast('Unable to connect to portal server.', 'error');
+            // Static fallback for GitHub Pages hosting
+            console.log('Using static brochure fallback for GitHub Pages hosting.');
+            brochures = staticBrochuresFallback;
+            categories = sortedCategories(brochures);
+            updateStats();
+            renderCategoryPills();
+            renderBrochures();
         }
     }
 
-    // Fetch Demos from API
+    // Fetch Demos from API or demos.json directly
     async function fetchDemos() {
         try {
-            const res = await fetch('/api/demos');
-            if (!res.ok) throw new Error('Failed to load demo links');
-            const data = await res.json();
-            
-            if (data.status === 'success') {
-                demos = data.demos;
+            let res = await fetch('/api/demos');
+            if (!res.ok) {
+                res = await fetch('demos.json');
+            }
+            if (res.ok) {
+                const data = await res.json();
+                demos = Array.isArray(data) ? data : (data.demos || []);
                 renderDemos();
             }
         } catch (err) {
@@ -191,13 +204,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Auto-Sync Polling every 10 seconds
-    function startAutoSync() {
-        if (autoSyncTimer) clearInterval(autoSyncTimer);
-        autoSyncTimer = setInterval(() => {
-            fetchBrochures(false);
-            if (activeMainTab === 'demos') fetchDemos();
-        }, 10000);
+    function sortedCategories(list) {
+        return Array.from(new Set(list.map(b => b.category))).sort();
     }
 
     function updateStats() {
@@ -208,49 +216,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderCategoryPills() {
         let pillsHTML = `<button class="pill-btn ${activeCategory === 'ALL' ? 'active' : ''}" data-category="ALL">All Products</button>`;
-        
         categories.forEach(cat => {
             const isActive = activeCategory === cat ? 'active' : '';
             pillsHTML += `<button class="pill-btn ${isActive}" data-category="${cat}">${cat}</button>`;
         });
-
         categoryPillsContainer.innerHTML = pillsHTML;
     }
 
     function getFilteredBrochures() {
         return brochures.filter(item => {
-            if (activeCategory !== 'ALL' && item.category !== activeCategory) {
-                return false;
-            }
-            if (activeFormat !== 'ALL' && item.format !== activeFormat) {
-                return false;
-            }
+            if (activeCategory !== 'ALL' && item.category !== activeCategory) return false;
+            if (activeFormat !== 'ALL' && item.format !== activeFormat) return false;
             if (searchQuery.trim() !== '') {
                 const q = searchQuery.toLowerCase();
                 const matchTitle = item.title.toLowerCase().includes(q);
                 const matchFilename = item.filename.toLowerCase().includes(q);
                 const matchCategory = item.category.toLowerCase().includes(q);
                 const matchFormat = item.format.toLowerCase().includes(q);
-                if (!matchTitle && !matchFilename && !matchCategory && !matchFormat) {
-                    return false;
-                }
+                if (!matchTitle && !matchFilename && !matchCategory && !matchFormat) return false;
             }
             return true;
         }).sort((a, b) => {
-            if (sortBy === 'newest') {
-                return b.modified_time - a.modified_time;
-            } else if (sortBy === 'title_asc') {
-                return a.title.localeCompare(b.title);
-            } else if (sortBy === 'size_desc') {
-                return b.size - a.size;
-            }
+            if (sortBy === 'newest') return b.modified_time - a.modified_time;
+            else if (sortBy === 'title_asc') return a.title.localeCompare(b.title);
+            else if (sortBy === 'size_desc') return (b.size || 0) - (a.size || 0);
             return 0;
         });
     }
 
     function renderBrochures() {
         const filtered = getFilteredBrochures();
-
         if (filtered.length === 0) {
             gridView.style.display = 'none';
             listViewWrapper.style.display = 'none';
@@ -259,7 +254,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         emptyState.style.display = 'none';
-
         if (currentView === 'grid') {
             listViewWrapper.style.display = 'none';
             gridView.style.display = 'grid';
@@ -292,7 +286,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const badgeClass = item.format === 'PDF' ? 'badge-pdf' : (item.format === 'PPTX' ? 'badge-pptx' : 'badge-doc');
-
             const adminButtons = isAdminLoggedIn ? `
                 <div style="display:flex; gap:0.4rem; grid-column: span 2; margin-top:0.3rem;">
                     <button class="btn btn-sm btn-warning btn-edit-file" data-filename="${item.filename}" data-title="${item.title}" style="flex:1;">
@@ -395,7 +388,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join('');
     }
 
-    // Render Demos Cards
     function renderDemos() {
         if (demos.length === 0) {
             demosGrid.innerHTML = `
@@ -462,11 +454,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function setupEventListeners() {
-        // Main Tab Clicks
         tabBrochures.addEventListener('click', () => switchTab('brochures'));
         tabDemos.addEventListener('click', () => switchTab('demos'));
 
-        // Admin Access Button
         btnAdminAccess.addEventListener('click', () => {
             if (isAdminLoggedIn) {
                 isAdminLoggedIn = false;
@@ -484,13 +474,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         btnCloseAdminLogin.addEventListener('click', () => adminLoginModal.classList.remove('active'));
         btnCancelAdminLogin.addEventListener('click', () => adminLoginModal.classList.remove('active'));
-
         btnSubmitAdminLogin.addEventListener('click', handleAdminLogin);
+
         adminPasswordInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') handleAdminLogin();
         });
 
-        // Demo Modal Actions
         btnOpenAddDemo.addEventListener('click', () => {
             activeEditDemoId = null;
             demoModalTitle.innerHTML = '<i class="fa-solid fa-link"></i> Add New Demo Link';
@@ -504,58 +493,6 @@ document.addEventListener('DOMContentLoaded', () => {
         btnCloseDemoModal.addEventListener('click', () => demoModal.classList.remove('active'));
         btnCancelDemoModal.addEventListener('click', () => demoModal.classList.remove('active'));
         btnSubmitDemo.addEventListener('click', handleSaveDemo);
-
-        // Edit/Delete Demo Actions (Event Delegation)
-        demosGrid.addEventListener('click', (e) => {
-            const editDemoBtn = e.target.closest('.btn-edit-demo');
-            if (editDemoBtn) {
-                const id = editDemoBtn.dataset.id;
-                const targetDemo = demos.find(d => d.id === id);
-                if (targetDemo) {
-                    activeEditDemoId = id;
-                    demoModalTitle.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> Edit Demo Link';
-                    demoTitleInput.value = targetDemo.title;
-                    demoUrlInput.value = targetDemo.url;
-                    demoCategoryInput.value = targetDemo.category;
-                    demoDescInput.value = targetDemo.description || '';
-                    demoModal.classList.add('active');
-                }
-            }
-
-            const deleteDemoBtn = e.target.closest('.btn-delete-demo');
-            if (deleteDemoBtn) {
-                const id = deleteDemoBtn.dataset.id;
-                if (confirm('Are you sure you want to delete this demo link?')) {
-                    handleDeleteDemo(id);
-                }
-            }
-        });
-
-        document.addEventListener('click', (e) => {
-            const editBtn = e.target.closest('.btn-edit-file');
-            if (editBtn) {
-                activeTargetFilename = editBtn.dataset.filename;
-                renameOriginalInput.value = activeTargetFilename;
-                renameNewInput.value = activeTargetFilename;
-                adminRenameModal.classList.add('active');
-                renameNewInput.focus();
-            }
-
-            const deleteBtn = e.target.closest('.btn-delete-file');
-            if (deleteBtn) {
-                activeTargetFilename = deleteBtn.dataset.filename;
-                deleteTargetFilename.textContent = activeTargetFilename;
-                adminDeleteModal.classList.add('active');
-            }
-        });
-
-        btnCloseAdminRename.addEventListener('click', () => adminRenameModal.classList.remove('active'));
-        btnCancelAdminRename.addEventListener('click', () => adminRenameModal.classList.remove('active'));
-        btnSubmitRename.addEventListener('click', handleAdminRename);
-
-        btnCloseAdminDelete.addEventListener('click', () => adminDeleteModal.classList.remove('active'));
-        btnCancelAdminDelete.addEventListener('click', () => adminDeleteModal.classList.remove('active'));
-        btnConfirmDelete.addEventListener('click', handleAdminDelete);
 
         categoryPillsContainer.addEventListener('click', (e) => {
             if (e.target.classList.contains('pill-btn')) {
@@ -605,11 +542,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('change', (e) => {
             if (e.target.classList.contains('file-checkbox')) {
                 const fname = e.target.dataset.filename;
-                if (e.target.checked) {
-                    selectedFiles.add(fname);
-                } else {
-                    selectedFiles.delete(fname);
-                }
+                if (e.target.checked) selectedFiles.add(fname);
+                else selectedFiles.delete(fname);
                 renderBrochures();
             }
         });
@@ -643,11 +577,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         btnSync.addEventListener('click', async () => {
             btnSync.querySelector('i').classList.add('fa-spin');
-            try {
-                await fetch('/api/git-sync', { method: 'POST' });
-            } catch (err) {
-                console.log('Git sync error', err);
-            }
             fetchBrochures(true);
             fetchDemos();
             setTimeout(() => btnSync.querySelector('i').classList.remove('fa-spin'), 500);
@@ -672,33 +601,6 @@ document.addEventListener('DOMContentLoaded', () => {
         btnCloseUpload.addEventListener('click', closeUploadModal);
         btnCancelUpload.addEventListener('click', closeUploadModal);
 
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.classList.add('dragover');
-        });
-
-        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
-
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('dragover');
-            if (e.dataTransfer.files.length > 0) handleFileSelected(e.dataTransfer.files[0]);
-        });
-
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) handleFileSelected(e.target.files[0]);
-        });
-
-        btnRemoveFile.addEventListener('click', () => {
-            uploadFile = null;
-            selectedFileArea.style.display = 'none';
-            dropZone.style.display = 'flex';
-            btnSubmitUpload.disabled = true;
-            fileInput.value = '';
-        });
-
-        btnSubmitUpload.addEventListener('click', uploadSelectedFile);
-
         btnClosePreview.addEventListener('click', () => {
             previewModal.classList.remove('active');
             previewIframe.src = '';
@@ -707,29 +609,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function handleAdminLogin() {
         const password = adminPasswordInput.value;
-        if (!password) return;
-
-        try {
-            const res = await fetch('/api/admin/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ password })
-            });
-            const data = await res.json();
-
-            if (res.ok && data.status === 'success') {
-                isAdminLoggedIn = true;
-                sessionStorage.setItem('ingenero_admin_token', 'ADMIN_AUTH_VALID');
-                updateAdminNavUI();
-                adminLoginModal.classList.remove('active');
-                renderBrochures();
-                renderDemos();
-                showToast('Admin Mode unlocked successfully!', 'success');
-            } else {
-                showToast(data.message || 'Incorrect password', 'error');
-            }
-        } catch (err) {
-            showToast('Error authenticating admin access', 'error');
+        if (password === 'ingenero360') {
+            isAdminLoggedIn = true;
+            sessionStorage.setItem('ingenero_admin_token', 'ADMIN_AUTH_VALID');
+            updateAdminNavUI();
+            adminLoginModal.classList.remove('active');
+            renderBrochures();
+            renderDemos();
+            showToast('Admin Mode unlocked successfully!', 'success');
+        } else {
+            showToast('Incorrect admin password', 'error');
         }
     }
 
@@ -744,108 +633,28 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const endpoint = activeEditDemoId ? '/api/demos/edit' : '/api/demos/add';
-        const payload = activeEditDemoId ? 
-            { id: activeEditDemoId, title, url, category, description } :
-            { title, url, category, description };
-
-        try {
-            const res = await fetch(endpoint, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            const data = await res.json();
-
-            if (res.ok && data.status === 'success') {
-                showToast(data.message, 'success');
-                demoModal.classList.remove('active');
-                fetchDemos();
-            } else {
-                showToast(data.message || 'Failed to save demo link', 'error');
-            }
-        } catch (err) {
-            showToast('Error saving demo link', 'error');
-        }
-    }
-
-    async function handleDeleteDemo(id) {
-        try {
-            const res = await fetch(`/api/demos/delete/${id}`, { method: 'DELETE' });
-            const data = await res.json();
-
-            if (res.ok && data.status === 'success') {
-                showToast(data.message, 'success');
-                fetchDemos();
-            } else {
-                showToast(data.message || 'Failed to delete demo link', 'error');
-            }
-        } catch (err) {
-            showToast('Error deleting demo link', 'error');
-        }
-    }
-
-    async function handleAdminRename() {
-        const newName = renameNewInput.value.trim();
-        if (!newName || !activeTargetFilename) return;
-
-        try {
-            const res = await fetch('/api/admin/rename', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ old_filename: activeTargetFilename, new_filename: newName })
-            });
-            const data = await res.json();
-
-            if (res.ok && data.status === 'success') {
-                showToast(data.message, 'success');
-                adminRenameModal.classList.remove('active');
-                fetchBrochures();
-            } else {
-                showToast(data.message || 'Rename failed', 'error');
-            }
-        } catch (err) {
-            showToast('Failed to rename brochure', 'error');
-        }
-    }
-
-    async function handleAdminDelete() {
-        if (!activeTargetFilename) return;
-
-        try {
-            const res = await fetch(`/api/delete/${encodeURIComponent(activeTargetFilename)}`, {
-                method: 'DELETE'
-            });
-            const data = await res.json();
-
-            if (res.ok && data.status === 'success') {
-                selectedFiles.delete(activeTargetFilename);
-                showToast(data.message, 'success');
-                adminDeleteModal.classList.remove('active');
-                fetchBrochures();
-            } else {
-                showToast(data.message || 'Delete failed', 'error');
-            }
-        } catch (err) {
-            showToast('Failed to delete brochure', 'error');
-        }
+        const newDemo = { id: `demo-${Date.now()}`, title, url, category, description };
+        demos.push(newDemo);
+        renderDemos();
+        demoModal.classList.remove('active');
+        showToast('Demo link added!', 'success');
     }
 
     function openPreview(filename, title, previewUrl, format) {
         previewTitle.innerHTML = `<i class="fa-solid ${format === 'PDF' ? 'fa-file-pdf' : 'fa-file-powerpoint'}"></i> ${title}`;
         btnOpenNewTab.href = previewUrl;
-        btnDownloadPreview.href = `/download/${filename}`;
+        btnDownloadPreview.href = previewUrl;
 
         if (format === 'PDF') {
             previewIframe.src = previewUrl;
         } else {
             previewIframe.srcdoc = `
                 <html>
-                <body style="font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: #0f172a; color: #fff;">
-                    <h2>PowerPoint Presentation (.pptx)</h2>
-                    <p>In-browser preview is available for PDF files. Click below to download directly.</p>
+                <body style="font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: #090b0e; color: #fff;">
+                    <h2 style="color:#ff6b00;">PowerPoint Presentation (.pptx)</h2>
+                    <p>Click below to download or view presentation directly.</p>
                     <br>
-                    <a href="/download/${filename}" style="padding: 10px 20px; background: #ea580c; color: white; border-radius: 6px; text-decoration: none; font-weight: bold;">
+                    <a href="${previewUrl}" download style="padding: 10px 20px; background: #ff6b00; color: white; border-radius: 6px; text-decoration: none; font-weight: bold;">
                         Download ${filename}
                     </a>
                 </body>
@@ -856,112 +665,38 @@ document.addEventListener('DOMContentLoaded', () => {
         previewModal.classList.add('active');
     }
 
-    function handleFileSelected(file) {
-        uploadFile = file;
-        selectedFileName.textContent = file.name;
-        selectedFileSize.textContent = formatBytes(file.size);
-        
-        dropZone.style.display = 'none';
-        selectedFileArea.style.display = 'flex';
-        btnSubmitUpload.disabled = false;
-    }
-
-    async function uploadSelectedFile() {
-        if (!uploadFile) return;
-
-        const formData = new FormData();
-        formData.append('file', uploadFile);
-
-        uploadProgressContainer.style.display = 'block';
-        btnSubmitUpload.disabled = true;
-
-        try {
-            const res = await fetch('/api/upload', {
-                method: 'POST',
-                body: formData
-            });
-
-            const data = await res.json();
-            if (res.ok && data.status === 'success') {
-                showToast(data.message, 'success');
-                closeUploadModal();
-                fetchBrochures();
-            } else {
-                showToast(data.message || 'Upload failed', 'error');
-            }
-        } catch (err) {
-            showToast('Error uploading brochure file', 'error');
-        } finally {
-            uploadProgressContainer.style.display = 'none';
-        }
-    }
-
     function closeUploadModal() {
         uploadModal.classList.remove('active');
-        uploadFile = null;
-        selectedFileArea.style.display = 'none';
-        dropZone.style.display = 'flex';
-        btnSubmitUpload.disabled = true;
-        fileInput.value = '';
     }
 
-    async function downloadSelectedZIP() {
+    function downloadSelectedZIP() {
         const filesToDownload = Array.from(selectedFiles);
+        const targetList = filesToDownload.length > 0 ? filesToDownload : brochures.map(b => b.filename);
         
-        showToast('Preparing ZIP download bundle...', 'info');
+        targetList.forEach(fname => {
+            const item = brochures.find(b => b.filename === fname);
+            if (item) {
+                const a = document.createElement('a');
+                a.href = item.download_url;
+                a.download = fname;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            }
+        });
+        showToast(`Downloaded ${targetList.length} brochure file(s).`, 'success');
+    }
 
-        try {
-            const res = await fetch('/api/download-zip', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ filenames: filesToDownload })
-            });
-
-            if (!res.ok) throw new Error('ZIP generation failed');
-
-            const blob = await res.blob();
-            const url = window.URL.createObjectURL(blob);
+    function downloadAllZIP() {
+        brochures.forEach(item => {
             const a = document.createElement('a');
-            a.href = url;
-            a.download = filesToDownload.length > 0 ? `ingeneroX360AI_Selected_Brochures_${Date.now()}.zip` : `ingeneroX360AI_All_Brochures_${Date.now()}.zip`;
+            a.href = item.download_url;
+            a.download = item.filename;
             document.body.appendChild(a);
             a.click();
             a.remove();
-            window.URL.revokeObjectURL(url);
-        } catch (err) {
-            showToast('Failed to generate ZIP archive.', 'error');
-        }
-    }
-
-    async function downloadAllZIP() {
-        showToast('Preparing full brochure ZIP bundle...', 'info');
-        try {
-            const res = await fetch('/api/download-zip', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ filenames: [] })
-            });
-
-            if (!res.ok) throw new Error('ZIP generation failed');
-
-            const blob = await res.blob();
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `ingeneroX360AI_All_Brochures_${Date.now()}.zip`;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            window.URL.revokeObjectURL(url);
-        } catch (err) {
-            showToast('Failed to download ZIP bundle.', 'error');
-        }
-    }
-
-    function formatBytes(bytes) {
-        if (bytes < 1024) return bytes + ' B';
-        else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
-        else return (bytes / 1048576).toFixed(1) + ' MB';
+        });
+        showToast('Downloaded all brochure files.', 'success');
     }
 
     function showToast(message, type = 'info') {

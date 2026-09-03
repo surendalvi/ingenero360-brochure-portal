@@ -4,6 +4,23 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+    const PRODUCT_CATEGORIES = [
+        'CDUX360', 'CokerX360', 'EnergyX360', 'OutlierX360', 
+        'ReliabilityX360', 'VDUX360', 'controllerX360', 
+        'furnaceX360', 'genX360', 'maintenanceX360'
+    ];
+
+    function getFileCategory(nameString) {
+        if (!nameString) return 'Other Products';
+        const strUpper = nameString.toUpperCase();
+        for (const cat of PRODUCT_CATEGORIES) {
+            if (strUpper.includes(cat.toUpperCase())) {
+                return cat;
+            }
+        }
+        return 'Other Products';
+    }
+
     // Exact match static data with cover page thumbnails for GitHub Pages hosting
     const staticBrochuresFallback = [
         { filename: 'cduX360.pdf', title: 'CDUX360 Brochure', category: 'CDUX360', format: 'PDF', ext: '.pdf', size_formatted: '604.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/cduX360.png', download_url: 'brochures/cduX360.pdf', preview_url: 'brochures/cduX360.pdf' },
@@ -489,6 +506,33 @@ document.addEventListener('DOMContentLoaded', () => {
         btnCancelDemoModal.addEventListener('click', () => demoModal.classList.remove('active'));
         btnSubmitDemo.addEventListener('click', handleSaveDemo);
 
+        document.addEventListener('click', (e) => {
+            const editBtn = e.target.closest('.btn-edit-file');
+            if (editBtn) {
+                activeTargetFilename = editBtn.dataset.filename;
+                const currentItem = brochures.find(b => b.filename === activeTargetFilename);
+                renameOriginalInput.value = activeTargetFilename;
+                renameNewInput.value = currentItem ? currentItem.title : editBtn.dataset.title;
+                adminRenameModal.classList.add('active');
+                renameNewInput.focus();
+            }
+
+            const deleteBtn = e.target.closest('.btn-delete-file');
+            if (deleteBtn) {
+                activeTargetFilename = deleteBtn.dataset.filename;
+                deleteTargetFilename.textContent = activeTargetFilename;
+                adminDeleteModal.classList.add('active');
+            }
+        });
+
+        btnCloseAdminRename.addEventListener('click', () => adminRenameModal.classList.remove('active'));
+        btnCancelAdminRename.addEventListener('click', () => adminRenameModal.classList.remove('active'));
+        btnSubmitRename.addEventListener('click', handleAdminRename);
+
+        btnCloseAdminDelete.addEventListener('click', () => adminDeleteModal.classList.remove('active'));
+        btnCancelAdminDelete.addEventListener('click', () => adminDeleteModal.classList.remove('active'));
+        btnConfirmDelete.addEventListener('click', handleAdminDelete);
+
         categoryPillsContainer.addEventListener('click', (e) => {
             if (e.target.classList.contains('pill-btn')) {
                 activeCategory = e.target.dataset.category;
@@ -615,6 +659,68 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             showToast('Incorrect admin password', 'error');
         }
+    }
+
+    async function handleAdminRename() {
+        const newTitle = renameNewInput.value.trim();
+        if (!newTitle || !activeTargetFilename) return;
+
+        // Try Flask backend API if live
+        try {
+            const res = await fetch('/api/admin/rename', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ old_filename: activeTargetFilename, new_filename: newTitle })
+            });
+            if (res.ok) {
+                const data = await res.json();
+                showToast(data.message, 'success');
+                adminRenameModal.classList.remove('active');
+                fetchBrochures();
+                return;
+            }
+        } catch (err) {
+            console.log('Backend API unavailable, updating local client state.');
+        }
+
+        // Static mode / client-side update
+        const item = brochures.find(b => b.filename === activeTargetFilename);
+        if (item) {
+            item.title = newTitle;
+            item.category = getFileCategory(newTitle);
+            categories = sortedCategories(brochures);
+            updateStats();
+            renderCategoryPills();
+            renderBrochures();
+            adminRenameModal.classList.remove('active');
+            showToast(`Brochure title modified and product tag updated to "${item.category}"`, 'success');
+        }
+    }
+
+    async function handleAdminDelete() {
+        if (!activeTargetFilename) return;
+
+        try {
+            const res = await fetch(`/api/delete/${encodeURIComponent(activeTargetFilename)}`, { method: 'DELETE' });
+            if (res.ok) {
+                const data = await res.json();
+                showToast(data.message, 'success');
+                adminDeleteModal.classList.remove('active');
+                fetchBrochures();
+                return;
+            }
+        } catch (err) {
+            console.log('Backend delete route unavailable, updating local client state.');
+        }
+
+        brochures = brochures.filter(b => b.filename !== activeTargetFilename);
+        selectedFiles.delete(activeTargetFilename);
+        categories = sortedCategories(brochures);
+        updateStats();
+        renderCategoryPills();
+        renderBrochures();
+        adminDeleteModal.classList.remove('active');
+        showToast('Brochure removed.', 'success');
     }
 
     async function handleSaveDemo() {

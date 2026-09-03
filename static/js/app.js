@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     const LOCAL_RENAMES_KEY = 'ingenero_custom_titles';
+    const LOCAL_UPLOADS_KEY = 'ingenero_custom_uploads';
 
     function getSavedCustomTitles() {
         try {
@@ -24,6 +25,37 @@ document.addEventListener('DOMContentLoaded', () => {
         const titles = getSavedCustomTitles();
         titles[filename] = newTitle;
         localStorage.setItem(LOCAL_RENAMES_KEY, JSON.stringify(titles));
+    }
+
+    function getSavedCustomUploads() {
+        try {
+            return JSON.parse(localStorage.getItem(LOCAL_UPLOADS_KEY)) || [];
+        } catch(e) {
+            return [];
+        }
+    }
+
+    function saveCustomUpload(brochureObj) {
+        const uploads = getSavedCustomUploads();
+        const filtered = uploads.filter(u => u.filename !== brochureObj.filename);
+        filtered.unshift(brochureObj);
+        try {
+            localStorage.setItem(LOCAL_UPLOADS_KEY, JSON.stringify(filtered));
+        } catch(e) {
+            console.warn('LocalStorage limit for upload data, saved metadata.');
+        }
+    }
+
+    function mergeSavedCustomUploads(list) {
+        const savedUploads = getSavedCustomUploads();
+        savedUploads.forEach(upload => {
+            const existingIdx = list.findIndex(b => b.filename === upload.filename);
+            if (existingIdx >= 0) {
+                list[existingIdx] = upload;
+            } else {
+                list.unshift(upload);
+            }
+        });
     }
 
     function getFileCategory(nameString) {
@@ -238,6 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await res.json();
                 brochures = Array.isArray(data) ? data : (data.brochures || []);
                 applySavedCustomTitles(brochures);
+                mergeSavedCustomUploads(brochures);
                 categories = sortedCategories(brochures);
                 updateStats();
                 renderCategoryPills();
@@ -249,6 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) {
             brochures = JSON.parse(JSON.stringify(staticBrochuresFallback));
             applySavedCustomTitles(brochures);
+            mergeSavedCustomUploads(brochures);
             categories = sortedCategories(brochures);
             updateStats();
             renderCategoryPills();
@@ -684,6 +718,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     preview_url: fileObjectUrl
                 };
 
+                // Save persistently to browser storage so it NEVER disappears on refresh
+                saveCustomUpload(newBrochure);
+
                 brochures.unshift(newBrochure);
                 categories = sortedCategories(brochures);
                 updateStats();
@@ -691,7 +728,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderBrochures();
 
                 closeUploadModal();
-                showToast(`Brochure "${uploadFile.name}" uploaded with generated cover thumbnail!`, 'success');
+                showToast(`Brochure "${uploadFile.name}" uploaded and saved permanently!`, 'success');
             });
         }
 
@@ -880,6 +917,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (item) {
             item.title = newTitle;
             item.category = getFileCategory(newTitle);
+            saveCustomUpload(item);
             categories = sortedCategories(brochures);
             updateStats();
             renderCategoryPills();
@@ -907,6 +945,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         brochures = brochures.filter(b => b.filename !== activeTargetFilename);
         selectedFiles.delete(activeTargetFilename);
+        
+        // Remove from local persistent uploads
+        const uploads = getSavedCustomUploads().filter(u => u.filename !== activeTargetFilename);
+        localStorage.setItem(LOCAL_UPLOADS_KEY, JSON.stringify(uploads));
+
         categories = sortedCategories(brochures);
         updateStats();
         renderCategoryPills();

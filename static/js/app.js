@@ -258,10 +258,11 @@ document.addEventListener('DOMContentLoaded', () => {
         let pillsHTML = `<button class="pill-btn ${activeCategory === 'ALL' ? 'active' : ''}" data-category="ALL">All Products</button>`;
         categories.forEach(cat => {
             const isActive = activeCategory === cat ? 'active' : '';
-            pillsHTML += `<button class="pill-btn ${isActive}" data-category="${cat}">${cat}">${cat}</button>`;
+            pillsHTML += `<button class="pill-btn ${isActive}" data-category="${cat}">${cat}</button>`;
         });
         categoryPillsContainer.innerHTML = pillsHTML;
     }
+
 
     function getFilteredBrochures() {
         return brochures.filter(item => {

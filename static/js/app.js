@@ -4,19 +4,19 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Fallback static data for GitHub Pages hosting
+    // Fallback static data with cover page thumbnails for GitHub Pages hosting
     const staticBrochuresFallback = [
-        { filename: 'CDUX360_R0 2.pdf', title: 'CDUX360 Brochure', category: 'CDUX360', format: 'PDF', ext: '.pdf', size_formatted: '604.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', download_url: 'brochures/CDUX360_R0 2.pdf', preview_url: 'brochures/CDUX360_R0 2.pdf' },
-        { filename: 'CokerX360_One_Pager R3.pdf', title: 'CokerX360 One Pager', category: 'CokerX360', format: 'PDF', ext: '.pdf', size_formatted: '826.1 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', download_url: 'brochures/CokerX360_One_Pager R3.pdf', preview_url: 'brochures/CokerX360_One_Pager R3.pdf' },
-        { filename: 'EnergyX360 Brochure (1).pdf', title: 'EnergyX360 Brochure', category: 'EnergyX360', format: 'PDF', ext: '.pdf', size_formatted: '731.5 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', download_url: 'brochures/EnergyX360 Brochure (1).pdf', preview_url: 'brochures/EnergyX360 Brochure (1).pdf' },
-        { filename: 'OutlierX360_One-Pager 1 1.pdf', title: 'OutlierX360 One Pager', category: 'OutlierX360', format: 'PDF', ext: '.pdf', size_formatted: '162.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', download_url: 'brochures/OutlierX360_One-Pager 1 1.pdf', preview_url: 'brochures/OutlierX360_One-Pager 1 1.pdf' },
-        { filename: 'ReliabilityX360_One_Pager_Rev0.pptx', title: 'ReliabilityX360 One Pager', category: 'ReliabilityX360', format: 'PPTX', ext: '.pptx', size_formatted: '751.1 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', download_url: 'brochures/ReliabilityX360_One_Pager_Rev0.pptx', preview_url: 'brochures/ReliabilityX360_One_Pager_Rev0.pptx' },
-        { filename: 'VDUX360_R0 1.pdf', title: 'VDUX360 Brochure', category: 'VDUX360', format: 'PDF', ext: '.pdf', size_formatted: '736.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', download_url: 'brochures/VDUX360_R0 1.pdf', preview_url: 'brochures/VDUX360_R0 1.pdf' },
-        { filename: 'controllerX360_details.pdf', title: 'controllerX360 Details', category: 'controllerX360', format: 'PDF', ext: '.pdf', size_formatted: '450.0 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', download_url: 'brochures/controllerX360_details.pdf', preview_url: 'brochures/controllerX360_details.pdf' },
-        { filename: 'furnaceX360_One_Pager 5.pptx', title: 'furnaceX360 One Pager', category: 'furnaceX360', format: 'PPTX', ext: '.pptx', size_formatted: '604.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', download_url: 'brochures/furnaceX360_One_Pager 5.pptx', preview_url: 'brochures/furnaceX360_One_Pager 5.pptx' },
-        { filename: 'genX360_Brochure.pdf', title: 'genX360 Brochure', category: 'genX360', format: 'PDF', ext: '.pdf', size_formatted: '162.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', download_url: 'brochures/genX360_Brochure.pdf', preview_url: 'brochures/genX360_Brochure.pdf' },
-        { filename: 'maintenanceX360_One-Page_Brochure.pdf', title: 'maintenanceX360 Brochure', category: 'maintenanceX360', format: 'PDF', ext: '.pdf', size_formatted: '520.0 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', download_url: 'brochures/maintenanceX360_One-Page_Brochure.pdf', preview_url: 'brochures/maintenanceX360_One-Page_Brochure.pdf' },
-        { filename: 'outlierX360_Final.pdf', title: 'outlierX360 Final', category: 'OutlierX360', format: 'PDF', ext: '.pdf', size_formatted: '380.0 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', download_url: 'brochures/outlierX360_Final.pdf', preview_url: 'brochures/outlierX360_Final.pdf' }
+        { filename: 'CDUX360_R0 2.pdf', title: 'CDUX360 Brochure', category: 'CDUX360', format: 'PDF', ext: '.pdf', size_formatted: '604.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/cduX360.png', download_url: 'brochures/CDUX360_R0 2.pdf', preview_url: 'brochures/CDUX360_R0 2.pdf' },
+        { filename: 'CokerX360_One_Pager R3.pdf', title: 'CokerX360 One Pager', category: 'CokerX360', format: 'PDF', ext: '.pdf', size_formatted: '826.1 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/cokerX360.png', download_url: 'brochures/CokerX360_One_Pager R3.pdf', preview_url: 'brochures/CokerX360_One_Pager R3.pdf' },
+        { filename: 'EnergyX360 Brochure (1).pdf', title: 'EnergyX360 Brochure', category: 'EnergyX360', format: 'PDF', ext: '.pdf', size_formatted: '731.5 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/energyX360.png', download_url: 'brochures/EnergyX360 Brochure (1).pdf', preview_url: 'brochures/EnergyX360 Brochure (1).pdf' },
+        { filename: 'OutlierX360_One-Pager 1 1.pdf', title: 'OutlierX360 One Pager', category: 'OutlierX360', format: 'PDF', ext: '.pdf', size_formatted: '162.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/outlierX360.png', download_url: 'brochures/OutlierX360_One-Pager 1 1.pdf', preview_url: 'brochures/OutlierX360_One-Pager 1 1.pdf' },
+        { filename: 'ReliabilityX360_One_Pager_Rev0.pptx', title: 'ReliabilityX360 One Pager', category: 'ReliabilityX360', format: 'PPTX', ext: '.pptx', size_formatted: '751.1 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: null, download_url: 'brochures/ReliabilityX360_One_Pager_Rev0.pptx', preview_url: 'brochures/ReliabilityX360_One_Pager_Rev0.pptx' },
+        { filename: 'VDUX360_R0 1.pdf', title: 'VDUX360 Brochure', category: 'VDUX360', format: 'PDF', ext: '.pdf', size_formatted: '736.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/vduX360.png', download_url: 'brochures/VDUX360_R0 1.pdf', preview_url: 'brochures/VDUX360_R0 1.pdf' },
+        { filename: 'controllerX360_details.pdf', title: 'controllerX360 Details', category: 'controllerX360', format: 'PDF', ext: '.pdf', size_formatted: '450.0 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/controllerX360.png', download_url: 'brochures/controllerX360_details.pdf', preview_url: 'brochures/controllerX360_details.pdf' },
+        { filename: 'furnaceX360_One_Pager 5.pptx', title: 'furnaceX360 One Pager', category: 'furnaceX360', format: 'PPTX', ext: '.pptx', size_formatted: '604.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: null, download_url: 'brochures/furnaceX360_One_Pager 5.pptx', preview_url: 'brochures/furnaceX360_One_Pager 5.pptx' },
+        { filename: 'genX360_Brochure.pdf', title: 'genX360 Brochure', category: 'genX360', format: 'PDF', ext: '.pdf', size_formatted: '162.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/genX360.png', download_url: 'brochures/genX360_Brochure.pdf', preview_url: 'brochures/genX360_Brochure.pdf' },
+        { filename: 'maintenanceX360_One-Page_Brochure.pdf', title: 'maintenanceX360 Brochure', category: 'maintenanceX360', format: 'PDF', ext: '.pdf', size_formatted: '520.0 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/maintenanceX360.png', download_url: 'brochures/maintenanceX360_One-Page_Brochure.pdf', preview_url: 'brochures/maintenanceX360_One-Page_Brochure.pdf' },
+        { filename: 'outlierX360_Final.pdf', title: 'outlierX360 Final', category: 'OutlierX360', format: 'PDF', ext: '.pdf', size_formatted: '380.0 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/outlierX360.png', download_url: 'brochures/outlierX360_Final.pdf', preview_url: 'brochures/outlierX360_Final.pdf' }
     ];
 
     // App State
@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentView = 'grid';
     let activeMainTab = 'brochures';
     let uploadFile = null;
-    let autoSyncTimer = null;
     let isAdminLoggedIn = sessionStorage.getItem('ingenero_admin_token') === 'ADMIN_AUTH_VALID';
 
     let activeTargetFilename = null;
@@ -159,7 +158,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Fetch Brochures from API or static fallback for GitHub Pages
     async function fetchBrochures(showToastNotification = false) {
         try {
             const res = await fetch('/api/brochures');
@@ -177,8 +175,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             throw new Error('API route unavailable');
         } catch (err) {
-            // Static fallback for GitHub Pages hosting
-            console.log('Using static brochure fallback for GitHub Pages hosting.');
             brochures = staticBrochuresFallback;
             categories = sortedCategories(brochures);
             updateStats();
@@ -187,7 +183,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Fetch Demos from API or demos.json directly
     async function fetchDemos() {
         try {
             let res = await fetch('/api/demos');

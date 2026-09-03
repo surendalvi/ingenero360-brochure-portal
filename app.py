@@ -64,11 +64,10 @@ def save_demos(demos):
     except Exception as e:
         print(f"Error saving demos.json: {e}")
 
-def git_commit_and_push_async(filename, action="Update"):
-    """Commits file changes to local git repo and pushes to GitHub asynchronously."""
+def git_commit_and_push_async(filename, action="Update", extra_files=None):
+    """Commits file changes and associated thumbnails to local git repo and pushes to GitHub asynchronously."""
     def _sync():
         try:
-            rel_path = filename if filename == "demos.json" else f"brochures/{filename}"
             subprocess.run(["git", "add", "-A"], cwd=str(BASE_DIR), capture_output=True, text=True, check=False)
             subprocess.run(["git", "commit", "-m", f"{action}: {filename} via IngeneroX360AI portal"], cwd=str(BASE_DIR), capture_output=True, text=True, check=False)
             res = subprocess.run(["git", "push"], cwd=str(BASE_DIR), capture_output=True, text=True, check=False)
@@ -122,18 +121,23 @@ def generate_pdf_thumbnail(pdf_path, thumb_path):
 
 def get_thumbnail_url(file_path):
     ext = file_path.suffix.lower()
+    if ext != '.pdf':
+        return None
+        
+    named_thumb = THUMBNAIL_DIR / f"{file_path.stem}.png"
+    if named_thumb.exists():
+        return f"/static/thumbnails/{file_path.stem}.png"
+        
     mtime = int(file_path.stat().st_mtime)
     file_hash = hashlib.md5(f"{file_path.name}_{mtime}".encode('utf-8')).hexdigest()
     thumb_name = f"{file_hash}.png"
     thumb_path = THUMBNAIL_DIR / thumb_name
     
-    if ext == '.pdf':
-        if not thumb_path.exists():
-            success = generate_pdf_thumbnail(file_path, thumb_path)
-            if not success:
-                return None
-        return f"/static/thumbnails/{thumb_name}"
-    return None
+    if not thumb_path.exists():
+        success = generate_pdf_thumbnail(file_path, thumb_path)
+        if not success:
+            return None
+    return f"/static/thumbnails/{thumb_name}"
 
 def scan_brochures():
     brochures = []
@@ -311,13 +315,14 @@ def upload_brochure():
     file.save(str(target_path))
     
     if ext == '.pdf':
-        get_thumbnail_url(target_path)
+        named_thumb = THUMBNAIL_DIR / f"{target_path.stem}.png"
+        generate_pdf_thumbnail(target_path, named_thumb)
         
-    git_commit_and_push_async(filename, "Upload")
+    git_commit_and_push_async(filename, "Upload Brochure & Thumbnail")
         
     return jsonify({
         'status': 'success',
-        'message': f'Brochure "{filename}" uploaded and synced to GitHub!',
+        'message': f'Brochure "{filename}" uploaded, cover thumbnail generated, and synced to GitHub!',
         'filename': filename
     })
 
@@ -344,7 +349,8 @@ def rename_brochure():
     try:
         old_path.rename(new_path)
         if ext == '.pdf':
-            get_thumbnail_url(new_path)
+            named_thumb = THUMBNAIL_DIR / f"{new_path.stem}.png"
+            generate_pdf_thumbnail(new_path, named_thumb)
         git_commit_and_push_async(new_filename, "Rename")
         return jsonify({'status': 'success', 'message': f'Brochure renamed to "{new_filename}"', 'new_filename': new_filename})
     except Exception as e:
@@ -395,6 +401,9 @@ def delete_file(filename):
         
     try:
         file_path.unlink()
+        thumb_path = THUMBNAIL_DIR / f"{file_path.stem}.png"
+        if thumb_path.exists():
+            thumb_path.unlink()
         git_commit_and_push_async(filename, "Delete")
         return jsonify({'status': 'success', 'message': f'Brochure "{filename}" deleted and synced to GitHub.'})
     except Exception as e:

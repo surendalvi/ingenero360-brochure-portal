@@ -1,6 +1,6 @@
 /**
  * IngeneroX360AI Suite Brochure & Demos Portal JavaScript App
- * Supports both Flask Server API and GitHub Pages Static Hosting
+ * Supports both Flask Server API and GitHub Pages Static Hosting via brochures.json & demos.json
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -37,9 +37,16 @@ document.addEventListener('DOMContentLoaded', () => {
         return 'Other Products';
     }
 
+    function formatFileSize(sizeInBytes) {
+        if (!sizeInBytes) return '0 B';
+        if (sizeInBytes < 1024) return sizeInBytes + ' B';
+        if (sizeInBytes < 1024 * 1024) return (sizeInBytes / 1024).toFixed(1) + ' KB';
+        return (sizeInBytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
     // Static fallback data with cover page thumbnails for GitHub Pages hosting
     const staticBrochuresFallback = [
-        { filename: 'cduX360.pdf', title: 'CDUX360 Brochure', category: 'CDUX360', format: 'PDF', ext: '.pdf', size_formatted: '604.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/cduX360.png', download_url: 'brochures/cduX360.pdf', preview_url: 'brochures/cduX360.pdf' },
+        { filename: 'cduX360.pdf', title: 'cduX360 Brochure', category: 'CDUX360', format: 'PDF', ext: '.pdf', size_formatted: '604.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/cduX360.png', download_url: 'brochures/cduX360.pdf', preview_url: 'brochures/cduX360.pdf' },
         { filename: 'cokerX360.pdf', title: 'CokerX360 Brochure', category: 'CokerX360', format: 'PDF', ext: '.pdf', size_formatted: '826.1 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/cokerX360.png', download_url: 'brochures/cokerX360.pdf', preview_url: 'brochures/cokerX360.pdf' },
         { filename: 'controllerX360.pdf', title: 'controllerX360 Details', category: 'controllerX360', format: 'PDF', ext: '.pdf', size_formatted: '450.0 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/controllerX360.png', download_url: 'brochures/controllerX360.pdf', preview_url: 'brochures/controllerX360.pdf' },
         { filename: 'energyX360.pdf', title: 'EnergyX360 Brochure', category: 'EnergyX360', format: 'PDF', ext: '.pdf', size_formatted: '731.5 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/energyX360.png', download_url: 'brochures/energyX360.pdf', preview_url: 'brochures/energyX360.pdf' },
@@ -145,7 +152,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const selectedFileName = document.getElementById('selectedFileName');
     const selectedFileSize = document.getElementById('selectedFileSize');
     const btnRemoveFile = document.getElementById('btnRemoveFile');
-    const uploadProgressContainer = document.getElementById('uploadProgressContainer');
 
     const previewModal = document.getElementById('previewModal');
     const btnClosePreview = document.getElementById('btnClosePreview');
@@ -171,6 +177,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 b.category = getFileCategory(b.title);
             }
         });
+    }
+
+    function exportUpdatedBrochuresJSON() {
+        const jsonStr = JSON.stringify(brochures, null, 2);
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'brochures.json';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
     }
 
     function updateAdminNavUI() {
@@ -203,21 +222,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function fetchBrochures(showToastNotification = false) {
         try {
-            const res = await fetch('/api/brochures');
+            let res = await fetch('/api/brochures');
+            if (!res.ok) {
+                res = await fetch('brochures.json');
+            }
             if (res.ok) {
                 const data = await res.json();
-                if (data.status === 'success') {
-                    brochures = data.brochures;
-                    applySavedCustomTitles(brochures);
-                    categories = sortedCategories(brochures);
-                    updateStats();
-                    renderCategoryPills();
-                    renderBrochures();
-                    if (showToastNotification) showToast('Portal refreshed successfully.', 'success');
-                    return;
-                }
+                brochures = Array.isArray(data) ? data : (data.brochures || []);
+                applySavedCustomTitles(brochures);
+                categories = sortedCategories(brochures);
+                updateStats();
+                renderCategoryPills();
+                renderBrochures();
+                if (showToastNotification) showToast('Portal refreshed successfully.', 'success');
+                return;
             }
-            throw new Error('API route unavailable');
+            throw new Error('API & brochures.json unavailable');
         } catch (err) {
             brochures = JSON.parse(JSON.stringify(staticBrochuresFallback));
             applySavedCustomTitles(brochures);
@@ -498,6 +518,28 @@ document.addEventListener('DOMContentLoaded', () => {
         if (selectAllTableCheckbox) selectAllTableCheckbox.checked = allSelected;
     }
 
+    function handleFileSelected(file) {
+        if (!file) return;
+        uploadFile = file;
+        dropZone.style.display = 'none';
+        selectedFileArea.style.display = 'flex';
+        selectedFileName.textContent = file.name;
+        selectedFileSize.textContent = formatFileSize(file.size);
+        btnSubmitUpload.disabled = false;
+    }
+
+    function closeUploadModal() {
+        uploadModal.classList.remove('active');
+        uploadFile = null;
+        if (fileInput) fileInput.value = '';
+        if (dropZone) dropZone.style.display = 'flex';
+        if (selectedFileArea) selectedFileArea.style.display = 'none';
+        if (btnSubmitUpload) {
+            btnSubmitUpload.disabled = true;
+            btnSubmitUpload.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Upload Brochure';
+        }
+    }
+
     function setupEventListeners() {
         tabBrochures.addEventListener('click', () => switchTab('brochures'));
         tabDemos.addEventListener('click', () => switchTab('demos'));
@@ -538,6 +580,108 @@ document.addEventListener('DOMContentLoaded', () => {
         btnCloseDemoModal.addEventListener('click', () => demoModal.classList.remove('active'));
         btnCancelDemoModal.addEventListener('click', () => demoModal.classList.remove('active'));
         btnSubmitDemo.addEventListener('click', handleSaveDemo);
+
+        // Upload Modal Event Listeners
+        if (dropZone) {
+            dropZone.addEventListener('click', (e) => {
+                if (fileInput) fileInput.click();
+            });
+
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('dragover');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                    handleFileSelected(e.dataTransfer.files[0]);
+                }
+            });
+        }
+
+        if (fileInput) {
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files && e.target.files.length > 0) {
+                    handleFileSelected(e.target.files[0]);
+                }
+            });
+        }
+
+        if (btnRemoveFile) {
+            btnRemoveFile.addEventListener('click', (e) => {
+                e.stopPropagation();
+                uploadFile = null;
+                if (fileInput) fileInput.value = '';
+                dropZone.style.display = 'flex';
+                selectedFileArea.style.display = 'none';
+                btnSubmitUpload.disabled = true;
+            });
+        }
+
+        if (btnSubmitUpload) {
+            btnSubmitUpload.addEventListener('click', async () => {
+                if (!uploadFile) return;
+
+                btnSubmitUpload.disabled = true;
+                btnSubmitUpload.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Uploading...';
+
+                const formData = new FormData();
+                formData.append('file', uploadFile);
+
+                try {
+                    const res = await fetch('/api/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        showToast(data.message, 'success');
+                        closeUploadModal();
+                        fetchBrochures();
+                        return;
+                    }
+                } catch (err) {
+                    console.log('Backend upload route unavailable, adding to client state.');
+                }
+
+                // Client-side fallback for static hosting
+                const ext = uploadFile.name.substring(uploadFile.name.lastIndexOf('.')).toLowerCase();
+                const format = ext.replace('.', '').toUpperCase();
+                const category = getFileCategory(uploadFile.name);
+                const title = uploadFile.name.replace(/\.[^/.]+$/, "").replace(/[_]/g, ' ');
+                const fileObjectUrl = URL.createObjectURL(uploadFile);
+
+                const newBrochure = {
+                    filename: uploadFile.name,
+                    title: title,
+                    category: category,
+                    format: format,
+                    ext: ext,
+                    size_formatted: formatFileSize(uploadFile.size),
+                    modified_time: Math.floor(Date.now() / 1000),
+                    modified_date: 'Just now',
+                    thumbnail_url: null,
+                    download_url: fileObjectUrl,
+                    preview_url: fileObjectUrl
+                };
+
+                brochures.unshift(newBrochure);
+                categories = sortedCategories(brochures);
+                updateStats();
+                renderCategoryPills();
+                renderBrochures();
+
+                closeUploadModal();
+                exportUpdatedBrochuresJSON();
+                showToast(`Brochure "${uploadFile.name}" added & updated brochures.json downloaded to commit to GitHub!`, 'success');
+            });
+        }
 
         document.addEventListener('click', (e) => {
             const editBtn = e.target.closest('.btn-edit-file');
@@ -729,7 +873,8 @@ document.addEventListener('DOMContentLoaded', () => {
             renderCategoryPills();
             renderBrochures();
             adminRenameModal.classList.remove('active');
-            showToast(`Brochure title modified & product tag updated to "${item.category}"`, 'success');
+            exportUpdatedBrochuresJSON();
+            showToast(`Title modified! Exported brochures.json — upload to GitHub so all visitors see it!`, 'success');
         }
     }
 
@@ -756,7 +901,8 @@ document.addEventListener('DOMContentLoaded', () => {
         renderCategoryPills();
         renderBrochures();
         adminDeleteModal.classList.remove('active');
-        showToast('Brochure removed.', 'success');
+        exportUpdatedBrochuresJSON();
+        showToast('Brochure removed & exported updated brochures.json!', 'success');
     }
 
     async function handleSaveDemo() {
@@ -800,10 +946,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         previewModal.classList.add('active');
-    }
-
-    function closeUploadModal() {
-        uploadModal.classList.remove('active');
     }
 
     function downloadSelectedZIP() {

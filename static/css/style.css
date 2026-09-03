@@ -1116,7 +1116,28 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    cursor: pointer;
 }
+
+.btn-browse,
+.drop-zone .btn-secondary {
+    background-color: #ffffff !important;
+    color: #090b0e !important;
+    border: 2px solid var(--primary) !important;
+    font-weight: 700 !important;
+    padding: 0.55rem 1.4rem !important;
+    border-radius: var(--radius-md) !important;
+    cursor: pointer !important;
+    margin-top: 0.5rem;
+}
+
+.btn-browse:hover,
+.drop-zone .btn-secondary:hover {
+    background-color: var(--primary) !important;
+    color: #ffffff !important;
+    border-color: var(--primary) !important;
+}
+
 
 .drop-zone.dragover {
     border-color: var(--primary);

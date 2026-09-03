@@ -263,7 +263,6 @@ document.addEventListener('DOMContentLoaded', () => {
         categoryPillsContainer.innerHTML = pillsHTML;
     }
 
-
     function getFilteredBrochures() {
         return brochures.filter(item => {
             if (activeCategory !== 'ALL' && item.category !== activeCategory) return false;
@@ -326,6 +325,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>`;
             }
 
+            const titleLower = (item.title || '').toLowerCase();
+            const catLower = (item.category || '').toLowerCase();
+            const isRedundantCategory = catLower === 'other products' || titleLower.includes(catLower) || catLower.includes(titleLower);
+            const categoryTagHTML = isRedundantCategory ? '' : `<span class="card-category-tag">${item.category}</span>`;
+
             const badgeClass = item.format === 'PDF' ? 'badge-pdf' : (item.format === 'PPTX' ? 'badge-pptx' : 'badge-doc');
             const adminButtons = isAdminLoggedIn ? `
                 <div style="display:flex; gap:0.4rem; grid-column: span 2; margin-top:0.3rem;">
@@ -347,7 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     <div class="card-body">
                         <div class="card-header-row">
-                            <span class="card-category-tag">${item.category}</span>
+                            ${categoryTagHTML}
                             <label class="card-select-inline ${isChecked ? 'selected' : ''}" onclick="event.stopPropagation();">
                                 <input type="checkbox" class="file-checkbox" data-filename="${item.filename}" ${isChecked ? 'checked' : ''}>
                                 <span class="checkmark"></span>

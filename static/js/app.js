@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const LOCAL_RENAMES_KEY = 'ingenero_custom_titles';
     const LOCAL_UPLOADS_KEY = 'ingenero_custom_uploads';
+    const LOCAL_DELETIONS_KEY = 'ingenero_custom_deletions';
 
     function getSavedCustomTitles() {
         try {
@@ -46,6 +47,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function getSavedCustomDeletions() {
+        try {
+            return JSON.parse(localStorage.getItem(LOCAL_DELETIONS_KEY)) || [];
+        } catch(e) {
+            return [];
+        }
+    }
+
+    function saveCustomDeletion(filename) {
+        const deletions = getSavedCustomDeletions();
+        if (!deletions.includes(filename)) {
+            deletions.push(filename);
+            localStorage.setItem(LOCAL_DELETIONS_KEY, JSON.stringify(deletions));
+        }
+        const uploads = getSavedCustomUploads().filter(u => u.filename !== filename);
+        localStorage.setItem(LOCAL_UPLOADS_KEY, JSON.stringify(uploads));
+    }
+
     function mergeSavedCustomUploads(list) {
         const savedUploads = getSavedCustomUploads();
         savedUploads.forEach(upload => {
@@ -58,8 +77,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function filterOutSavedDeletions(list) {
+        const deletions = getSavedCustomDeletions();
+        return list.filter(b => !deletions.includes(b.filename));
+    }
+
     function getFileCategory(nameString) {
         if (!nameString) return 'Other Products';
+        const match = nameString.match(/([a-zA-Z0-9]+[xX]360)/i);
+        if (match) {
+            return match[1];
+        }
         const strUpper = nameString.toUpperCase();
         for (const cat of PRODUCT_CATEGORIES) {
             if (strUpper.includes(cat.toUpperCase())) {
@@ -271,6 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 brochures = Array.isArray(data) ? data : (data.brochures || []);
                 applySavedCustomTitles(brochures);
                 mergeSavedCustomUploads(brochures);
+                brochures = filterOutSavedDeletions(brochures);
                 categories = sortedCategories(brochures);
                 updateStats();
                 renderCategoryPills();
@@ -283,6 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brochures = JSON.parse(JSON.stringify(staticBrochuresFallback));
             applySavedCustomTitles(brochures);
             mergeSavedCustomUploads(brochures);
+            brochures = filterOutSavedDeletions(brochures);
             categories = sortedCategories(brochures);
             updateStats();
             renderCategoryPills();
@@ -718,17 +748,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     preview_url: fileObjectUrl
                 };
 
-                // Save persistently to browser storage so it NEVER disappears on refresh
                 saveCustomUpload(newBrochure);
 
                 brochures.unshift(newBrochure);
+                brochures = filterOutSavedDeletions(brochures);
                 categories = sortedCategories(brochures);
                 updateStats();
                 renderCategoryPills();
                 renderBrochures();
 
                 closeUploadModal();
-                showToast(`Brochure "${uploadFile.name}" uploaded and saved permanently!`, 'success');
+                showToast(`Brochure "${uploadFile.name}" uploaded!`, 'success');
             });
         }
 
@@ -891,10 +921,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const newTitle = renameNewInput.value.trim();
         if (!newTitle || !activeTargetFilename) return;
 
-        // Save persistently to browser localStorage
         saveCustomTitle(activeTargetFilename, newTitle);
 
-        // Try Flask backend API if live
         try {
             const res = await fetch('/api/admin/rename', {
                 method: 'POST',
@@ -912,7 +940,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Backend API unavailable, updating local client state.');
         }
 
-        // Apply immediately to current memory list
         const item = brochures.find(b => b.filename === activeTargetFilename);
         if (item) {
             item.title = newTitle;
@@ -930,6 +957,9 @@ document.addEventListener('DOMContentLoaded', () => {
     async function handleAdminDelete() {
         if (!activeTargetFilename) return;
 
+        // Save deletion permanently into local storage
+        saveCustomDeletion(activeTargetFilename);
+
         try {
             const res = await fetch(`/api/delete/${encodeURIComponent(activeTargetFilename)}`, { method: 'DELETE' });
             if (res.ok) {
@@ -944,11 +974,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         brochures = brochures.filter(b => b.filename !== activeTargetFilename);
+        brochures = filterOutSavedDeletions(brochures);
         selectedFiles.delete(activeTargetFilename);
-        
-        // Remove from local persistent uploads
-        const uploads = getSavedCustomUploads().filter(u => u.filename !== activeTargetFilename);
-        localStorage.setItem(LOCAL_UPLOADS_KEY, JSON.stringify(uploads));
 
         categories = sortedCategories(brochures);
         updateStats();

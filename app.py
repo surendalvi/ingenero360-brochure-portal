@@ -64,7 +64,7 @@ def save_demos(demos):
     except Exception as e:
         print(f"Error saving demos.json: {e}")
 
-def git_commit_and_push_async(filename, action="Update", extra_files=None):
+def git_commit_and_push_async(filename, action="Update"):
     """Commits file changes and associated thumbnails to local git repo and pushes to GitHub asynchronously."""
     def _sync():
         try:
@@ -90,6 +90,9 @@ def git_pull_latest():
         return False
 
 def get_file_category(filename):
+    match = re.search(r'([a-zA-Z0-9]+[xX]360)', filename)
+    if match:
+        return match.group(1)
     fname_upper = filename.upper()
     for cat in PRODUCT_CATEGORIES:
         if cat.upper() in fname_upper:

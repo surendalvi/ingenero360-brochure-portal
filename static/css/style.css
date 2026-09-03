@@ -916,6 +916,19 @@ body {
     font-size: 0.8rem;
 }
 
+.card-actions .btn-secondary {
+    background-color: #ffffff;
+    color: var(--slate-800);
+    border: 1px solid var(--slate-300);
+}
+
+.card-actions .btn-secondary:hover {
+    background-color: var(--primary-light);
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+
 /* List View Table */
 .brochures-list-wrapper {
     background: #ffffff;

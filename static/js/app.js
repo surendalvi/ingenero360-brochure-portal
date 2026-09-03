@@ -10,6 +10,22 @@ document.addEventListener('DOMContentLoaded', () => {
         'furnaceX360', 'genX360', 'maintenanceX360'
     ];
 
+    const LOCAL_RENAMES_KEY = 'ingenero_custom_titles';
+
+    function getSavedCustomTitles() {
+        try {
+            return JSON.parse(localStorage.getItem(LOCAL_RENAMES_KEY)) || {};
+        } catch(e) {
+            return {};
+        }
+    }
+
+    function saveCustomTitle(filename, newTitle) {
+        const titles = getSavedCustomTitles();
+        titles[filename] = newTitle;
+        localStorage.setItem(LOCAL_RENAMES_KEY, JSON.stringify(titles));
+    }
+
     function getFileCategory(nameString) {
         if (!nameString) return 'Other Products';
         const strUpper = nameString.toUpperCase();
@@ -21,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return 'Other Products';
     }
 
-    // Exact match static data with cover page thumbnails for GitHub Pages hosting
+    // Static fallback data with cover page thumbnails for GitHub Pages hosting
     const staticBrochuresFallback = [
         { filename: 'cduX360.pdf', title: 'CDUX360 Brochure', category: 'CDUX360', format: 'PDF', ext: '.pdf', size_formatted: '604.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/cduX360.png', download_url: 'brochures/cduX360.pdf', preview_url: 'brochures/cduX360.pdf' },
         { filename: 'cokerX360.pdf', title: 'CokerX360 Brochure', category: 'CokerX360', format: 'PDF', ext: '.pdf', size_formatted: '826.1 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/cokerX360.png', download_url: 'brochures/cokerX360.pdf', preview_url: 'brochures/cokerX360.pdf' },
@@ -147,6 +163,16 @@ document.addEventListener('DOMContentLoaded', () => {
         setupEventListeners();
     }
 
+    function applySavedCustomTitles(list) {
+        const saved = getSavedCustomTitles();
+        list.forEach(b => {
+            if (saved[b.filename]) {
+                b.title = saved[b.filename];
+                b.category = getFileCategory(b.title);
+            }
+        });
+    }
+
     function updateAdminNavUI() {
         if (isAdminLoggedIn) {
             btnAdminAccess.classList.add('admin-active');
@@ -182,7 +208,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await res.json();
                 if (data.status === 'success') {
                     brochures = data.brochures;
-                    categories = data.categories;
+                    applySavedCustomTitles(brochures);
+                    categories = sortedCategories(brochures);
                     updateStats();
                     renderCategoryPills();
                     renderBrochures();
@@ -192,7 +219,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             throw new Error('API route unavailable');
         } catch (err) {
-            brochures = staticBrochuresFallback;
+            brochures = JSON.parse(JSON.stringify(staticBrochuresFallback));
+            applySavedCustomTitles(brochures);
             categories = sortedCategories(brochures);
             updateStats();
             renderCategoryPills();
@@ -230,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let pillsHTML = `<button class="pill-btn ${activeCategory === 'ALL' ? 'active' : ''}" data-category="ALL">All Products</button>`;
         categories.forEach(cat => {
             const isActive = activeCategory === cat ? 'active' : '';
-            pillsHTML += `<button class="pill-btn ${isActive}" data-category="${cat}">${cat}</button>`;
+            pillsHTML += `<button class="pill-btn ${isActive}" data-category="${cat}">${cat}">${cat}</button>`;
         });
         categoryPillsContainer.innerHTML = pillsHTML;
     }
@@ -665,6 +693,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const newTitle = renameNewInput.value.trim();
         if (!newTitle || !activeTargetFilename) return;
 
+        // Save persistently to browser localStorage
+        saveCustomTitle(activeTargetFilename, newTitle);
+
         // Try Flask backend API if live
         try {
             const res = await fetch('/api/admin/rename', {
@@ -683,7 +714,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Backend API unavailable, updating local client state.');
         }
 
-        // Static mode / client-side update
+        // Apply immediately to current memory list
         const item = brochures.find(b => b.filename === activeTargetFilename);
         if (item) {
             item.title = newTitle;
@@ -693,7 +724,7 @@ document.addEventListener('DOMContentLoaded', () => {
             renderCategoryPills();
             renderBrochures();
             adminRenameModal.classList.remove('active');
-            showToast(`Brochure title modified and product tag updated to "${item.category}"`, 'success');
+            showToast(`Brochure title modified & product tag updated to "${item.category}"`, 'success');
         }
     }
 

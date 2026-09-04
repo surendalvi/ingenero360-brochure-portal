@@ -933,11 +933,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 closeUploadModal();
 
-                // Direct GitHub REST API Auto-Commit using saved token (Zero prompts if saved)
-                const pat = getGitHubPAT();
+                // Direct GitHub REST API Auto-Commit
+                let pat = getGitHubPAT();
+                if (!pat) {
+                    const tokenPrompt = prompt("GitHub Access Token Required: Enter your GitHub PAT once to automatically save all uploaded files & cover thumbnails directly to GitHub for all visitors worldwide:");
+                    if (tokenPrompt && tokenPrompt.trim()) {
+                        saveGitHubPAT(tokenPrompt.trim());
+                        pat = tokenPrompt.trim();
+                    }
+                }
+
                 if (pat) {
                     try {
-                        showToast(`Committing "${uploadFile.name}" directly to GitHub...`, 'info');
+                        showToast(`Saving "${uploadFile.name}" & cover thumbnail directly to GitHub...`, 'info');
                         const fileBase64 = await fileToBase64(uploadFile);
                         const fileUploaded = await syncFileToGitHub(`brochures/${uploadFile.name}`, fileBase64, `Auto-upload brochure ${uploadFile.name}`);
                         
@@ -946,22 +954,23 @@ document.addEventListener('DOMContentLoaded', () => {
                             const thumbStem = uploadFile.name.replace(/\.[^/.]+$/, "");
                             await syncFileToGitHub(`static/thumbnails/${thumbStem}.png`, thumbBase64, `Add thumbnail for ${uploadFile.name}`);
                             newBrochure.thumbnail_url = `static/thumbnails/${thumbStem}.png`;
+                        } else {
+                            newBrochure.thumbnail_url = `static/thumbnails/${uploadFile.name.replace(/\.[^/.]+$/, "")}.png`;
                         }
 
-                        // Sync updated catalog to GitHub
                         await syncCatalogToGitHub();
 
                         if (fileUploaded) {
-                            showToast(`Brochure "${uploadFile.name}" saved directly to GitHub! Live for all visitors in ~30s.`, 'success');
+                            showToast(`Brochure "${uploadFile.name}" & thumbnail saved directly to GitHub! Live for all visitors in ~30s.`, 'success');
                         } else {
-                            showToast(`Saved locally. GitHub sync failed (verify PAT permissions).`, 'warning');
+                            showToast(`Saved locally. GitHub commit failed (please check PAT repo permissions).`, 'warning');
                         }
                     } catch(e) {
                         console.error('GitHub Direct Commit failed:', e);
                         showToast(`Saved locally. GitHub direct commit error: ${e.message}`, 'error');
                     }
                 } else {
-                    showToast(`Brochure "${uploadFile.name}" saved locally! Click "Refresh & Sync" to enable GitHub Auto-Sync.`, 'info');
+                    showToast(`Brochure "${uploadFile.name}" saved locally! Click "Refresh & Sync" to enter your GitHub PAT and enable direct worldwide sync.`, 'info');
                 }
             });
         }

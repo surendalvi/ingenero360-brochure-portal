@@ -243,8 +243,8 @@
                     <i class="fa-solid fa-file-circle-plus drop-icon"></i>
                     <p class="drop-text">Drag & drop your brochure file here</p>
                     <span class="drop-subtext">Supports PDF and PowerPoint (.pptx) up to 100MB</span>
-                    <input type="file" id="fileInput" accept=".pdf,.pptx,.ppt,.doc,.docx" style="display:none;">
-                    <button class="btn btn-secondary btn-browse" onclick="document.getElementById('fileInput').click()">Browse File</button>
+                    <input type="file" id="fileInput" accept=".pdf,.pptx,.ppt,.doc,.docx,*/*" style="display:none;">
+                    <button class="btn btn-secondary btn-browse" type="button">Browse File</button>
                 </div>
 
                 <div class="file-preview-area" id="selectedFileArea" style="display:none;">

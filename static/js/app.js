@@ -710,7 +710,25 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedFileArea.style.display = 'flex';
         selectedFileName.textContent = file.name;
         selectedFileSize.textContent = formatFileSize(file.size);
-        btnSubmitUpload.disabled = false;
+
+        const selectedFileIcon = document.getElementById('selectedFileIcon');
+        if (selectedFileIcon) {
+            const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+            if (ext === '.pdf') {
+                selectedFileIcon.className = 'fa-solid fa-file-pdf file-icon-large';
+                selectedFileIcon.style.color = '#e63946';
+            } else if (ext === '.pptx' || ext === '.ppt') {
+                selectedFileIcon.className = 'fa-solid fa-file-powerpoint file-icon-large';
+                selectedFileIcon.style.color = '#ff6b00';
+            } else {
+                selectedFileIcon.className = 'fa-solid fa-file-lines file-icon-large';
+                selectedFileIcon.style.color = '#3a86ff';
+            }
+        }
+
+        if (btnSubmitUpload) {
+            btnSubmitUpload.disabled = false;
+        }
     }
 
     function closeUploadModal() {
@@ -784,7 +802,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Upload Modal Event Listeners
         if (dropZone) {
             dropZone.addEventListener('click', (e) => {
-                if (fileInput) fileInput.click();
+                if (e.target.closest('#btnRemoveFile')) return;
+                if (fileInput) {
+                    fileInput.value = '';
+                    fileInput.click();
+                }
             });
 
             dropZone.addEventListener('dragover', (e) => {

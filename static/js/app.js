@@ -234,18 +234,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Static fallback data with cover page thumbnails for GitHub Pages hosting
     const staticBrochuresFallback = [
-        { filename: 'polymerX360.pdf', title: 'polymerX360 Brochure', category: 'polymerX360', format: 'PDF', ext: '.pdf', size_formatted: '837.7 KB', modified_time: 1725450000, modified_date: 'Sep 04, 2026', thumbnail_url: 'static/thumbnails/polymerX360.png', download_url: 'brochures/polymerX360.pdf', preview_url: 'brochures/polymerX360.pdf' },
-        { filename: 'cduX360.pdf', title: 'cduX360 Brochure', category: 'CDUX360', format: 'PDF', ext: '.pdf', size_formatted: '604.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/cduX360.png', download_url: 'brochures/cduX360.pdf', preview_url: 'brochures/cduX360.pdf' },
-        { filename: 'cokerX360.pdf', title: 'CokerX360 Brochure', category: 'CokerX360', format: 'PDF', ext: '.pdf', size_formatted: '826.1 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/cokerX360.png', download_url: 'brochures/cokerX360.pdf', preview_url: 'brochures/cokerX360.pdf' },
-        { filename: 'controllerX360.pdf', title: 'controllerX360 Details', category: 'controllerX360', format: 'PDF', ext: '.pdf', size_formatted: '450.0 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/controllerX360.png', download_url: 'brochures/controllerX360.pdf', preview_url: 'brochures/controllerX360.pdf' },
-        { filename: 'energyX360.pdf', title: 'EnergyX360 Brochure', category: 'EnergyX360', format: 'PDF', ext: '.pdf', size_formatted: '731.5 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/energyX360.png', download_url: 'brochures/energyX360.pdf', preview_url: 'brochures/energyX360.pdf' },
-        { filename: 'furnaceX360.pptx', title: 'furnaceX360 Presentation', category: 'furnaceX360', format: 'PPTX', ext: '.pptx', size_formatted: '604.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: null, download_url: 'brochures/furnaceX360.pptx', preview_url: 'brochures/furnaceX360.pptx' },
-        { filename: 'genX360.pdf', title: 'genX360 Brochure', category: 'genX360', format: 'PDF', ext: '.pdf', size_formatted: '162.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/genX360.png', download_url: 'brochures/genX360.pdf', preview_url: 'brochures/genX360.pdf' },
-        { filename: 'maintenanceX360.pdf', title: 'maintenanceX360 Brochure', category: 'maintenanceX360', format: 'PDF', ext: '.pdf', size_formatted: '520.0 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/maintenanceX360.png', download_url: 'brochures/maintenanceX360.pdf', preview_url: 'brochures/maintenanceX360.pdf' },
-        { filename: 'outlierX360.pdf', title: 'OutlierX360 One Pager', category: 'OutlierX360', format: 'PDF', ext: '.pdf', size_formatted: '162.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/outlierX360.png', download_url: 'brochures/outlierX360.pdf', preview_url: 'brochures/outlierX360.pdf' },
+        { filename: 'polymerX360.pdf', title: 'polymerX360', category: 'polymerX360', format: 'PDF', ext: '.pdf', size_formatted: '837.7 KB', modified_time: 1725450000, modified_date: 'Sep 04, 2026', thumbnail_url: 'static/thumbnails/polymerX360.png', download_url: 'brochures/polymerX360.pdf', preview_url: 'brochures/polymerX360.pdf' },
+        { filename: 'cduX360.pdf', title: 'cduX360', category: 'CDUX360', format: 'PDF', ext: '.pdf', size_formatted: '604.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/cduX360.png', download_url: 'brochures/cduX360.pdf', preview_url: 'brochures/cduX360.pdf' },
+        { filename: 'cokerX360.pdf', title: 'cokerX360', category: 'CokerX360', format: 'PDF', ext: '.pdf', size_formatted: '826.1 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/cokerX360.png', download_url: 'brochures/cokerX360.pdf', preview_url: 'brochures/cokerX360.pdf' },
+        { filename: 'controllerX360.pdf', title: 'controllerX360', category: 'controllerX360', format: 'PDF', ext: '.pdf', size_formatted: '450.0 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/controllerX360.png', download_url: 'brochures/controllerX360.pdf', preview_url: 'brochures/controllerX360.pdf' },
+        { filename: 'energyX360.pdf', title: 'energyX360', category: 'EnergyX360', format: 'PDF', ext: '.pdf', size_formatted: '731.5 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/energyX360.png', download_url: 'brochures/energyX360.pdf', preview_url: 'brochures/energyX360.pdf' },
+        { filename: 'furnaceX360.pptx', title: 'furnaceX360', category: 'furnaceX360', format: 'PPTX', ext: '.pptx', size_formatted: '604.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: null, download_url: 'brochures/furnaceX360.pptx', preview_url: 'brochures/furnaceX360.pptx' },
+        { filename: 'genX360.pdf', title: 'genX360', category: 'genX360', format: 'PDF', ext: '.pdf', size_formatted: '162.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/genX360.png', download_url: 'brochures/genX360.pdf', preview_url: 'brochures/genX360.pdf' },
+        { filename: 'maintenanceX360.pdf', title: 'maintenanceX360', category: 'maintenanceX360', format: 'PDF', ext: '.pdf', size_formatted: '520.0 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/maintenanceX360.png', download_url: 'brochures/maintenanceX360.pdf', preview_url: 'brochures/maintenanceX360.pdf' },
+        { filename: 'outlierX360.pdf', title: 'outlierX360', category: 'OutlierX360', format: 'PDF', ext: '.pdf', size_formatted: '162.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/outlierX360.png', download_url: 'brochures/outlierX360.pdf', preview_url: 'brochures/outlierX360.pdf' },
         { filename: 'outlierX360_new.pdf', title: 'outlierX360 Final', category: 'OutlierX360', format: 'PDF', ext: '.pdf', size_formatted: '380.0 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/outlierX360_new.png', download_url: 'brochures/outlierX360_new.pdf', preview_url: 'brochures/outlierX360_new.pdf' },
-        { filename: 'reliabilityX360.pptx', title: 'ReliabilityX360 Presentation', category: 'ReliabilityX360', format: 'PPTX', ext: '.pptx', size_formatted: '751.1 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: null, download_url: 'brochures/reliabilityX360.pptx', preview_url: 'brochures/reliabilityX360.pptx' },
-        { filename: 'vduX360.pdf', title: 'VDUX360 Brochure', category: 'VDUX360', format: 'PDF', ext: '.pdf', size_formatted: '736.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/vduX360.png', download_url: 'brochures/vduX360.pdf', preview_url: 'brochures/vduX360.pdf' }
+        { filename: 'reliabilityX360.pptx', title: 'reliabilityX360', category: 'ReliabilityX360', format: 'PPTX', ext: '.pptx', size_formatted: '751.1 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: null, download_url: 'brochures/reliabilityX360.pptx', preview_url: 'brochures/reliabilityX360.pptx' },
+        { filename: 'vduX360.pdf', title: 'vduX360', category: 'VDUX360', format: 'PDF', ext: '.pdf', size_formatted: '736.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/vduX360.png', download_url: 'brochures/vduX360.pdf', preview_url: 'brochures/vduX360.pdf' }
     ];
 
     // App State
@@ -518,17 +518,24 @@ document.addEventListener('DOMContentLoaded', () => {
             const isChecked = selectedFiles.has(item.filename);
             const cardClass = isChecked ? 'brochure-card selected' : 'brochure-card';
             
+            const iconClass = item.format === 'PDF' ? 'pdf-icon' : 'pptx-icon';
+            const faIcon = item.format === 'PDF' ? 'fa-file-pdf' : 'fa-file-powerpoint';
+            const fallbackHTML = `
+                <div class="thumb-fallback ${iconClass}">
+                    <i class="fa-solid ${faIcon}"></i>
+                    <span>${item.format} Document</span>
+                </div>`;
+
             let thumbHTML = '';
             if (item.thumbnail_url) {
-                thumbHTML = `<img src="${item.thumbnail_url}" alt="${item.title}" class="card-thumb-img" loading="lazy">`;
-            } else {
-                const iconClass = item.format === 'PDF' ? 'pdf-icon' : 'pptx-icon';
-                const faIcon = item.format === 'PDF' ? 'fa-file-pdf' : 'fa-file-powerpoint';
                 thumbHTML = `
-                    <div class="thumb-fallback ${iconClass}">
+                    <img src="${item.thumbnail_url}" alt="${item.title}" class="card-thumb-img" loading="lazy" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';">
+                    <div class="thumb-fallback ${iconClass}" style="display:none;">
                         <i class="fa-solid ${faIcon}"></i>
                         <span>${item.format} Document</span>
                     </div>`;
+            } else {
+                thumbHTML = fallbackHTML;
             }
 
             const titleLower = (item.title || '').toLowerCase();
@@ -591,13 +598,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const isChecked = selectedFiles.has(item.filename);
             const badgeClass = item.format === 'PDF' ? 'badge-pdf' : (item.format === 'PPTX' ? 'badge-pptx' : 'badge-doc');
 
+            const faIcon = item.format === 'PDF' ? 'fa-file-pdf' : 'fa-file-powerpoint';
+            const iconColor = item.format === 'PDF' ? 'var(--pdf-red)' : 'var(--pptx-orange)';
+            const listFallbackHTML = `<div class="table-thumb-fallback" style="color: ${iconColor}"><i class="fa-solid ${faIcon}"></i></div>`;
+
             let thumbHTML = '';
             if (item.thumbnail_url) {
-                thumbHTML = `<img src="${item.thumbnail_url}" class="table-thumb" alt="thumb">`;
+                thumbHTML = `
+                    <img src="${item.thumbnail_url}" class="table-thumb" alt="thumb" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='inline-block';">
+                    <div class="table-thumb-fallback" style="display:none; color: ${iconColor}"><i class="fa-solid ${faIcon}"></i></div>
+                `;
             } else {
-                const faIcon = item.format === 'PDF' ? 'fa-file-pdf' : 'fa-file-powerpoint';
-                const iconColor = item.format === 'PDF' ? 'var(--pdf-red)' : 'var(--pptx-orange)';
-                thumbHTML = `<div class="table-thumb-fallback" style="color: ${iconColor}"><i class="fa-solid ${faIcon}"></i></div>`;
+                thumbHTML = listFallbackHTML;
             }
 
             const adminActions = isAdminLoggedIn ? `

@@ -234,6 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Static fallback data with cover page thumbnails for GitHub Pages hosting
     const staticBrochuresFallback = [
+        { filename: 'polymerX360.pdf', title: 'polymerX360 Brochure', category: 'polymerX360', format: 'PDF', ext: '.pdf', size_formatted: '837.7 KB', modified_time: 1725450000, modified_date: 'Sep 04, 2026', thumbnail_url: 'static/thumbnails/polymerX360.png', download_url: 'brochures/polymerX360.pdf', preview_url: 'brochures/polymerX360.pdf' },
         { filename: 'cduX360.pdf', title: 'cduX360 Brochure', category: 'CDUX360', format: 'PDF', ext: '.pdf', size_formatted: '604.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/cduX360.png', download_url: 'brochures/cduX360.pdf', preview_url: 'brochures/cduX360.pdf' },
         { filename: 'cokerX360.pdf', title: 'CokerX360 Brochure', category: 'CokerX360', format: 'PDF', ext: '.pdf', size_formatted: '826.1 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/cokerX360.png', download_url: 'brochures/cokerX360.pdf', preview_url: 'brochures/cokerX360.pdf' },
         { filename: 'controllerX360.pdf', title: 'controllerX360 Details', category: 'controllerX360', format: 'PDF', ext: '.pdf', size_formatted: '450.0 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/controllerX360.png', download_url: 'brochures/controllerX360.pdf', preview_url: 'brochures/controllerX360.pdf' },

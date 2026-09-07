@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Static fallback data with cover page thumbnails for GitHub Pages hosting
     const staticBrochuresFallback = [
-        { filename: 'polymerX360.pdf', title: 'polymerX360', category: 'polymerX360', format: 'PDF', ext: '.pdf', size_formatted: '837.7 KB', modified_time: 1725450000, modified_date: 'Sep 04, 2026', thumbnail_url: 'static/thumbnails/polymerX360.png', download_url: 'brochures/polymerX360.pdf', preview_url: 'brochures/polymerX360.pdf' },
+        { filename: 'polymerX360.pdf', title: 'polymerX360', category: 'polymerX360', format: 'PDF', ext: '.pdf', size_formatted: '837.7 KB', modified_time: 1725450000, modified_date: 'Sep 04, 2026', thumbnail_url: 'static/thumbnails/polymerX360.png', download_url: 'polymerX360.pdf', preview_url: 'polymerX360.pdf' },
         { filename: 'cduX360.pdf', title: 'cduX360', category: 'CDUX360', format: 'PDF', ext: '.pdf', size_formatted: '604.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/cduX360.png', download_url: 'brochures/cduX360.pdf', preview_url: 'brochures/cduX360.pdf' },
         { filename: 'cokerX360.pdf', title: 'cokerX360', category: 'CokerX360', format: 'PDF', ext: '.pdf', size_formatted: '826.1 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/cokerX360.png', download_url: 'brochures/cokerX360.pdf', preview_url: 'brochures/cokerX360.pdf' },
         { filename: 'controllerX360.pdf', title: 'controllerX360', category: 'controllerX360', format: 'PDF', ext: '.pdf', size_formatted: '450.0 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/controllerX360.png', download_url: 'brochures/controllerX360.pdf', preview_url: 'brochures/controllerX360.pdf' },
@@ -1244,11 +1244,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function openPreview(filename, title, previewUrl, format) {
         previewTitle.innerHTML = `<i class="fa-solid ${format === 'PDF' ? 'fa-file-pdf' : 'fa-file-powerpoint'}"></i> ${title}`;
-        btnOpenNewTab.href = previewUrl;
-        btnDownloadPreview.href = previewUrl;
+        
+        const brochureItem = brochures.find(b => b.filename === filename);
+        const actualPreviewUrl = (brochureItem && brochureItem.preview_url) ? brochureItem.preview_url : previewUrl;
+        const actualDownloadUrl = (brochureItem && brochureItem.download_url) ? brochureItem.download_url : previewUrl;
+
+        btnOpenNewTab.href = actualPreviewUrl;
+        btnDownloadPreview.href = actualDownloadUrl;
 
         if (format === 'PDF') {
-            previewIframe.src = previewUrl;
+            previewIframe.src = actualPreviewUrl;
         } else {
             previewIframe.srcdoc = `
                 <html>
@@ -1256,7 +1261,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h2 style="color:#ff6b00;">PowerPoint Presentation (.pptx)</h2>
                     <p>Click below to download or view presentation directly.</p>
                     <br>
-                    <a href="${previewUrl}" download style="padding: 10px 20px; background: #ff6b00; color: white; border-radius: 6px; text-decoration: none; font-weight: bold;">
+                    <a href="${actualDownloadUrl}" download style="padding: 10px 20px; background: #ff6b00; color: white; border-radius: 6px; text-decoration: none; font-weight: bold;">
                         Download ${filename}
                     </a>
                 </body>

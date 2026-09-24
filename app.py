@@ -25,9 +25,10 @@ ALLOWED_EXTENSIONS = {'.pdf', '.pptx', '.ppt', '.doc', '.docx'}
 ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'ingenero360')
 
 PRODUCT_CATEGORIES = [
-    'CDUX360', 'CokerX360', 'EnergyX360', 'OutlierX360', 
-    'ReliabilityX360', 'VDUX360', 'controllerX360', 
-    'furnaceX360', 'genX360', 'maintenanceX360'
+    'CDUX360', 'CokerX360', 'EnergyX360', 'MethanolX360', 'OutlierX360', 
+    'ReliabilityX360', 'VDUX360', 'acetyleneX360', 'ammoniaX360', 'cgcX360',
+    'controllerX360', 'furnaceX360', 'gasX360', 'gasnetX360', 'genX360', 
+    'maintenanceX360', 'polymerX360', 'quenchX360', 'recoveryX360'
 ]
 
 def load_demos():

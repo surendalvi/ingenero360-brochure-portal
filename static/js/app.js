@@ -9,9 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const GITHUB_REPO = 'ingenero360-brochure-portal';
 
     const PRODUCT_CATEGORIES = [
-        'CDUX360', 'CokerX360', 'EnergyX360', 'OutlierX360', 
-        'ReliabilityX360', 'VDUX360', 'controllerX360', 
-        'furnaceX360', 'genX360', 'maintenanceX360'
+        'CDUX360', 'CokerX360', 'EnergyX360', 'MethanolX360', 'OutlierX360', 
+        'ReliabilityX360', 'VDUX360', 'acetyleneX360', 'ammoniaX360', 'cgcX360',
+        'controllerX360', 'furnaceX360', 'gasX360', 'gasnetX360', 'genX360', 
+        'maintenanceX360', 'polymerX360', 'quenchX360', 'recoveryX360'
     ];
 
     const LOCAL_RENAMES_KEY = 'ingenero_custom_titles';
@@ -234,19 +235,254 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Static fallback data with cover page thumbnails for GitHub Pages hosting
     const staticBrochuresFallback = [
-        { filename: 'polymerX360.pdf', title: 'polymerX360', category: 'polymerX360', format: 'PDF', ext: '.pdf', size_formatted: '837.7 KB', modified_time: 1725450000, modified_date: 'Sep 04, 2026', thumbnail_url: 'static/thumbnails/polymerX360.png', download_url: 'brochures/polymerX360.pdf', preview_url: 'brochures/polymerX360.pdf' },
-        { filename: 'cduX360.pdf', title: 'cduX360', category: 'CDUX360', format: 'PDF', ext: '.pdf', size_formatted: '604.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/cduX360.png', download_url: 'brochures/cduX360.pdf', preview_url: 'brochures/cduX360.pdf' },
-        { filename: 'cokerX360.pdf', title: 'cokerX360', category: 'CokerX360', format: 'PDF', ext: '.pdf', size_formatted: '826.1 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/cokerX360.png', download_url: 'brochures/cokerX360.pdf', preview_url: 'brochures/cokerX360.pdf' },
-        { filename: 'controllerX360.pdf', title: 'controllerX360', category: 'controllerX360', format: 'PDF', ext: '.pdf', size_formatted: '450.0 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/controllerX360.png', download_url: 'brochures/controllerX360.pdf', preview_url: 'brochures/controllerX360.pdf' },
-        { filename: 'energyX360.pdf', title: 'energyX360', category: 'EnergyX360', format: 'PDF', ext: '.pdf', size_formatted: '731.5 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/energyX360.png', download_url: 'brochures/energyX360.pdf', preview_url: 'brochures/energyX360.pdf' },
-        { filename: 'furnaceX360.pptx', title: 'furnaceX360', category: 'furnaceX360', format: 'PPTX', ext: '.pptx', size_formatted: '604.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: null, download_url: 'brochures/furnaceX360.pptx', preview_url: 'brochures/furnaceX360.pptx' },
-        { filename: 'genX360.pdf', title: 'genX360', category: 'genX360', format: 'PDF', ext: '.pdf', size_formatted: '162.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/genX360.png', download_url: 'brochures/genX360.pdf', preview_url: 'brochures/genX360.pdf' },
-        { filename: 'maintenanceX360.pdf', title: 'maintenanceX360', category: 'maintenanceX360', format: 'PDF', ext: '.pdf', size_formatted: '520.0 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/maintenanceX360.png', download_url: 'brochures/maintenanceX360.pdf', preview_url: 'brochures/maintenanceX360.pdf' },
-        { filename: 'outlierX360.pdf', title: 'outlierX360', category: 'OutlierX360', format: 'PDF', ext: '.pdf', size_formatted: '162.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/outlierX360.png', download_url: 'brochures/outlierX360.pdf', preview_url: 'brochures/outlierX360.pdf' },
-        { filename: 'outlierX360_new.pdf', title: 'outlierX360 Final', category: 'OutlierX360', format: 'PDF', ext: '.pdf', size_formatted: '380.0 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/outlierX360_new.png', download_url: 'brochures/outlierX360_new.pdf', preview_url: 'brochures/outlierX360_new.pdf' },
-        { filename: 'reliabilityX360.pptx', title: 'reliabilityX360', category: 'ReliabilityX360', format: 'PPTX', ext: '.pptx', size_formatted: '751.1 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: null, download_url: 'brochures/reliabilityX360.pptx', preview_url: 'brochures/reliabilityX360.pptx' },
-        { filename: 'vduX360.pdf', title: 'vduX360', category: 'VDUX360', format: 'PDF', ext: '.pdf', size_formatted: '736.7 KB', modified_time: 1725148800, modified_date: 'Sep 01, 2026', thumbnail_url: 'static/thumbnails/vduX360.png', download_url: 'brochures/vduX360.pdf', preview_url: 'brochures/vduX360.pdf' }
-    ];
+        {
+                "filename": "MethanolX360.pdf",
+                "title": "MethanolX360",
+                "category": "MethanolX360",
+                "format": "PDF",
+                "ext": ".pdf",
+                "size_formatted": "350.3 KB",
+                "modified_time": 1788864367,
+                "modified_date": "Sep 08, 2026",
+                "thumbnail_url": "static/thumbnails/MethanolX360.png",
+                "download_url": "brochures/MethanolX360.pdf",
+                "preview_url": "brochures/MethanolX360.pdf"
+        },
+        {
+                "filename": "acetyleneX360.pdf",
+                "title": "acetyleneX360",
+                "category": "acetyleneX360",
+                "format": "PDF",
+                "ext": ".pdf",
+                "size_formatted": "457.3 KB",
+                "modified_time": 1790232395,
+                "modified_date": "Sep 24, 2026",
+                "thumbnail_url": "static/thumbnails/acetyleneX360.png",
+                "download_url": "brochures/acetyleneX360.pdf",
+                "preview_url": "brochures/acetyleneX360.pdf"
+        },
+        {
+                "filename": "ammoniaX360.pdf",
+                "title": "ammoniaX360",
+                "category": "ammoniaX360",
+                "format": "PDF",
+                "ext": ".pdf",
+                "size_formatted": "501.4 KB",
+                "modified_time": 1790181177,
+                "modified_date": "Sep 23, 2026",
+                "thumbnail_url": "static/thumbnails/ammoniaX360.png",
+                "download_url": "brochures/ammoniaX360.pdf",
+                "preview_url": "brochures/ammoniaX360.pdf"
+        },
+        {
+                "filename": "cduX360.pdf",
+                "title": "cduX360",
+                "category": "cduX360",
+                "format": "PDF",
+                "ext": ".pdf",
+                "size_formatted": "736.3 KB",
+                "modified_time": 1788259913,
+                "modified_date": "Sep 01, 2026",
+                "thumbnail_url": "static/thumbnails/cduX360.png",
+                "download_url": "brochures/cduX360.pdf",
+                "preview_url": "brochures/cduX360.pdf"
+        },
+        {
+                "filename": "cgcX360.pdf",
+                "title": "cgcX360",
+                "category": "cgcX360",
+                "format": "PDF",
+                "ext": ".pdf",
+                "size_formatted": "453.7 KB",
+                "modified_time": 1790232399,
+                "modified_date": "Sep 24, 2026",
+                "thumbnail_url": "static/thumbnails/cgcX360.png",
+                "download_url": "brochures/cgcX360.pdf",
+                "preview_url": "brochures/cgcX360.pdf"
+        },
+        {
+                "filename": "cokerX360.pdf",
+                "title": "cokerX360",
+                "category": "cokerX360",
+                "format": "PDF",
+                "ext": ".pdf",
+                "size_formatted": "826.1 KB",
+                "modified_time": 1788259986,
+                "modified_date": "Sep 01, 2026",
+                "thumbnail_url": "static/thumbnails/cokerX360.png",
+                "download_url": "brochures/cokerX360.pdf",
+                "preview_url": "brochures/cokerX360.pdf"
+        },
+        {
+                "filename": "controllerX360.pdf",
+                "title": "controllerX360",
+                "category": "controllerX360",
+                "format": "PDF",
+                "ext": ".pdf",
+                "size_formatted": "393.2 KB",
+                "modified_time": 1788259892,
+                "modified_date": "Sep 01, 2026",
+                "thumbnail_url": "static/thumbnails/controllerX360.png",
+                "download_url": "brochures/controllerX360.pdf",
+                "preview_url": "brochures/controllerX360.pdf"
+        },
+        {
+                "filename": "energyX360.pdf",
+                "title": "energyX360",
+                "category": "energyX360",
+                "format": "PDF",
+                "ext": ".pdf",
+                "size_formatted": "731.5 KB",
+                "modified_time": 1788259959,
+                "modified_date": "Sep 01, 2026",
+                "thumbnail_url": "static/thumbnails/energyX360.png",
+                "download_url": "brochures/energyX360.pdf",
+                "preview_url": "brochures/energyX360.pdf"
+        },
+        {
+                "filename": "furnaceX360.pptx",
+                "title": "furnaceX360",
+                "category": "furnaceX360",
+                "format": "PPTX",
+                "ext": ".pptx",
+                "size_formatted": "604.7 KB",
+                "modified_time": 1788259998,
+                "modified_date": "Sep 01, 2026",
+                "thumbnail_url": null,
+                "download_url": "brochures/furnaceX360.pptx",
+                "preview_url": "brochures/furnaceX360.pptx"
+        },
+        {
+                "filename": "gasX360.pdf",
+                "title": "gasX360",
+                "category": "gasX360",
+                "format": "PDF",
+                "ext": ".pdf",
+                "size_formatted": "985.0 KB",
+                "modified_time": 1790232444,
+                "modified_date": "Sep 24, 2026",
+                "thumbnail_url": "static/thumbnails/gasX360.png",
+                "download_url": "brochures/gasX360.pdf",
+                "preview_url": "brochures/gasX360.pdf"
+        },
+        {
+                "filename": "gasnetX360.pptx",
+                "title": "gasnetX360",
+                "category": "gasnetX360",
+                "format": "PPTX",
+                "ext": ".pptx",
+                "size_formatted": "2.0 MB",
+                "modified_time": 1788792829,
+                "modified_date": "Sep 07, 2026",
+                "thumbnail_url": null,
+                "download_url": "brochures/gasnetX360.pptx",
+                "preview_url": "brochures/gasnetX360.pptx"
+        },
+        {
+                "filename": "genX360.pdf",
+                "title": "genX360",
+                "category": "genX360",
+                "format": "PDF",
+                "ext": ".pdf",
+                "size_formatted": "162.7 KB",
+                "modified_time": 1788259972,
+                "modified_date": "Sep 01, 2026",
+                "thumbnail_url": "static/thumbnails/genX360.png",
+                "download_url": "brochures/genX360.pdf",
+                "preview_url": "brochures/genX360.pdf"
+        },
+        {
+                "filename": "maintenanceX360.pdf",
+                "title": "maintenanceX360",
+                "category": "maintenanceX360",
+                "format": "PDF",
+                "ext": ".pdf",
+                "size_formatted": "172.6 KB",
+                "modified_time": 1788259887,
+                "modified_date": "Sep 01, 2026",
+                "thumbnail_url": "static/thumbnails/maintenanceX360.png",
+                "download_url": "brochures/maintenanceX360.pdf",
+                "preview_url": "brochures/maintenanceX360.pdf"
+        },
+        {
+                "filename": "outlierX360.pdf",
+                "title": "outlierX360",
+                "category": "outlierX360",
+                "format": "PDF",
+                "ext": ".pdf",
+                "size_formatted": "348.5 KB",
+                "modified_time": 1788259889,
+                "modified_date": "Sep 01, 2026",
+                "thumbnail_url": "static/thumbnails/outlierX360.png",
+                "download_url": "brochures/outlierX360.pdf",
+                "preview_url": "brochures/outlierX360.pdf"
+        },
+        {
+                "filename": "polymerX360.pdf",
+                "title": "polymerX360",
+                "category": "polymerX360",
+                "format": "PDF",
+                "ext": ".pdf",
+                "size_formatted": "837.7 KB",
+                "modified_time": 1788512244,
+                "modified_date": "Sep 04, 2026",
+                "thumbnail_url": "static/thumbnails/polymerX360.png",
+                "download_url": "brochures/polymerX360.pdf",
+                "preview_url": "brochures/polymerX360.pdf"
+        },
+        {
+                "filename": "quenchX360.pdf",
+                "title": "quenchX360",
+                "category": "quenchX360",
+                "format": "PDF",
+                "ext": ".pdf",
+                "size_formatted": "462.7 KB",
+                "modified_time": 1790232412,
+                "modified_date": "Sep 24, 2026",
+                "thumbnail_url": "static/thumbnails/quenchX360.png",
+                "download_url": "brochures/quenchX360.pdf",
+                "preview_url": "brochures/quenchX360.pdf"
+        },
+        {
+                "filename": "recoveryX360.pdf",
+                "title": "recoveryX360",
+                "category": "recoveryX360",
+                "format": "PDF",
+                "ext": ".pdf",
+                "size_formatted": "462.8 KB",
+                "modified_time": 1790232438,
+                "modified_date": "Sep 24, 2026",
+                "thumbnail_url": "static/thumbnails/recoveryX360.png",
+                "download_url": "brochures/recoveryX360.pdf",
+                "preview_url": "brochures/recoveryX360.pdf"
+        },
+        {
+                "filename": "reliabilityX360.pdf",
+                "title": "reliabilityX360",
+                "category": "reliabilityX360",
+                "format": "PDF",
+                "ext": ".pdf",
+                "size_formatted": "421.0 KB",
+                "modified_time": 1788526570,
+                "modified_date": "Sep 04, 2026",
+                "thumbnail_url": "static/thumbnails/reliabilityX360.png",
+                "download_url": "brochures/reliabilityX360.pdf",
+                "preview_url": "brochures/reliabilityX360.pdf"
+        },
+        {
+                "filename": "vduX360.pdf",
+                "title": "vduX360",
+                "category": "vduX360",
+                "format": "PDF",
+                "ext": ".pdf",
+                "size_formatted": "736.7 KB",
+                "modified_time": 1788259941,
+                "modified_date": "Sep 01, 2026",
+                "thumbnail_url": "static/thumbnails/vduX360.png",
+                "download_url": "brochures/vduX360.pdf",
+                "preview_url": "brochures/vduX360.pdf"
+        }
+];
 
     // App State
     let brochures = [];

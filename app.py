@@ -90,14 +90,58 @@ def git_pull_latest():
         print(f"[GitHub Pull Error]: {e}")
         return False
 
-def get_file_category(filename):
-    match = re.search(r'([a-zA-Z0-9]+[xX]360)', filename)
-    if match:
-        return match.group(1)
-    fname_upper = filename.upper()
-    for cat in PRODUCT_CATEGORIES:
+INDUSTRY_CATEGORIES = [
+    'Ammonia and Methanol',
+    'Diagnostic and Agentic AI Tools',
+    'Gas',
+    'Maintenance and Reliability',
+    'Olefin',
+    'Polymer',
+    'Refinery',
+    'Utility'
+]
+
+PRODUCT_NAMES = {
+    'ammoniaX360.pdf': ('AmmoniaX360', 'Predictive Decision Support for Ammonia Plant'),
+    'MethanolX360.pdf': ('MethanolX360', 'Predictive Decision Support for Methanol Complex'),
+    'controllerX360_brochure.pdf': ('ControllerX360', 'Control Loop Performance Diagnosis & Autonomous Tuning'),
+    'genX360_Brochure.pdf': ('GenX360', 'Autonomous Generative AI Decision Support for Process Manufacturing'),
+    'outlierX360_brochure.pdf': ('OutlierX360', 'Outlier Detection & Plant Sensor Data Diagnostics'),
+    'workflowX360_brochure.pdf': ('WorkflowX360', 'Standard Workflow Orchestration for Industrial AI'),
+    'gasnetX360.pdf': ('GasnetX360', 'Highest-Margin, Constraint-Feasible Pipeline Network Optimization'),
+    'gasX360.pdf': ('GasX360', 'Predictive Decision Support for Gas Processing Plants'),
+    'maintenanceX360_brochure.pdf': ('MaintenanceX360', 'Predictive Maintenance & Dynamic Scheduling'),
+    'reliabilityX360_brochure.pdf': ('ReliabilityX360', 'Predictive Decision Support for Critical Rotating Assets'),
+    'acetyleneX360_brochure.pdf': ('AcetyleneX360', 'Acetylene Hydrogenation & Cold Ethylene Recovery Optimization'),
+    'cgcX360_brochure.pdf': ('CgcX360', 'Cracked Gas Compression Train Performance & Anti-Surge Diagnostics'),
+    'furnaceX360_Brochure.pdf': ('FurnaceX360', 'Olefin Cracking Furnace Yield & Run-Length Optimization'),
+    'olefinX360_brochure.pdf': ('OlefinX360', 'Comprehensive Ethylene & Olefin Complex Optimization'),
+    'quenchX360_brochure.pdf': ('QuenchX360', 'Quench & Dilution Steam System Process Optimization'),
+    'recoveryX360_brochure.pdf': ('RecoveryX360', 'Cold Section & Ethylene Recovery Train Optimization'),
+    'polymerX360_brochure.pdf': ('PolymerX360', 'Predictive Decision Support for Polymer & Polyolefin Units'),
+    'cduX360_brochure.pdf': ('CDUX360', 'Predictive Decision Support for Crude Distillation Units'),
+    'cokerX360_brochure.pdf': ('CokerX360', 'Delayed Coking Unit Cycle & Throughput Optimization'),
+    'vduX360_brochure.pdf': ('VDUX360', 'Vacuum Distillation Unit Cut-Point & Energy Optimization'),
+    'energyX360_brochure.pdf': ('EnergyX360', 'Site-Wide Energy, Steam, Power & Emissions Optimization')
+}
+
+def get_file_category(file_path):
+    # Check parent folder relative to BROCHURE_DIR
+    try:
+        rel_parent = file_path.parent.relative_to(BROCHURE_DIR).as_posix()
+        if rel_parent and rel_parent != '.':
+            return file_path.parent.name
+    except Exception:
+        pass
+    
+    fname = file_path.name
+    fname_upper = fname.upper()
+    for cat in INDUSTRY_CATEGORIES:
         if cat.upper() in fname_upper:
             return cat
+    match = re.search(r'([a-zA-Z0-9]+[xX]360)', fname)
+    if match:
+        return match.group(1)
     return 'Other Products'
 
 def format_file_size(size_in_bytes):
@@ -148,34 +192,40 @@ def scan_brochures():
     if not BROCHURE_DIR.exists():
         return brochures
         
-    for item in BROCHURE_DIR.iterdir():
+    for item in BROCHURE_DIR.rglob('*'):
         if item.is_file() and item.suffix.lower() in ALLOWED_EXTENSIONS:
             if item.name.startswith('.'):
                 continue
                 
             stat = item.stat()
-            category = get_file_category(item.name)
+            rel_path = item.relative_to(BROCHURE_DIR).as_posix()
+            category = get_file_category(item)
             thumb_url = get_thumbnail_url(item)
             
-            clean_title = item.stem.replace('_', ' ').replace('-', ' ')
-            clean_title = re.sub(r'\s+', ' ', clean_title).strip()
+            title, subtitle = PRODUCT_NAMES.get(item.name, (
+                re.sub(r'\s+', ' ', item.stem.replace('_brochure', '').replace('_Brochure', '').replace('_', ' ').replace('-', ' ')).strip(),
+                ''
+            ))
             
             brochures.append({
                 'filename': item.name,
-                'title': clean_title,
+                'rel_path': rel_path,
+                'title': title,
+                'subtitle': subtitle,
                 'category': category,
+                'category_slug': category.lower().replace(' ', '-').replace('&', 'and'),
                 'format': item.suffix.lower().replace('.', '').upper(),
                 'ext': item.suffix.lower(),
                 'size': stat.st_size,
                 'size_formatted': format_file_size(stat.st_size),
-                'modified_time': stat.st_mtime,
+                'modified_time': int(stat.st_mtime),
                 'modified_date': time.strftime('%b %d, %Y', time.localtime(stat.st_mtime)),
                 'thumbnail_url': thumb_url,
-                'download_url': f"/download/{item.name}",
-                'preview_url': f"/preview/{item.name}"
+                'download_url': f"/download/{rel_path}",
+                'preview_url': f"/preview/{rel_path}"
             })
             
-    brochures.sort(key=lambda x: x['modified_time'], reverse=True)
+    brochures.sort(key=lambda x: (x['category'], x['title']))
     return brochures
 
 @app.route('/')
@@ -283,20 +333,31 @@ def delete_demo(demo_id):
     git_commit_and_push_async("demos.json", f"Delete Demo: {demo_id}")
     return jsonify({'status': 'success', 'message': 'Demo link deleted and synced to GitHub.'})
 
-@app.route('/download/<filename>')
-def download_file(filename):
-    file_path = BROCHURE_DIR / filename
-    if not file_path.exists() or file_path.suffix.lower() not in ALLOWED_EXTENSIONS:
-        abort(404)
-    return send_from_directory(BROCHURE_DIR, filename, as_attachment=True)
+def find_brochure_file(filepath_str):
+    """Finds a brochure file either by relative subpath or by filename."""
+    candidate = BROCHURE_DIR / filepath_str
+    if candidate.exists() and candidate.is_file():
+        return candidate
+    # Fallback search by filename across all subdirectories
+    for f in BROCHURE_DIR.rglob('*'):
+        if f.is_file() and (f.name == filepath_str or f.name.lower() == filepath_str.lower()):
+            return f
+    return None
 
-@app.route('/preview/<filename>')
-def preview_file(filename):
-    file_path = BROCHURE_DIR / filename
-    if not file_path.exists() or file_path.suffix.lower() not in ALLOWED_EXTENSIONS:
+@app.route('/download/<path:filepath>')
+def download_file(filepath):
+    file_path = find_brochure_file(filepath)
+    if not file_path or file_path.suffix.lower() not in ALLOWED_EXTENSIONS:
+        abort(404)
+    return send_file(file_path, as_attachment=True, download_name=file_path.name)
+
+@app.route('/preview/<path:filepath>')
+def preview_file(filepath):
+    file_path = find_brochure_file(filepath)
+    if not file_path or file_path.suffix.lower() not in ALLOWED_EXTENSIONS:
         abort(404)
     mimetype = 'application/pdf' if file_path.suffix.lower() == '.pdf' else None
-    return send_from_directory(BROCHURE_DIR, filename, mimetype=mimetype)
+    return send_file(file_path, mimetype=mimetype)
 
 @app.route('/api/upload', methods=['POST'])
 def upload_brochure():
@@ -307,6 +368,7 @@ def upload_brochure():
     if file.filename == '':
         return jsonify({'status': 'error', 'message': 'Empty filename'}), 400
         
+    category_folder = request.form.get('category', '').strip()
     filename = secure_filename(file.filename)
     if not filename:
         filename = file.filename
@@ -315,32 +377,40 @@ def upload_brochure():
     if ext not in ALLOWED_EXTENSIONS:
         return jsonify({'status': 'error', 'message': f'File format {ext} not allowed.'}), 400
         
-    target_path = BROCHURE_DIR / filename
+    if category_folder and category_folder in INDUSTRY_CATEGORIES:
+        target_dir = BROCHURE_DIR / category_folder
+    else:
+        target_dir = BROCHURE_DIR
+        
+    target_dir.mkdir(parents=True, exist_ok=True)
+    target_path = target_dir / filename
     file.save(str(target_path))
     
     if ext == '.pdf':
         named_thumb = THUMBNAIL_DIR / f"{target_path.stem}.png"
         generate_pdf_thumbnail(target_path, named_thumb)
         
-    git_commit_and_push_async(filename, "Upload Brochure & Thumbnail")
+    rel_path = target_path.relative_to(BROCHURE_DIR).as_posix()
+    git_commit_and_push_async(rel_path, "Upload Brochure & Thumbnail")
         
     return jsonify({
         'status': 'success',
         'message': f'Brochure "{filename}" uploaded, cover thumbnail generated, and synced to GitHub!',
-        'filename': filename
+        'filename': filename,
+        'rel_path': rel_path
     })
 
 @app.route('/api/admin/rename', methods=['POST'])
 def rename_brochure():
     data = request.get_json(silent=True) or {}
-    old_filename = data.get('old_filename', '')
+    old_filepath = data.get('old_filename', '')
     new_filename = data.get('new_filename', '')
     
-    if not old_filename or not new_filename:
+    if not old_filepath or not new_filename:
         return jsonify({'status': 'error', 'message': 'Missing old or new filename'}), 400
         
-    old_path = BROCHURE_DIR / old_filename
-    if not old_path.exists():
+    old_path = find_brochure_file(old_filepath)
+    if not old_path or not old_path.exists():
         return jsonify({'status': 'error', 'message': 'Original file not found'}), 404
         
     ext = old_path.suffix.lower()
@@ -348,14 +418,15 @@ def rename_brochure():
         new_filename += ext
         
     new_filename = secure_filename(new_filename)
-    new_path = BROCHURE_DIR / new_filename
+    new_path = old_path.parent / new_filename
     
     try:
         old_path.rename(new_path)
         if ext == '.pdf':
             named_thumb = THUMBNAIL_DIR / f"{new_path.stem}.png"
             generate_pdf_thumbnail(new_path, named_thumb)
-        git_commit_and_push_async(new_filename, "Rename")
+        rel_path = new_path.relative_to(BROCHURE_DIR).as_posix()
+        git_commit_and_push_async(rel_path, "Rename")
         return jsonify({'status': 'success', 'message': f'Brochure renamed to "{new_filename}"', 'new_filename': new_filename})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
@@ -379,14 +450,14 @@ def download_zip():
     
     if not filenames:
         all_brochures = scan_brochures()
-        filenames = [b['filename'] for b in all_brochures]
+        filenames = [b['rel_path'] for b in all_brochures]
         
     memory_file = io.BytesIO()
     with zipfile.ZipFile(memory_file, 'w', zipfile.ZIP_DEFLATED) as zf:
         for fname in filenames:
-            fpath = BROCHURE_DIR / fname
-            if fpath.exists() and fpath.is_file():
-                zf.write(fpath, arcname=fname)
+            fpath = find_brochure_file(fname)
+            if fpath and fpath.exists() and fpath.is_file():
+                zf.write(fpath, arcname=fpath.name)
                 
     memory_file.seek(0)
     zip_filename = f"ingeneroX360AI_Suite_Brochures_{int(time.time())}.zip"
@@ -397,19 +468,20 @@ def download_zip():
         download_name=zip_filename
     )
 
-@app.route('/api/delete/<filename>', methods=['DELETE'])
-def delete_file(filename):
-    file_path = BROCHURE_DIR / filename
-    if not file_path.exists() or file_path.suffix.lower() not in ALLOWED_EXTENSIONS:
+@app.route('/api/delete/<path:filepath>', methods=['DELETE'])
+def delete_file(filepath):
+    file_path = find_brochure_file(filepath)
+    if not file_path or not file_path.exists() or file_path.suffix.lower() not in ALLOWED_EXTENSIONS:
         return jsonify({'status': 'error', 'message': 'File not found'}), 404
         
     try:
+        rel_path = file_path.relative_to(BROCHURE_DIR).as_posix()
         file_path.unlink()
         thumb_path = THUMBNAIL_DIR / f"{file_path.stem}.png"
         if thumb_path.exists():
             thumb_path.unlink()
-        git_commit_and_push_async(filename, "Delete")
-        return jsonify({'status': 'success', 'message': f'Brochure "{filename}" deleted and synced to GitHub.'})
+        git_commit_and_push_async(rel_path, "Delete")
+        return jsonify({'status': 'success', 'message': f'Brochure "{file_path.name}" deleted and synced to GitHub.'})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
 

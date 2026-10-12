@@ -870,19 +870,52 @@ body {
 }
 
 .card-category-tag {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 700;
     color: var(--primary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.card-category-tag i {
+    font-size: 0.7rem;
+    color: var(--primary);
+}
+
+.pill-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 107, 0, 0.15);
+    color: var(--primary);
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0.1rem 0.45rem;
+    border-radius: 10px;
+    margin-left: 0.4rem;
+}
+
+.pill-btn.active .pill-count {
+    background: var(--primary);
+    color: #ffffff;
 }
 
 .card-title {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--slate-800);
-    margin-bottom: 0.75rem;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--slate-850, #0f172a);
+    margin-bottom: 0.25rem;
+    line-height: 1.3;
+}
+
+.card-subtitle {
+    font-size: 0.8rem;
+    color: var(--slate-500);
     line-height: 1.35;
+    margin-bottom: 0.75rem;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;

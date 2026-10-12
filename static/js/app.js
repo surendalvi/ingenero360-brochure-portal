@@ -8,11 +8,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const GITHUB_OWNER = 'surendalvi';
     const GITHUB_REPO = 'ingenero360-brochure-portal';
 
-    const PRODUCT_CATEGORIES = [
-        'CDUX360', 'CokerX360', 'EnergyX360', 'MethanolX360', 'OutlierX360', 
-        'ReliabilityX360', 'VDUX360', 'acetyleneX360', 'ammoniaX360', 'cgcX360',
-        'controllerX360', 'furnaceX360', 'gasX360', 'gasnetX360', 'genX360', 
-        'maintenanceX360', 'polymerX360', 'quenchX360', 'recoveryX360'
+    const INDUSTRY_CATEGORIES = [
+        'Ammonia and Methanol',
+        'Diagnostic and Agentic AI Tools',
+        'Gas',
+        'Maintenance and Reliability',
+        'Olefin',
+        'Polymer',
+        'Refinery',
+        'Utility'
     ];
 
     const LOCAL_RENAMES_KEY = 'ingenero_custom_titles';
@@ -192,15 +196,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function getFileCategory(nameString) {
         if (!nameString) return 'Other Products';
-        const match = nameString.match(/([a-zA-Z0-9]+[xX]360)/i);
-        if (match) {
-            return match[1];
-        }
         const strUpper = nameString.toUpperCase();
-        for (const cat of PRODUCT_CATEGORIES) {
+        for (const cat of INDUSTRY_CATEGORIES) {
             if (strUpper.includes(cat.toUpperCase())) {
                 return cat;
             }
+        }
+        const match = nameString.match(/([a-zA-Z0-9]+[xX]360)/i);
+        if (match) {
+            return match[1];
         }
         return 'Other Products';
     }
@@ -236,251 +240,361 @@ document.addEventListener('DOMContentLoaded', () => {
     // Static fallback data with cover page thumbnails for GitHub Pages hosting
     const staticBrochuresFallback = [
         {
-                "filename": "MethanolX360.pdf",
-                "title": "MethanolX360",
-                "category": "MethanolX360",
-                "format": "PDF",
-                "ext": ".pdf",
-                "size_formatted": "350.3 KB",
-                "modified_time": 1788864367,
-                "modified_date": "Sep 08, 2026",
-                "thumbnail_url": "static/thumbnails/MethanolX360.png",
-                "download_url": "brochures/MethanolX360.pdf",
-                "preview_url": "brochures/MethanolX360.pdf"
-        },
-        {
-                "filename": "acetyleneX360.pdf",
-                "title": "acetyleneX360",
-                "category": "acetyleneX360",
-                "format": "PDF",
-                "ext": ".pdf",
-                "size_formatted": "457.3 KB",
-                "modified_time": 1790232395,
-                "modified_date": "Sep 24, 2026",
-                "thumbnail_url": "static/thumbnails/acetyleneX360.png",
-                "download_url": "brochures/acetyleneX360.pdf",
-                "preview_url": "brochures/acetyleneX360.pdf"
-        },
-        {
                 "filename": "ammoniaX360.pdf",
-                "title": "ammoniaX360",
-                "category": "ammoniaX360",
+                "rel_path": "Ammonia and Methanol/ammoniaX360.pdf",
+                "title": "AmmoniaX360",
+                "subtitle": "Predictive Decision Support for Ammonia Plant",
+                "category": "Ammonia and Methanol",
+                "category_slug": "ammonia-and-methanol",
                 "format": "PDF",
                 "ext": ".pdf",
+                "size": 513452,
                 "size_formatted": "501.4 KB",
                 "modified_time": 1790181177,
                 "modified_date": "Sep 23, 2026",
                 "thumbnail_url": "static/thumbnails/ammoniaX360.png",
-                "download_url": "brochures/ammoniaX360.pdf",
-                "preview_url": "brochures/ammoniaX360.pdf"
+                "download_url": "brochures/Ammonia and Methanol/ammoniaX360.pdf",
+                "preview_url": "brochures/Ammonia and Methanol/ammoniaX360.pdf"
         },
         {
-                "filename": "cduX360.pdf",
-                "title": "cduX360",
-                "category": "cduX360",
+                "filename": "MethanolX360.pdf",
+                "rel_path": "Ammonia and Methanol/MethanolX360.pdf",
+                "title": "MethanolX360",
+                "subtitle": "Predictive Decision Support for Methanol Complex",
+                "category": "Ammonia and Methanol",
+                "category_slug": "ammonia-and-methanol",
                 "format": "PDF",
                 "ext": ".pdf",
-                "size_formatted": "736.3 KB",
-                "modified_time": 1788259913,
-                "modified_date": "Sep 01, 2026",
-                "thumbnail_url": "static/thumbnails/cduX360.png",
-                "download_url": "brochures/cduX360.pdf",
-                "preview_url": "brochures/cduX360.pdf"
+                "size": 358679,
+                "size_formatted": "350.3 KB",
+                "modified_time": 1788864367,
+                "modified_date": "Sep 08, 2026",
+                "thumbnail_url": "static/thumbnails/MethanolX360.png",
+                "download_url": "brochures/Ammonia and Methanol/MethanolX360.pdf",
+                "preview_url": "brochures/Ammonia and Methanol/MethanolX360.pdf"
         },
         {
-                "filename": "cgcX360.pdf",
-                "title": "cgcX360",
-                "category": "cgcX360",
+                "filename": "controllerX360_brochure.pdf",
+                "rel_path": "Diagnostic and Agentic AI Tools/controllerX360_brochure.pdf",
+                "title": "ControllerX360",
+                "subtitle": "Control Loop Performance Diagnosis & Autonomous Tuning",
+                "category": "Diagnostic and Agentic AI Tools",
+                "category_slug": "diagnostic-and-agentic-ai-tools",
                 "format": "PDF",
                 "ext": ".pdf",
-                "size_formatted": "453.7 KB",
-                "modified_time": 1790232399,
-                "modified_date": "Sep 24, 2026",
-                "thumbnail_url": "static/thumbnails/cgcX360.png",
-                "download_url": "brochures/cgcX360.pdf",
-                "preview_url": "brochures/cgcX360.pdf"
+                "size": 418263,
+                "size_formatted": "408.5 KB",
+                "modified_time": 1791633785,
+                "modified_date": "Oct 10, 2026",
+                "thumbnail_url": "static/thumbnails/controllerX360_brochure.png",
+                "download_url": "brochures/Diagnostic and Agentic AI Tools/controllerX360_brochure.pdf",
+                "preview_url": "brochures/Diagnostic and Agentic AI Tools/controllerX360_brochure.pdf"
         },
         {
-                "filename": "cokerX360.pdf",
-                "title": "cokerX360",
-                "category": "cokerX360",
+                "filename": "genX360_Brochure.pdf",
+                "rel_path": "Diagnostic and Agentic AI Tools/genX360_Brochure.pdf",
+                "title": "GenX360",
+                "subtitle": "Autonomous Generative AI Decision Support for Process Manufacturing",
+                "category": "Diagnostic and Agentic AI Tools",
+                "category_slug": "diagnostic-and-agentic-ai-tools",
                 "format": "PDF",
                 "ext": ".pdf",
-                "size_formatted": "826.1 KB",
-                "modified_time": 1788259986,
-                "modified_date": "Sep 01, 2026",
-                "thumbnail_url": "static/thumbnails/cokerX360.png",
-                "download_url": "brochures/cokerX360.pdf",
-                "preview_url": "brochures/cokerX360.pdf"
+                "size": 193516,
+                "size_formatted": "189.0 KB",
+                "modified_time": 1791633788,
+                "modified_date": "Oct 10, 2026",
+                "thumbnail_url": "static/thumbnails/genX360_Brochure.png",
+                "download_url": "brochures/Diagnostic and Agentic AI Tools/genX360_Brochure.pdf",
+                "preview_url": "brochures/Diagnostic and Agentic AI Tools/genX360_Brochure.pdf"
         },
         {
-                "filename": "controllerX360.pdf",
-                "title": "controllerX360",
-                "category": "controllerX360",
+                "filename": "outlierX360_brochure.pdf",
+                "rel_path": "Diagnostic and Agentic AI Tools/outlierX360_brochure.pdf",
+                "title": "OutlierX360",
+                "subtitle": "Outlier Detection & Plant Sensor Data Diagnostics",
+                "category": "Diagnostic and Agentic AI Tools",
+                "category_slug": "diagnostic-and-agentic-ai-tools",
                 "format": "PDF",
                 "ext": ".pdf",
-                "size_formatted": "393.2 KB",
-                "modified_time": 1788259892,
-                "modified_date": "Sep 01, 2026",
-                "thumbnail_url": "static/thumbnails/controllerX360.png",
-                "download_url": "brochures/controllerX360.pdf",
-                "preview_url": "brochures/controllerX360.pdf"
+                "size": 397711,
+                "size_formatted": "388.4 KB",
+                "modified_time": 1791633789,
+                "modified_date": "Oct 10, 2026",
+                "thumbnail_url": "static/thumbnails/outlierX360_brochure.png",
+                "download_url": "brochures/Diagnostic and Agentic AI Tools/outlierX360_brochure.pdf",
+                "preview_url": "brochures/Diagnostic and Agentic AI Tools/outlierX360_brochure.pdf"
         },
         {
-                "filename": "energyX360.pdf",
-                "title": "energyX360",
-                "category": "energyX360",
+                "filename": "workflowX360_brochure.pdf",
+                "rel_path": "Diagnostic and Agentic AI Tools/workflowX360_brochure.pdf",
+                "title": "WorkflowX360",
+                "subtitle": "Standard Workflow Orchestration for Industrial AI",
+                "category": "Diagnostic and Agentic AI Tools",
+                "category_slug": "diagnostic-and-agentic-ai-tools",
                 "format": "PDF",
                 "ext": ".pdf",
-                "size_formatted": "731.5 KB",
-                "modified_time": 1788259959,
-                "modified_date": "Sep 01, 2026",
-                "thumbnail_url": "static/thumbnails/energyX360.png",
-                "download_url": "brochures/energyX360.pdf",
-                "preview_url": "brochures/energyX360.pdf"
+                "size": 235174,
+                "size_formatted": "229.7 KB",
+                "modified_time": 1791635005,
+                "modified_date": "Oct 10, 2026",
+                "thumbnail_url": "static/thumbnails/workflowX360_brochure.png",
+                "download_url": "brochures/Diagnostic and Agentic AI Tools/workflowX360_brochure.pdf",
+                "preview_url": "brochures/Diagnostic and Agentic AI Tools/workflowX360_brochure.pdf"
         },
         {
-                "filename": "furnaceX360.pptx",
-                "title": "furnaceX360",
-                "category": "furnaceX360",
-                "format": "PPTX",
-                "ext": ".pptx",
-                "size_formatted": "604.7 KB",
-                "modified_time": 1788259998,
-                "modified_date": "Sep 01, 2026",
-                "thumbnail_url": null,
-                "download_url": "brochures/furnaceX360.pptx",
-                "preview_url": "brochures/furnaceX360.pptx"
+                "filename": "gasnetX360.pdf",
+                "rel_path": "Gas/gasnetX360.pdf",
+                "title": "GasnetX360",
+                "subtitle": "Highest-Margin, Constraint-Feasible Pipeline Network Optimization",
+                "category": "Gas",
+                "category_slug": "gas",
+                "format": "PDF",
+                "ext": ".pdf",
+                "size": 505690,
+                "size_formatted": "493.8 KB",
+                "modified_time": 1791795647,
+                "modified_date": "Oct 12, 2026",
+                "thumbnail_url": "static/thumbnails/gasnetX360.png",
+                "download_url": "brochures/Gas/gasnetX360.pdf",
+                "preview_url": "brochures/Gas/gasnetX360.pdf"
         },
         {
                 "filename": "gasX360.pdf",
-                "title": "gasX360",
-                "category": "gasX360",
+                "rel_path": "Gas/gasX360.pdf",
+                "title": "GasX360",
+                "subtitle": "Predictive Decision Support for Gas Processing Plants",
+                "category": "Gas",
+                "category_slug": "gas",
                 "format": "PDF",
                 "ext": ".pdf",
+                "size": 1008672,
                 "size_formatted": "985.0 KB",
                 "modified_time": 1790232444,
                 "modified_date": "Sep 24, 2026",
                 "thumbnail_url": "static/thumbnails/gasX360.png",
-                "download_url": "brochures/gasX360.pdf",
-                "preview_url": "brochures/gasX360.pdf"
+                "download_url": "brochures/Gas/gasX360.pdf",
+                "preview_url": "brochures/Gas/gasX360.pdf"
         },
         {
-                "filename": "gasnetX360.pptx",
-                "title": "gasnetX360",
-                "category": "gasnetX360",
-                "format": "PPTX",
-                "ext": ".pptx",
-                "size_formatted": "2.0 MB",
-                "modified_time": 1788792829,
-                "modified_date": "Sep 07, 2026",
-                "thumbnail_url": null,
-                "download_url": "brochures/gasnetX360.pptx",
-                "preview_url": "brochures/gasnetX360.pptx"
-        },
-        {
-                "filename": "genX360.pdf",
-                "title": "genX360",
-                "category": "genX360",
+                "filename": "maintenanceX360_brochure.pdf",
+                "rel_path": "Maintenance and Reliability/maintenanceX360_brochure.pdf",
+                "title": "MaintenanceX360",
+                "subtitle": "Predictive Maintenance & Dynamic Scheduling",
+                "category": "Maintenance and Reliability",
+                "category_slug": "maintenance-and-reliability",
                 "format": "PDF",
                 "ext": ".pdf",
-                "size_formatted": "162.7 KB",
-                "modified_time": 1788259972,
-                "modified_date": "Sep 01, 2026",
-                "thumbnail_url": "static/thumbnails/genX360.png",
-                "download_url": "brochures/genX360.pdf",
-                "preview_url": "brochures/genX360.pdf"
+                "size": 272177,
+                "size_formatted": "265.8 KB",
+                "modified_time": 1791633788,
+                "modified_date": "Oct 10, 2026",
+                "thumbnail_url": "static/thumbnails/maintenanceX360_brochure.png",
+                "download_url": "brochures/Maintenance and Reliability/maintenanceX360_brochure.pdf",
+                "preview_url": "brochures/Maintenance and Reliability/maintenanceX360_brochure.pdf"
         },
         {
-                "filename": "maintenanceX360.pdf",
-                "title": "maintenanceX360",
-                "category": "maintenanceX360",
+                "filename": "reliabilityX360_brochure.pdf",
+                "rel_path": "Maintenance and Reliability/reliabilityX360_brochure.pdf",
+                "title": "ReliabilityX360",
+                "subtitle": "Predictive Decision Support for Critical Rotating Assets",
+                "category": "Maintenance and Reliability",
+                "category_slug": "maintenance-and-reliability",
                 "format": "PDF",
                 "ext": ".pdf",
-                "size_formatted": "172.6 KB",
-                "modified_time": 1788259887,
-                "modified_date": "Sep 01, 2026",
-                "thumbnail_url": "static/thumbnails/maintenanceX360.png",
-                "download_url": "brochures/maintenanceX360.pdf",
-                "preview_url": "brochures/maintenanceX360.pdf"
+                "size": 680971,
+                "size_formatted": "665.0 KB",
+                "modified_time": 1791633790,
+                "modified_date": "Oct 10, 2026",
+                "thumbnail_url": "static/thumbnails/reliabilityX360_brochure.png",
+                "download_url": "brochures/Maintenance and Reliability/reliabilityX360_brochure.pdf",
+                "preview_url": "brochures/Maintenance and Reliability/reliabilityX360_brochure.pdf"
         },
         {
-                "filename": "outlierX360.pdf",
-                "title": "outlierX360",
-                "category": "outlierX360",
+                "filename": "acetyleneX360_brochure.pdf",
+                "rel_path": "Olefin/acetyleneX360_brochure.pdf",
+                "title": "AcetyleneX360",
+                "subtitle": "Acetylene Hydrogenation & Cold Ethylene Recovery Optimization",
+                "category": "Olefin",
+                "category_slug": "olefin",
                 "format": "PDF",
                 "ext": ".pdf",
-                "size_formatted": "348.5 KB",
-                "modified_time": 1788259889,
-                "modified_date": "Sep 01, 2026",
-                "thumbnail_url": "static/thumbnails/outlierX360.png",
-                "download_url": "brochures/outlierX360.pdf",
-                "preview_url": "brochures/outlierX360.pdf"
+                "size": 468308,
+                "size_formatted": "457.3 KB",
+                "modified_time": 1790238891,
+                "modified_date": "Sep 24, 2026",
+                "thumbnail_url": "static/thumbnails/acetyleneX360_brochure.png",
+                "download_url": "brochures/Olefin/acetyleneX360_brochure.pdf",
+                "preview_url": "brochures/Olefin/acetyleneX360_brochure.pdf"
         },
         {
-                "filename": "polymerX360.pdf",
-                "title": "polymerX360",
-                "category": "polymerX360",
+                "filename": "cgcX360_brochure.pdf",
+                "rel_path": "Olefin/cgcX360_brochure.pdf",
+                "title": "CgcX360",
+                "subtitle": "Cracked Gas Compression Train Performance & Anti-Surge Diagnostics",
+                "category": "Olefin",
+                "category_slug": "olefin",
                 "format": "PDF",
                 "ext": ".pdf",
-                "size_formatted": "837.7 KB",
-                "modified_time": 1788512244,
-                "modified_date": "Sep 04, 2026",
-                "thumbnail_url": "static/thumbnails/polymerX360.png",
-                "download_url": "brochures/polymerX360.pdf",
-                "preview_url": "brochures/polymerX360.pdf"
+                "size": 464610,
+                "size_formatted": "453.7 KB",
+                "modified_time": 1790238897,
+                "modified_date": "Sep 24, 2026",
+                "thumbnail_url": "static/thumbnails/cgcX360_brochure.png",
+                "download_url": "brochures/Olefin/cgcX360_brochure.pdf",
+                "preview_url": "brochures/Olefin/cgcX360_brochure.pdf"
         },
         {
-                "filename": "quenchX360.pdf",
-                "title": "quenchX360",
-                "category": "quenchX360",
+                "filename": "furnaceX360_Brochure.pdf",
+                "rel_path": "Olefin/furnaceX360_Brochure.pdf",
+                "title": "FurnaceX360",
+                "subtitle": "Olefin Cracking Furnace Yield & Run-Length Optimization",
+                "category": "Olefin",
+                "category_slug": "olefin",
                 "format": "PDF",
                 "ext": ".pdf",
+                "size": 288831,
+                "size_formatted": "282.1 KB",
+                "modified_time": 1791633787,
+                "modified_date": "Oct 10, 2026",
+                "thumbnail_url": "static/thumbnails/furnaceX360_Brochure.png",
+                "download_url": "brochures/Olefin/furnaceX360_Brochure.pdf",
+                "preview_url": "brochures/Olefin/furnaceX360_Brochure.pdf"
+        },
+        {
+                "filename": "olefinX360_brochure.pdf",
+                "rel_path": "Olefin/olefinX360_brochure.pdf",
+                "title": "OlefinX360",
+                "subtitle": "Comprehensive Ethylene & Olefin Complex Optimization",
+                "category": "Olefin",
+                "category_slug": "olefin",
+                "format": "PDF",
+                "ext": ".pdf",
+                "size": 1713617,
+                "size_formatted": "1.6 MB",
+                "modified_time": 1790266729,
+                "modified_date": "Sep 24, 2026",
+                "thumbnail_url": "static/thumbnails/olefinX360_brochure.png",
+                "download_url": "brochures/Olefin/olefinX360_brochure.pdf",
+                "preview_url": "brochures/Olefin/olefinX360_brochure.pdf"
+        },
+        {
+                "filename": "quenchX360_brochure.pdf",
+                "rel_path": "Olefin/quenchX360_brochure.pdf",
+                "title": "QuenchX360",
+                "subtitle": "Quench & Dilution Steam System Process Optimization",
+                "category": "Olefin",
+                "category_slug": "olefin",
+                "format": "PDF",
+                "ext": ".pdf",
+                "size": 473813,
                 "size_formatted": "462.7 KB",
-                "modified_time": 1790232412,
+                "modified_time": 1790238917,
                 "modified_date": "Sep 24, 2026",
-                "thumbnail_url": "static/thumbnails/quenchX360.png",
-                "download_url": "brochures/quenchX360.pdf",
-                "preview_url": "brochures/quenchX360.pdf"
+                "thumbnail_url": "static/thumbnails/quenchX360_brochure.png",
+                "download_url": "brochures/Olefin/quenchX360_brochure.pdf",
+                "preview_url": "brochures/Olefin/quenchX360_brochure.pdf"
         },
         {
-                "filename": "recoveryX360.pdf",
-                "title": "recoveryX360",
-                "category": "recoveryX360",
+                "filename": "recoveryX360_brochure.pdf",
+                "rel_path": "Olefin/recoveryX360_brochure.pdf",
+                "title": "RecoveryX360",
+                "subtitle": "Cold Section & Ethylene Recovery Train Optimization",
+                "category": "Olefin",
+                "category_slug": "olefin",
                 "format": "PDF",
                 "ext": ".pdf",
+                "size": 473901,
                 "size_formatted": "462.8 KB",
-                "modified_time": 1790232438,
+                "modified_time": 1790238934,
                 "modified_date": "Sep 24, 2026",
-                "thumbnail_url": "static/thumbnails/recoveryX360.png",
-                "download_url": "brochures/recoveryX360.pdf",
-                "preview_url": "brochures/recoveryX360.pdf"
+                "thumbnail_url": "static/thumbnails/recoveryX360_brochure.png",
+                "download_url": "brochures/Olefin/recoveryX360_brochure.pdf",
+                "preview_url": "brochures/Olefin/recoveryX360_brochure.pdf"
         },
         {
-                "filename": "reliabilityX360.pdf",
-                "title": "reliabilityX360",
-                "category": "reliabilityX360",
+                "filename": "polymerX360_brochure.pdf",
+                "rel_path": "Polymer/polymerX360_brochure.pdf",
+                "title": "PolymerX360",
+                "subtitle": "Predictive Decision Support for Polymer & Polyolefin Units",
+                "category": "Polymer",
+                "category_slug": "polymer",
                 "format": "PDF",
                 "ext": ".pdf",
-                "size_formatted": "421.0 KB",
-                "modified_time": 1788526570,
-                "modified_date": "Sep 04, 2026",
-                "thumbnail_url": "static/thumbnails/reliabilityX360.png",
-                "download_url": "brochures/reliabilityX360.pdf",
-                "preview_url": "brochures/reliabilityX360.pdf"
+                "size": 692698,
+                "size_formatted": "676.5 KB",
+                "modified_time": 1791634801,
+                "modified_date": "Oct 10, 2026",
+                "thumbnail_url": "static/thumbnails/polymerX360_brochure.png",
+                "download_url": "brochures/Polymer/polymerX360_brochure.pdf",
+                "preview_url": "brochures/Polymer/polymerX360_brochure.pdf"
         },
         {
-                "filename": "vduX360.pdf",
-                "title": "vduX360",
-                "category": "vduX360",
+                "filename": "cduX360_brochure.pdf",
+                "rel_path": "Refinery/cduX360_brochure.pdf",
+                "title": "CDUX360",
+                "subtitle": "Predictive Decision Support for Crude Distillation Units",
+                "category": "Refinery",
+                "category_slug": "refinery",
                 "format": "PDF",
                 "ext": ".pdf",
-                "size_formatted": "736.7 KB",
-                "modified_time": 1788259941,
-                "modified_date": "Sep 01, 2026",
-                "thumbnail_url": "static/thumbnails/vduX360.png",
-                "download_url": "brochures/vduX360.pdf",
-                "preview_url": "brochures/vduX360.pdf"
+                "size": 796854,
+                "size_formatted": "778.2 KB",
+                "modified_time": 1791633784,
+                "modified_date": "Oct 10, 2026",
+                "thumbnail_url": "static/thumbnails/cduX360_brochure.png",
+                "download_url": "brochures/Refinery/cduX360_brochure.pdf",
+                "preview_url": "brochures/Refinery/cduX360_brochure.pdf"
+        },
+        {
+                "filename": "cokerX360_brochure.pdf",
+                "rel_path": "Refinery/cokerX360_brochure.pdf",
+                "title": "CokerX360",
+                "subtitle": "Delayed Coking Unit Cycle & Throughput Optimization",
+                "category": "Refinery",
+                "category_slug": "refinery",
+                "format": "PDF",
+                "ext": ".pdf",
+                "size": 582249,
+                "size_formatted": "568.6 KB",
+                "modified_time": 1791633785,
+                "modified_date": "Oct 10, 2026",
+                "thumbnail_url": "static/thumbnails/cokerX360_brochure.png",
+                "download_url": "brochures/Refinery/cokerX360_brochure.pdf",
+                "preview_url": "brochures/Refinery/cokerX360_brochure.pdf"
+        },
+        {
+                "filename": "vduX360_brochure.pdf",
+                "rel_path": "Refinery/vduX360_brochure.pdf",
+                "title": "VDUX360",
+                "subtitle": "Vacuum Distillation Unit Cut-Point & Energy Optimization",
+                "category": "Refinery",
+                "category_slug": "refinery",
+                "format": "PDF",
+                "ext": ".pdf",
+                "size": 797536,
+                "size_formatted": "778.8 KB",
+                "modified_time": 1791633791,
+                "modified_date": "Oct 10, 2026",
+                "thumbnail_url": "static/thumbnails/vduX360_brochure.png",
+                "download_url": "brochures/Refinery/vduX360_brochure.pdf",
+                "preview_url": "brochures/Refinery/vduX360_brochure.pdf"
+        },
+        {
+                "filename": "energyX360_brochure.pdf",
+                "rel_path": "Utility/energyX360_brochure.pdf",
+                "title": "EnergyX360",
+                "subtitle": "Site-Wide Energy, Steam, Power & Emissions Optimization",
+                "category": "Utility",
+                "category_slug": "utility",
+                "format": "PDF",
+                "ext": ".pdf",
+                "size": 4186645,
+                "size_formatted": "4.0 MB",
+                "modified_time": 1791633787,
+                "modified_date": "Oct 10, 2026",
+                "thumbnail_url": "static/thumbnails/energyX360_brochure.png",
+                "download_url": "brochures/Utility/energyX360_brochure.pdf",
+                "preview_url": "brochures/Utility/energyX360_brochure.pdf"
         }
 ];
 
@@ -696,11 +810,25 @@ document.addEventListener('DOMContentLoaded', () => {
         statProducts.textContent = uniqueCategories.size;
     }
 
+    const CATEGORY_ICONS = {
+        'Ammonia and Methanol': 'fa-flask',
+        'Diagnostic and Agentic AI Tools': 'fa-brain',
+        'Gas': 'fa-fire-flame-simple',
+        'Maintenance and Reliability': 'fa-gears',
+        'Olefin': 'fa-industry',
+        'Polymer': 'fa-cubes-stacked',
+        'Refinery': 'fa-oil-well',
+        'Utility': 'fa-bolt'
+    };
+
     function renderCategoryPills() {
-        let pillsHTML = `<button class="pill-btn ${activeCategory === 'ALL' ? 'active' : ''}" data-category="ALL">All Products</button>`;
+        const totalCount = brochures.length;
+        let pillsHTML = `<button class="pill-btn ${activeCategory === 'ALL' ? 'active' : ''}" data-category="ALL"><i class="fa-solid fa-layer-group"></i> All Products <span class="pill-count">${totalCount}</span></button>`;
         categories.forEach(cat => {
             const isActive = activeCategory === cat ? 'active' : '';
-            pillsHTML += `<button class="pill-btn ${isActive}" data-category="${cat}">${cat}</button>`;
+            const count = brochures.filter(b => b.category === cat).length;
+            const icon = CATEGORY_ICONS[cat] || 'fa-folder';
+            pillsHTML += `<button class="pill-btn ${isActive}" data-category="${cat}"><i class="fa-solid ${icon}"></i> ${cat} <span class="pill-count">${count}</span></button>`;
         });
         categoryPillsContainer.innerHTML = pillsHTML;
     }
@@ -711,11 +839,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (activeFormat !== 'ALL' && item.format !== activeFormat) return false;
             if (searchQuery.trim() !== '') {
                 const q = searchQuery.toLowerCase();
-                const matchTitle = item.title.toLowerCase().includes(q);
-                const matchFilename = item.filename.toLowerCase().includes(q);
-                const matchCategory = item.category.toLowerCase().includes(q);
-                const matchFormat = item.format.toLowerCase().includes(q);
-                if (!matchTitle && !matchFilename && !matchCategory && !matchFormat) return false;
+                const matchTitle = (item.title || '').toLowerCase().includes(q);
+                const matchSubtitle = (item.subtitle || '').toLowerCase().includes(q);
+                const matchFilename = (item.filename || '').toLowerCase().includes(q);
+                const matchCategory = (item.category || '').toLowerCase().includes(q);
+                const matchFormat = (item.format || '').toLowerCase().includes(q);
+                if (!matchTitle && !matchSubtitle && !matchFilename && !matchCategory && !matchFormat) return false;
             }
             return true;
         }).sort((a, b) => {
@@ -774,10 +903,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 thumbHTML = fallbackHTML;
             }
 
-            const titleLower = (item.title || '').toLowerCase();
-            const catLower = (item.category || '').toLowerCase();
-            const isRedundantCategory = catLower === 'other products' || titleLower.includes(catLower) || catLower.includes(titleLower);
-            const categoryTagHTML = isRedundantCategory ? '' : `<span class="card-category-tag">${item.category}</span>`;
+            const catIcon = CATEGORY_ICONS[item.category] || 'fa-folder';
+            const categoryTagHTML = `<span class="card-category-tag"><i class="fa-solid ${catIcon}"></i> ${item.category}</span>`;
+            const subtitleHTML = item.subtitle ? `<p class="card-subtitle" title="${item.subtitle}">${item.subtitle}</p>` : '';
 
             const badgeClass = item.format === 'PDF' ? 'badge-pdf' : (item.format === 'PPTX' ? 'badge-pptx' : 'badge-doc');
             const adminButtons = isAdminLoggedIn ? `
@@ -808,6 +936,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             </label>
                         </div>
                         <h3 class="card-title" title="${item.title}">${item.title}</h3>
+                        ${subtitleHTML}
                         
                         <div class="card-meta">
                             <span><i class="fa-regular fa-hard-drive"></i> ${item.size_formatted}</span>
@@ -857,6 +986,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </button>
             ` : '';
 
+            const catIcon = CATEGORY_ICONS[item.category] || 'fa-folder';
             return `
                 <tr data-filename="${item.filename}">
                     <td>
@@ -866,8 +996,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         </label>
                     </td>
                     <td>${thumbHTML}</td>
-                    <td><strong>${item.title}</strong></td>
-                    <td><span class="card-category-tag">${item.category}</span></td>
+                    <td>
+                        <div style="font-weight: 800; color: var(--slate-900); font-size: 0.95rem;">${item.title}</div>
+                        ${item.subtitle ? `<div style="font-size: 0.78rem; color: var(--slate-500); margin-top: 2px;">${item.subtitle}</div>` : ''}
+                    </td>
+                    <td><span class="card-category-tag"><i class="fa-solid ${catIcon}"></i> ${item.category}</span></td>
                     <td><span class="format-badge ${badgeClass}">${item.format}</span></td>
                     <td>${item.size_formatted}</td>
                     <td>${item.modified_date}</td>

@@ -818,7 +818,7 @@ document.addEventListener('DOMContentLoaded', () => {
             "product": "CokerX360",
             "filename": "CokerX360.mp4",
             "url": "videos/CokerX360.mp4",
-            "drive_url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/Documents/Brochure/videos/CokerX360.mp4",
+            "drive_url": "https://ingenero0-my.sharepoint.com/:f:/g/personal/sdalvi_ingenero_com/IgCDbuyBG5dHRIGc04CqPmuHAQ5OoguLQwiHg3spGTobzRc?e=FdLckG",
             "type": "video/mp4",
             "format": "MP4 Video",
             "size": "34.2 MB",
@@ -833,7 +833,7 @@ document.addEventListener('DOMContentLoaded', () => {
             "product": "FurnaceX360",
             "filename": "FurnaceX360.m4a",
             "url": "videos/FurnaceX360.m4a",
-            "drive_url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/Documents/Brochure/videos/FurnaceX360.m4a",
+            "drive_url": "https://ingenero0-my.sharepoint.com/:f:/g/personal/sdalvi_ingenero_com/IgCDbuyBG5dHRIGc04CqPmuHAQ5OoguLQwiHg3spGTobzRc?e=FdLckG",
             "type": "audio/mp4",
             "format": "M4A Audio / Briefing",
             "size": "35.7 MB",
@@ -848,7 +848,7 @@ document.addEventListener('DOMContentLoaded', () => {
             "product": "GenX360",
             "filename": "GenX360.m4a",
             "url": "videos/GenX360.m4a",
-            "drive_url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/Documents/Brochure/videos/GenX360.m4a",
+            "drive_url": "https://ingenero0-my.sharepoint.com/:f:/g/personal/sdalvi_ingenero_com/IgCDbuyBG5dHRIGc04CqPmuHAQ5OoguLQwiHg3spGTobzRc?e=FdLckG",
             "type": "audio/mp4",
             "format": "M4A Audio / Briefing",
             "size": "35.5 MB",
@@ -863,7 +863,7 @@ document.addEventListener('DOMContentLoaded', () => {
             "product": "OutlierX360",
             "filename": "OutlierX360.mp4",
             "url": "videos/OutlierX360.mp4",
-            "drive_url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/Documents/Brochure/videos/OutlierX360.mp4",
+            "drive_url": "https://ingenero0-my.sharepoint.com/:f:/g/personal/sdalvi_ingenero_com/IgCDbuyBG5dHRIGc04CqPmuHAQ5OoguLQwiHg3spGTobzRc?e=FdLckG",
             "type": "video/mp4",
             "format": "MP4 Video",
             "size": "89.9 MB",
@@ -878,7 +878,7 @@ document.addEventListener('DOMContentLoaded', () => {
             "product": "ReliabilityX360",
             "filename": "ReliabilityX360.mp4",
             "url": "videos/ReliabilityX360.mp4",
-            "drive_url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/Documents/Brochure/videos/ReliabilityX360.mp4",
+            "drive_url": "https://ingenero0-my.sharepoint.com/:f:/g/personal/sdalvi_ingenero_com/IgCDbuyBG5dHRIGc04CqPmuHAQ5OoguLQwiHg3spGTobzRc?e=FdLckG",
             "type": "video/mp4",
             "format": "MP4 Video",
             "size": "29.6 MB",
@@ -960,8 +960,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             <i class="fa-solid fa-play"></i> ${actionPlayText}
                         </button>
                         ${kt.drive_url ? `
-                            <a href="${kt.drive_url}" target="_blank" class="btn btn-secondary" title="Open in Cloud Drive">
-                                <i class="fa-brands fa-google-drive"></i> Drive Link
+                            <a href="${kt.drive_url}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" title="Watch on Microsoft OneDrive / Stream">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> OneDrive
                             </a>
                         ` : `
                             <a href="${kt.url}" download class="btn btn-secondary" title="Direct download session file (${kt.size})">
@@ -992,7 +992,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btnDownloadKtModal.href = kt.drive_url;
             btnDownloadKtModal.target = '_blank';
             btnDownloadKtModal.removeAttribute('download');
-            btnDownloadKtModal.innerHTML = '<i class="fa-brands fa-google-drive"></i> Open in Cloud Drive';
+            btnDownloadKtModal.innerHTML = '<i class="fa-solid fa-arrow-up-right-from-square"></i> Open in OneDrive';
         } else {
             btnDownloadKtModal.href = kt.url;
             btnDownloadKtModal.target = '_self';
@@ -1013,40 +1013,86 @@ document.addEventListener('DOMContentLoaded', () => {
             `).join('');
         }
 
-        const driveFallbackMsg = kt.drive_url ? `
-            <div style="margin-top: 1rem; text-align: center;">
-                <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 0.6rem;">If playback does not start directly:</p>
-                <a href="${kt.drive_url}" target="_blank" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
-                    <i class="fa-brands fa-google-drive"></i> Access Full Video on Drive
-                </a>
-            </div>
-        ` : '';
+        const driveUrl = kt.drive_url || '#';
+        const hasDriveUrl = !!kt.drive_url;
 
         if (isAudio) {
             ktMediaContainer.innerHTML = `
-                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; padding: 2.5rem 1.5rem; background: linear-gradient(180deg, #0f172a, #020617); text-align: center;">
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; min-height: 340px; padding: 2.5rem 1.5rem; background: linear-gradient(180deg, #0f172a, #020617); text-align: center;">
                     <div style="width: 80px; height: 80px; border-radius: 50%; background: rgba(59, 130, 246, 0.2); border: 2px solid #3b82f6; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;">
                         <i class="fa-solid fa-headphones" style="font-size: 2.2rem; color: #60a5fa;"></i>
                     </div>
-                    <h4 style="color: #fff; font-size: 1.2rem; font-weight: 700; margin-bottom: 0.25rem;">${kt.product} Technical Briefing</h4>
-                    <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 1.5rem;">IngeneroX360AI Engineering Knowledge Transfer</p>
-                    <audio controls autoplay style="width: 100%; max-width: 550px; outline: none; border-radius: 30px;">
+                    <h4 style="color: #fff; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">${kt.product} Technical Briefing</h4>
+                    <p style="color: #94a3b8; font-size: 0.88rem; margin-bottom: 1.5rem;">IngeneroX360AI Engineering Audio Knowledge Transfer &bull; ${kt.size}</p>
+                    
+                    <audio id="ktAudioElement" controls autoplay style="width: 100%; max-width: 550px; outline: none; border-radius: 30px;">
                         <source src="${kt.url}" type="${kt.type}">
-                        Your browser does not support audio element.
+                        Your browser does not support audio playback.
                     </audio>
-                    ${driveFallbackMsg}
+
+                    <div id="ktAudioFallback" style="display: none; width: 100%; max-width: 550px; background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(59, 130, 246, 0.35); border-radius: 12px; padding: 1.5rem; text-align: center; margin-top: 1rem;">
+                        <p style="color: #e2e8f0; font-size: 0.95rem; margin-bottom: 1rem;">
+                            <i class="fa-solid fa-cloud-arrow-down" style="color: #60a5fa; margin-right: 0.4rem;"></i>
+                            Audio briefing is hosted on Ingenero Cloud Storage (${kt.size}).
+                        </p>
+                        ${hasDriveUrl ? `
+                            <a href="${driveUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="padding: 0.65rem 1.5rem; font-weight: 600;">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Open & Listen on OneDrive
+                            </a>
+                        ` : `
+                            <span style="color: #94a3b8; font-size: 0.85rem;">Cloud streaming link will be available once configured.</span>
+                        `}
+                    </div>
                 </div>
             `;
         } else {
             ktMediaContainer.innerHTML = `
-                <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
-                    <video controls autoplay style="width: 100%; max-height: 520px; outline: none; background: #000;">
+                <div style="width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 360px; background: #000; border-radius: 8px; overflow: hidden; position: relative;">
+                    <video id="ktVideoElement" controls autoplay style="width: 100%; max-height: 520px; outline: none; background: #000;">
                         <source src="${kt.url}" type="${kt.type}">
-                        Your browser does not support video element.
+                        Your browser does not support video playback.
                     </video>
-                    ${driveFallbackMsg}
+
+                    <div id="ktVideoFallback" style="display: none; width: 100%; padding: 3rem 1.5rem; background: linear-gradient(180deg, #0b1528, #030816); text-align: center;">
+                        <div style="width: 72px; height: 72px; border-radius: 50%; background: rgba(59, 130, 246, 0.15); border: 2px solid #3b82f6; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;">
+                            <i class="fa-solid fa-video" style="font-size: 2rem; color: #60a5fa;"></i>
+                        </div>
+                        <h4 style="color: #fff; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.4rem;">${kt.product} Knowledge Transfer Session</h4>
+                        <p style="color: #94a3b8; font-size: 0.9rem; max-width: 520px; margin: 0 auto 1.5rem auto; line-height: 1.5;">
+                            This high-definition session (${kt.size}) is hosted securely in Cloud Storage. Click below to stream in full resolution.
+                        </p>
+                        ${hasDriveUrl ? `
+                            <a href="${driveUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="padding: 0.75rem 2rem; font-size: 1rem; font-weight: 600; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); display: inline-flex; align-items: center; gap: 0.6rem;">
+                                <i class="fa-solid fa-play"></i> Watch Full Session on OneDrive / Stream
+                            </a>
+                        ` : `
+                            <span style="color: #94a3b8; font-size: 0.85rem;">Cloud streaming link will be updated shortly.</span>
+                        `}
+                    </div>
                 </div>
             `;
+        }
+
+        // Attach error listener to switch to fallback when static media fails to load (e.g. on GitHub Pages)
+        const mediaElem = isAudio ? document.getElementById('ktAudioElement') : document.getElementById('ktVideoElement');
+        const fallbackElem = isAudio ? document.getElementById('ktAudioFallback') : document.getElementById('ktVideoFallback');
+        if (mediaElem && fallbackElem) {
+            const handleMediaError = () => {
+                mediaElem.style.display = 'none';
+                fallbackElem.style.display = 'block';
+            };
+            const sourceElem = mediaElem.querySelector('source');
+            if (sourceElem) {
+                sourceElem.addEventListener('error', handleMediaError);
+            }
+            mediaElem.addEventListener('error', handleMediaError);
+
+            // Timeout check: if media hasn't loaded any data within 1.5 seconds and has error/no source
+            setTimeout(() => {
+                if (mediaElem.readyState === 0 && (mediaElem.networkState === 3 || mediaElem.error)) {
+                    handleMediaError();
+                }
+            }, 1500);
         }
 
         ktVideoPlayerModal.classList.add('active');

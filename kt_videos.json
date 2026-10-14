@@ -16,7 +16,8 @@
       "Fired heater velocity steam control",
       "Anti-foam injection & foam-over mitigation",
       "Downstream hydrocracker yield boost"
-    ]
+    ],
+    "drive_url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/Documents/Brochure/videos/CokerX360.mp4"
   },
   {
     "id": "kt-furnace",
@@ -35,7 +36,8 @@
       "Coking rate prediction & run-length extension",
       "Decoking schedule optimization",
       "Cross-coil feed distribution control"
-    ]
+    ],
+    "drive_url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/Documents/Brochure/videos/FurnaceX360.m4a"
   },
   {
     "id": "kt-gen",
@@ -54,7 +56,8 @@
       "Grounded SOP & vendor manual parsing",
       "Automated shift handover & incident debriefs",
       "Enterprise guardrails & role-based governance"
-    ]
+    ],
+    "drive_url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/Documents/Brochure/videos/GenX360.m4a"
   },
   {
     "id": "kt-outlier",
@@ -73,7 +76,8 @@
       "Sensor drift vs. process upset autonomous isolation",
       "80%+ nuisance alarm reduction",
       "Pristine data pipeline for advanced process controllers"
-    ]
+    ],
+    "drive_url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/Documents/Brochure/videos/OutlierX360.mp4"
   },
   {
     "id": "kt-reliability",
@@ -92,6 +96,7 @@
       "Vibration spectral signature & bearing thermal warning",
       "Lube oil degradation & mechanical seal monitoring",
       "14 to 30 day pre-trip actionable maintenance horizon"
-    ]
+    ],
+    "drive_url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/Documents/Brochure/videos/ReliabilityX360.mp4"
   }
 ]

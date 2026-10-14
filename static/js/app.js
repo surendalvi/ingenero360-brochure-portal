@@ -818,6 +818,7 @@ document.addEventListener('DOMContentLoaded', () => {
             "product": "CokerX360",
             "filename": "CokerX360.mp4",
             "url": "videos/CokerX360.mp4",
+            "drive_url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/Documents/Brochure/videos/CokerX360.mp4",
             "type": "video/mp4",
             "format": "MP4 Video",
             "size": "34.2 MB",
@@ -832,6 +833,7 @@ document.addEventListener('DOMContentLoaded', () => {
             "product": "FurnaceX360",
             "filename": "FurnaceX360.m4a",
             "url": "videos/FurnaceX360.m4a",
+            "drive_url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/Documents/Brochure/videos/FurnaceX360.m4a",
             "type": "audio/mp4",
             "format": "M4A Audio / Briefing",
             "size": "35.7 MB",
@@ -846,6 +848,7 @@ document.addEventListener('DOMContentLoaded', () => {
             "product": "GenX360",
             "filename": "GenX360.m4a",
             "url": "videos/GenX360.m4a",
+            "drive_url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/Documents/Brochure/videos/GenX360.m4a",
             "type": "audio/mp4",
             "format": "M4A Audio / Briefing",
             "size": "35.5 MB",
@@ -860,6 +863,7 @@ document.addEventListener('DOMContentLoaded', () => {
             "product": "OutlierX360",
             "filename": "OutlierX360.mp4",
             "url": "videos/OutlierX360.mp4",
+            "drive_url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/Documents/Brochure/videos/OutlierX360.mp4",
             "type": "video/mp4",
             "format": "MP4 Video",
             "size": "89.9 MB",
@@ -874,6 +878,7 @@ document.addEventListener('DOMContentLoaded', () => {
             "product": "ReliabilityX360",
             "filename": "ReliabilityX360.mp4",
             "url": "videos/ReliabilityX360.mp4",
+            "drive_url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/Documents/Brochure/videos/ReliabilityX360.mp4",
             "type": "video/mp4",
             "format": "MP4 Video",
             "size": "29.6 MB",
@@ -954,9 +959,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         <button class="btn btn-primary btn-play-kt" data-id="${kt.id}" title="Play session in modal">
                             <i class="fa-solid fa-play"></i> ${actionPlayText}
                         </button>
-                        <a href="${kt.url}" download class="btn btn-secondary" title="Direct download session file (${kt.size})">
-                            <i class="fa-solid fa-download"></i> Download
-                        </a>
+                        ${kt.drive_url ? `
+                            <a href="${kt.drive_url}" target="_blank" class="btn btn-secondary" title="Open in Cloud Drive">
+                                <i class="fa-brands fa-google-drive"></i> Drive Link
+                            </a>
+                        ` : `
+                            <a href="${kt.url}" download class="btn btn-secondary" title="Direct download session file (${kt.size})">
+                                <i class="fa-solid fa-download"></i> Download
+                            </a>
+                        `}
                     </div>
                 </div>
             `;
@@ -977,8 +988,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const isAudio = (kt.type || '').includes('audio') || (kt.filename || '').endsWith('.m4a');
         
         ktModalTitle.innerHTML = `<i class="fa-solid ${isAudio ? 'fa-headphones' : 'fa-film'}" style="color: #60a5fa;"></i> ${kt.title}`;
-        btnDownloadKtModal.href = kt.url;
-        btnDownloadKtModal.setAttribute('download', kt.filename);
+        if (kt.drive_url) {
+            btnDownloadKtModal.href = kt.drive_url;
+            btnDownloadKtModal.target = '_blank';
+            btnDownloadKtModal.removeAttribute('download');
+            btnDownloadKtModal.innerHTML = '<i class="fa-brands fa-google-drive"></i> Open in Cloud Drive';
+        } else {
+            btnDownloadKtModal.href = kt.url;
+            btnDownloadKtModal.target = '_self';
+            btnDownloadKtModal.setAttribute('download', kt.filename);
+            btnDownloadKtModal.innerHTML = '<i class="fa-solid fa-download"></i> Download Media';
+        }
         
         ktModalBadge.textContent = kt.suite;
         ktModalFormat.textContent = kt.format;
@@ -993,6 +1013,15 @@ document.addEventListener('DOMContentLoaded', () => {
             `).join('');
         }
 
+        const driveFallbackMsg = kt.drive_url ? `
+            <div style="margin-top: 1rem; text-align: center;">
+                <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 0.6rem;">If playback does not start directly:</p>
+                <a href="${kt.drive_url}" target="_blank" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                    <i class="fa-brands fa-google-drive"></i> Access Full Video on Drive
+                </a>
+            </div>
+        ` : '';
+
         if (isAudio) {
             ktMediaContainer.innerHTML = `
                 <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; padding: 2.5rem 1.5rem; background: linear-gradient(180deg, #0f172a, #020617); text-align: center;">
@@ -1005,14 +1034,18 @@ document.addEventListener('DOMContentLoaded', () => {
                         <source src="${kt.url}" type="${kt.type}">
                         Your browser does not support audio element.
                     </audio>
+                    ${driveFallbackMsg}
                 </div>
             `;
         } else {
             ktMediaContainer.innerHTML = `
-                <video controls autoplay style="width: 100%; max-height: 540px; outline: none; background: #000;">
-                    <source src="${kt.url}" type="${kt.type}">
-                    Your browser does not support video element.
-                </video>
+                <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+                    <video controls autoplay style="width: 100%; max-height: 520px; outline: none; background: #000;">
+                        <source src="${kt.url}" type="${kt.type}">
+                        Your browser does not support video element.
+                    </video>
+                    ${driveFallbackMsg}
+                </div>
             `;
         }
 
@@ -1372,6 +1405,16 @@ document.addEventListener('DOMContentLoaded', () => {
         tabBrochures.addEventListener('click', () => switchTab('brochures'));
         if (tabKtVideos) tabKtVideos.addEventListener('click', () => switchTab('ktVideos'));
         tabDemos.addEventListener('click', () => switchTab('demos'));
+
+        // Direct fallback delegation for tabs in case of touch / nested icon click
+        document.addEventListener('click', (e) => {
+            const tabBtn = e.target.closest('.main-tab-btn');
+            if (tabBtn) {
+                if (tabBtn.id === 'tabBrochures') switchTab('brochures');
+                else if (tabBtn.id === 'tabKtVideos') switchTab('ktVideos');
+                else if (tabBtn.id === 'tabDemos') switchTab('demos');
+            }
+        });
 
         if (btnCloseKtModal) btnCloseKtModal.addEventListener('click', closeKtVideoModal);
         if (ktVideoPlayerModal) {

@@ -602,6 +602,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let brochures = [];
     let categories = [];
     let demos = [];
+    let ktVideos = [];
     let selectedFiles = new Set();
     let activeCategory = 'ALL';
     let activeFormat = 'ALL';
@@ -617,10 +618,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // DOM Elements
     const tabBrochures = document.getElementById('tabBrochures');
+    const tabKtVideos = document.getElementById('tabKtVideos');
     const tabDemos = document.getElementById('tabDemos');
     const brochuresSection = document.getElementById('brochuresSection');
+    const ktVideosSection = document.getElementById('ktVideosSection');
     const demosSection = document.getElementById('demosSection');
     const demosGrid = document.getElementById('demosGrid');
+    const ktVideosGrid = document.getElementById('ktVideosGrid');
+    const ktVideoCountBadge = document.getElementById('ktVideoCountBadge');
+
+    const ktVideoPlayerModal = document.getElementById('ktVideoPlayerModal');
+    const btnCloseKtModal = document.getElementById('btnCloseKtModal');
+    const btnDownloadKtModal = document.getElementById('btnDownloadKtModal');
+    const ktModalTitle = document.getElementById('ktModalTitle');
+    const ktMediaContainer = document.getElementById('ktMediaContainer');
+    const ktModalBadge = document.getElementById('ktModalBadge');
+    const ktModalFormat = document.getElementById('ktModalFormat');
+    const ktModalSize = document.getElementById('ktModalSize');
+    const ktModalDesc = document.getElementById('ktModalDesc');
+    const ktModalTopicsList = document.getElementById('ktModalTopicsList');
 
     const gridView = document.getElementById('brochuresGrid');
     const listViewWrapper = document.getElementById('brochuresListWrapper');
@@ -710,6 +726,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function init() {
         updateAdminNavUI();
         fetchBrochures();
+        fetchKtVideos();
         fetchDemos();
         setupEventListeners();
     }
@@ -738,15 +755,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function switchTab(tabName) {
         activeMainTab = tabName;
+        // Reset all tabs
+        tabBrochures.classList.remove('active');
+        if (tabKtVideos) tabKtVideos.classList.remove('active');
+        tabDemos.classList.remove('active');
+
+        brochuresSection.style.display = 'none';
+        if (ktVideosSection) ktVideosSection.style.display = 'none';
+        demosSection.style.display = 'none';
+
         if (tabName === 'brochures') {
             tabBrochures.classList.add('active');
-            tabDemos.classList.remove('active');
             brochuresSection.style.display = 'block';
-            demosSection.style.display = 'none';
-        } else {
+        } else if (tabName === 'ktVideos') {
+            if (tabKtVideos) tabKtVideos.classList.add('active');
+            if (ktVideosSection) ktVideosSection.style.display = 'block';
+            fetchKtVideos();
+        } else if (tabName === 'demos') {
             tabDemos.classList.add('active');
-            tabBrochures.classList.remove('active');
-            brochuresSection.style.display = 'none';
             demosSection.style.display = 'block';
             fetchDemos();
         }
@@ -781,6 +807,223 @@ document.addEventListener('DOMContentLoaded', () => {
             updateStats();
             renderCategoryPills();
             renderBrochures();
+        }
+    }
+
+    const staticKtVideosFallback = [
+        {
+            "id": "kt-coker",
+            "title": "CokerX360 Knowledge Transfer & Walkthrough",
+            "suite": "Refinery",
+            "product": "CokerX360",
+            "filename": "CokerX360.mp4",
+            "url": "videos/CokerX360.mp4",
+            "type": "video/mp4",
+            "format": "MP4 Video",
+            "size": "34.2 MB",
+            "badge": "Refinery Upgrading",
+            "description": "Knowledge transfer session on Delayed Coking Unit cycle acceleration, thermal stress guarding, velocity steam optimization, and HCGO yield maximization co-pilot.",
+            "topics": ["Drum switch & quench cycle optimization", "Fired heater velocity steam control", "Anti-foam injection & foam-over mitigation", "Downstream hydrocracker yield boost"]
+        },
+        {
+            "id": "kt-furnace",
+            "title": "FurnaceX360 Knowledge Transfer & Technical Briefing",
+            "suite": "Olefin",
+            "product": "FurnaceX360",
+            "filename": "FurnaceX360.m4a",
+            "url": "videos/FurnaceX360.m4a",
+            "type": "audio/mp4",
+            "format": "M4A Audio / Briefing",
+            "size": "35.7 MB",
+            "badge": "Ethylene Complex",
+            "description": "Detailed walkthrough of Olefins Cracking Furnace yield maximization, coil outlet temperature (COT) & tube metal temperature (TMT) balancing, and 10-15% run-length extension.",
+            "topics": ["COT balancing across cracking passes", "Coking rate prediction & run-length extension", "Decoking schedule optimization", "Cross-coil feed distribution control"]
+        },
+        {
+            "id": "kt-gen",
+            "title": "GenX360 Knowledge Transfer & Platform Walkthrough",
+            "suite": "Diagnostic & Agentic AI Tools",
+            "product": "GenX360",
+            "filename": "GenX360.m4a",
+            "url": "videos/GenX360.m4a",
+            "type": "audio/mp4",
+            "format": "M4A Audio / Briefing",
+            "size": "35.5 MB",
+            "badge": "Industrial GenAI",
+            "description": "In-depth overview of GenX360 conversational generative AI co-pilot, grounded retrieval-augmented generation (RAG) over plant SOPs, and automated shift handover reports.",
+            "topics": ["Natural-language plant historian querying", "Grounded SOP & vendor manual parsing", "Automated shift handover & incident debriefs", "Enterprise guardrails & role-based governance"]
+        },
+        {
+            "id": "kt-outlier",
+            "title": "OutlierX360 Knowledge Transfer & Sensor Diagnostics",
+            "suite": "Diagnostic & Agentic AI Tools",
+            "product": "OutlierX360",
+            "filename": "OutlierX360.mp4",
+            "url": "videos/OutlierX360.mp4",
+            "type": "video/mp4",
+            "format": "MP4 Video",
+            "size": "89.9 MB",
+            "badge": "Sensor Diagnostics",
+            "description": "Complete video demo on multivariate sensor validation, distinguishing sensor drift vs. process grade shifts, cutting nuisance alarms by 80%+, and APC input sanitization.",
+            "topics": ["Multivariate correlation envelopes across 10,000+ tags", "Sensor drift vs. process upset autonomous isolation", "80%+ nuisance alarm reduction", "Pristine data pipeline for advanced process controllers"]
+        },
+        {
+            "id": "kt-reliability",
+            "title": "ReliabilityX360 Knowledge Transfer & Machinery Health",
+            "suite": "Maintenance & Reliability",
+            "product": "ReliabilityX360",
+            "filename": "ReliabilityX360.mp4",
+            "url": "videos/ReliabilityX360.mp4",
+            "type": "video/mp4",
+            "format": "MP4 Video",
+            "size": "29.6 MB",
+            "badge": "Critical Assets",
+            "description": "Comprehensive knowledge session on physics-informed predictive maintenance for critical compressors, pumps, and turbines with 14-30 day lead anomaly detection.",
+            "topics": ["Physics-informed rotating asset machine learning models", "Vibration spectral signature & bearing thermal warning", "Lube oil degradation & mechanical seal monitoring", "14 to 30 day pre-trip actionable maintenance horizon"]
+        }
+    ];
+
+    async function fetchKtVideos() {
+        try {
+            let res = await fetch('/api/kt-videos');
+            if (!res.ok) {
+                res = await fetch('kt_videos.json');
+            }
+            if (res.ok) {
+                const data = await res.json();
+                ktVideos = Array.isArray(data) ? data : (data.videos || []);
+                renderKtVideos();
+                return;
+            }
+            throw new Error('Fallback to static KT videos');
+        } catch (err) {
+            ktVideos = staticKtVideosFallback;
+            renderKtVideos();
+        }
+    }
+
+    function renderKtVideos() {
+        if (!ktVideosGrid) return;
+        if (ktVideoCountBadge) {
+            ktVideoCountBadge.textContent = `${ktVideos.length} Sessions`;
+        }
+
+        if (ktVideos.length === 0) {
+            ktVideosGrid.innerHTML = `
+                <div class="empty-state" style="grid-column: 1 / -1; padding: 3rem 1rem;">
+                    <i class="fa-solid fa-film empty-icon"></i>
+                    <h3>No KT Videos Available</h3>
+                    <p>Knowledge transfer sessions will appear here once uploaded.</p>
+                </div>
+            `;
+            return;
+        }
+
+        ktVideosGrid.innerHTML = ktVideos.map(kt => {
+            const isAudio = (kt.type || '').includes('audio') || (kt.filename || '').endsWith('.m4a');
+            const mediaIcon = isAudio ? 'fa-headphones' : 'fa-film';
+            const actionPlayText = isAudio ? 'Listen Audio' : 'Watch Video';
+
+            const topicsHTML = (kt.topics || []).map(t => `
+                <li><i class="fa-solid fa-check"></i> <span>${t}</span></li>
+            `).join('');
+
+            return `
+                <div class="kt-card" id="card-${kt.id}">
+                    <div>
+                        <div class="demo-card-top">
+                            <span class="kt-card-badge">${kt.badge || kt.suite}</span>
+                            <span class="badge" style="background: rgba(148, 163, 184, 0.15); color: var(--slate-700); font-size: 0.72rem; padding: 0.2rem 0.5rem; border-radius: 6px;">
+                                <i class="fa-solid ${mediaIcon}"></i> ${kt.format}
+                            </span>
+                        </div>
+                        <div class="kt-card-suite">${kt.suite}</div>
+                        <h3 class="kt-card-title">${kt.title}</h3>
+                        <div class="kt-card-meta">
+                            <span><i class="fa-regular fa-hard-drive"></i> ${kt.size}</span>
+                            <span>&bull;</span>
+                            <span><i class="fa-solid fa-layer-group"></i> ${kt.product}</span>
+                        </div>
+                        <p class="kt-card-desc">${kt.description}</p>
+                        <ul class="kt-card-topics">
+                            ${topicsHTML}
+                        </ul>
+                    </div>
+
+                    <div class="demo-card-actions">
+                        <button class="btn btn-primary btn-play-kt" data-id="${kt.id}" title="Play session in modal">
+                            <i class="fa-solid fa-play"></i> ${actionPlayText}
+                        </button>
+                        <a href="${kt.url}" download class="btn btn-secondary" title="Direct download session file (${kt.size})">
+                            <i class="fa-solid fa-download"></i> Download
+                        </a>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        // Attach play click listeners
+        document.querySelectorAll('.btn-play-kt').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const ktId = btn.getAttribute('data-id');
+                const kt = ktVideos.find(v => v.id === ktId);
+                if (kt) openKtVideoModal(kt);
+            });
+        });
+    }
+
+    function openKtVideoModal(kt) {
+        if (!ktVideoPlayerModal) return;
+        const isAudio = (kt.type || '').includes('audio') || (kt.filename || '').endsWith('.m4a');
+        
+        ktModalTitle.innerHTML = `<i class="fa-solid ${isAudio ? 'fa-headphones' : 'fa-film'}" style="color: #60a5fa;"></i> ${kt.title}`;
+        btnDownloadKtModal.href = kt.url;
+        btnDownloadKtModal.setAttribute('download', kt.filename);
+        
+        ktModalBadge.textContent = kt.suite;
+        ktModalFormat.textContent = kt.format;
+        ktModalSize.textContent = kt.size;
+        ktModalDesc.textContent = kt.description;
+
+        if (ktModalTopicsList) {
+            ktModalTopicsList.innerHTML = (kt.topics || []).map(t => `
+                <div style="color: #94a3b8; font-size: 0.85rem; display: flex; align-items: center; gap: 0.4rem;">
+                    <i class="fa-solid fa-chevron-right" style="color: #60a5fa; font-size: 0.7rem;"></i> <span>${t}</span>
+                </div>
+            `).join('');
+        }
+
+        if (isAudio) {
+            ktMediaContainer.innerHTML = `
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; padding: 2.5rem 1.5rem; background: linear-gradient(180deg, #0f172a, #020617); text-align: center;">
+                    <div style="width: 80px; height: 80px; border-radius: 50%; background: rgba(59, 130, 246, 0.2); border: 2px solid #3b82f6; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;">
+                        <i class="fa-solid fa-headphones" style="font-size: 2.2rem; color: #60a5fa;"></i>
+                    </div>
+                    <h4 style="color: #fff; font-size: 1.2rem; font-weight: 700; margin-bottom: 0.25rem;">${kt.product} Technical Briefing</h4>
+                    <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 1.5rem;">IngeneroX360AI Engineering Knowledge Transfer</p>
+                    <audio controls autoplay style="width: 100%; max-width: 550px; outline: none; border-radius: 30px;">
+                        <source src="${kt.url}" type="${kt.type}">
+                        Your browser does not support audio element.
+                    </audio>
+                </div>
+            `;
+        } else {
+            ktMediaContainer.innerHTML = `
+                <video controls autoplay style="width: 100%; max-height: 540px; outline: none; background: #000;">
+                    <source src="${kt.url}" type="${kt.type}">
+                    Your browser does not support video element.
+                </video>
+            `;
+        }
+
+        ktVideoPlayerModal.classList.add('active');
+    }
+
+    function closeKtVideoModal() {
+        if (!ktVideoPlayerModal) return;
+        ktVideoPlayerModal.classList.remove('active');
+        if (ktMediaContainer) {
+            ktMediaContainer.innerHTML = '';
         }
     }
 
@@ -1127,7 +1370,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function setupEventListeners() {
         tabBrochures.addEventListener('click', () => switchTab('brochures'));
+        if (tabKtVideos) tabKtVideos.addEventListener('click', () => switchTab('ktVideos'));
         tabDemos.addEventListener('click', () => switchTab('demos'));
+
+        if (btnCloseKtModal) btnCloseKtModal.addEventListener('click', closeKtVideoModal);
+        if (ktVideoPlayerModal) {
+            ktVideoPlayerModal.addEventListener('click', (e) => {
+                if (e.target === ktVideoPlayerModal) closeKtVideoModal();
+            });
+        }
 
         btnAdminAccess.addEventListener('click', () => {
             if (isAdminLoggedIn) {

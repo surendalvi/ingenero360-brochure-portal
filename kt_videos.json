@@ -1,0 +1,97 @@
+[
+  {
+    "id": "kt-coker",
+    "title": "CokerX360 Knowledge Transfer & Walkthrough",
+    "suite": "Refinery",
+    "product": "CokerX360",
+    "filename": "CokerX360.mp4",
+    "url": "videos/CokerX360.mp4",
+    "type": "video/mp4",
+    "format": "MP4 Video",
+    "size": "34.2 MB",
+    "badge": "Refinery Upgrading",
+    "description": "Knowledge transfer session on Delayed Coking Unit cycle acceleration, thermal stress guarding, velocity steam optimization, and HCGO yield maximization co-pilot.",
+    "topics": [
+      "Drum switch & quench cycle optimization",
+      "Fired heater velocity steam control",
+      "Anti-foam injection & foam-over mitigation",
+      "Downstream hydrocracker yield boost"
+    ]
+  },
+  {
+    "id": "kt-furnace",
+    "title": "FurnaceX360 Knowledge Transfer & Technical Briefing",
+    "suite": "Olefin",
+    "product": "FurnaceX360",
+    "filename": "FurnaceX360.m4a",
+    "url": "videos/FurnaceX360.m4a",
+    "type": "audio/mp4",
+    "format": "M4A Audio / Briefing",
+    "size": "35.7 MB",
+    "badge": "Ethylene Complex",
+    "description": "Detailed walkthrough of Olefins Cracking Furnace yield maximization, coil outlet temperature (COT) & tube metal temperature (TMT) balancing, and 10-15% run-length extension.",
+    "topics": [
+      "COT balancing across cracking passes",
+      "Coking rate prediction & run-length extension",
+      "Decoking schedule optimization",
+      "Cross-coil feed distribution control"
+    ]
+  },
+  {
+    "id": "kt-gen",
+    "title": "GenX360 Knowledge Transfer & Platform Walkthrough",
+    "suite": "Diagnostic & Agentic AI Tools",
+    "product": "GenX360",
+    "filename": "GenX360.m4a",
+    "url": "videos/GenX360.m4a",
+    "type": "audio/mp4",
+    "format": "M4A Audio / Briefing",
+    "size": "35.5 MB",
+    "badge": "Industrial GenAI",
+    "description": "In-depth overview of GenX360 conversational generative AI co-pilot, grounded retrieval-augmented generation (RAG) over plant SOPs, and automated shift handover reports.",
+    "topics": [
+      "Natural-language plant historian querying",
+      "Grounded SOP & vendor manual parsing",
+      "Automated shift handover & incident debriefs",
+      "Enterprise guardrails & role-based governance"
+    ]
+  },
+  {
+    "id": "kt-outlier",
+    "title": "OutlierX360 Knowledge Transfer & Sensor Diagnostics",
+    "suite": "Diagnostic & Agentic AI Tools",
+    "product": "OutlierX360",
+    "filename": "OutlierX360.mp4",
+    "url": "videos/OutlierX360.mp4",
+    "type": "video/mp4",
+    "format": "MP4 Video",
+    "size": "89.9 MB",
+    "badge": "Sensor Diagnostics",
+    "description": "Complete video demo on multivariate sensor validation, distinguishing sensor drift vs. process grade shifts, cutting nuisance alarms by 80%+, and APC input sanitization.",
+    "topics": [
+      "Multivariate correlation envelopes across 10,000+ tags",
+      "Sensor drift vs. process upset autonomous isolation",
+      "80%+ nuisance alarm reduction",
+      "Pristine data pipeline for advanced process controllers"
+    ]
+  },
+  {
+    "id": "kt-reliability",
+    "title": "ReliabilityX360 Knowledge Transfer & Machinery Health",
+    "suite": "Maintenance & Reliability",
+    "product": "ReliabilityX360",
+    "filename": "ReliabilityX360.mp4",
+    "url": "videos/ReliabilityX360.mp4",
+    "type": "video/mp4",
+    "format": "MP4 Video",
+    "size": "29.6 MB",
+    "badge": "Critical Assets",
+    "description": "Comprehensive knowledge session on physics-informed predictive maintenance for critical compressors, pumps, and turbines with 14-30 day lead anomaly detection.",
+    "topics": [
+      "Physics-informed rotating asset machine learning models",
+      "Vibration spectral signature & bearing thermal warning",
+      "Lube oil degradation & mechanical seal monitoring",
+      "14 to 30 day pre-trip actionable maintenance horizon"
+    ]
+  }
+]

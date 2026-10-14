@@ -312,6 +312,95 @@ body {
     justify-content: center;
 }
 
+/* KT Video Card Styles */
+.kt-card {
+    background: #ffffff;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--slate-200);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.25s ease;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    border-left: 4px solid var(--primary);
+}
+
+.kt-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(59, 130, 246, 0.4);
+}
+
+.kt-card-badge {
+    padding: 0.25rem 0.65rem;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: rgba(59, 130, 246, 0.12);
+    color: #1d4ed8;
+    border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+.kt-card-suite {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.25rem;
+}
+
+.kt-card-title {
+    font-size: 1.12rem;
+    font-weight: 800;
+    color: var(--slate-800);
+    margin-bottom: 0.5rem;
+    line-height: 1.35;
+}
+
+.kt-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.78rem;
+    color: var(--slate-500);
+    margin-bottom: 0.75rem;
+}
+
+.kt-card-desc {
+    font-size: 0.86rem;
+    color: var(--slate-600);
+    margin-bottom: 1rem;
+    line-height: 1.45;
+}
+
+.kt-card-topics {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.25rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.kt-card-topics li {
+    font-size: 0.8rem;
+    color: var(--slate-600);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+}
+
+.kt-card-topics li i {
+    color: var(--primary);
+    font-size: 0.7rem;
+    margin-top: 0.25rem;
+}
+
 /* Main Container */
 .main-container {
     max-width: 1350px;

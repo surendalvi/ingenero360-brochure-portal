@@ -32,6 +32,10 @@
             </div>
             
             <div class="nav-actions">
+                <a href="presentation.html" class="btn btn-secondary" title="Interactive Fullscreen Presentation Deck for Marketing">
+                    <i class="fa-solid fa-chalkboard-user"></i>
+                    <span>Presentation Deck</span>
+                </a>
                 <button class="btn btn-secondary" id="btnSync" title="Sync now with GitHub">
                     <i class="fa-solid fa-rotate"></i>
                     <span class="sync-text">Refresh & Sync</span>
@@ -57,6 +61,9 @@
         <div class="main-tabs-wrapper">
             <button class="main-tab-btn active" id="tabBrochures">
                 <i class="fa-solid fa-folder-open"></i> Product Brochures
+            </button>
+            <button class="main-tab-btn" id="tabKtVideos">
+                <i class="fa-solid fa-video"></i> KT Videos
             </button>
             <button class="main-tab-btn" id="tabDemos">
                 <i class="fa-solid fa-laptop-code"></i> Demos & Video Portals
@@ -203,6 +210,25 @@
                     <p>No product brochures matched your search or category filter criteria.</p>
                     <button class="btn btn-secondary" id="btnResetFilters">Reset Filters</button>
                 </div>
+            </section>
+        </div>
+
+        <!-- KT VIDEOS SECTION -->
+        <div id="ktVideosSection" style="display: none;">
+            <section class="demos-header-card" style="border-color: rgba(59, 130, 246, 0.4);">
+                <div class="demos-header-info">
+                    <h2><i class="fa-solid fa-graduation-cap" style="color: #60a5fa;"></i> Knowledge Transfer (KT) & Technical Walkthroughs</h2>
+                    <p>Comprehensive engineering walkthroughs, model mechanics, and deep-dive technical transfer sessions for IngeneroX360AI Suite products. Watch online or download session media directly.</p>
+                </div>
+                <div class="kt-header-badges">
+                    <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.4); padding: 0.5rem 1rem; border-radius: 20px; font-weight: 700;">
+                        <i class="fa-solid fa-film"></i> <span id="ktVideoCountBadge">5 Sessions</span>
+                    </span>
+                </div>
+            </section>
+
+            <section class="demos-grid" id="ktVideosGrid">
+                <!-- Dynamic KT Video Cards -->
             </section>
         </div>
 
@@ -422,6 +448,38 @@
             <div class="modal-footer">
                 <button class="btn btn-secondary" id="btnCancelGitHubToken">Cancel</button>
                 <button class="btn btn-primary" id="btnSaveGitHubToken">Save Token & Enable Sync</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- KT Video / Audio Player Modal -->
+    <div class="modal-overlay" id="ktVideoPlayerModal">
+        <div class="modal-content modal-large" style="max-width: 900px; background: #08152e; border: 1px solid rgba(59, 130, 246, 0.4);">
+            <div class="modal-header" style="background: #030816; border-bottom: 1px solid rgba(59, 130, 246, 0.3);">
+                <h3 id="ktModalTitle" style="color: #ffffff; display: flex; align-items: center; gap: 0.6rem; font-size: 1.15rem;">
+                    <i class="fa-solid fa-play" style="color: #60a5fa;"></i> Knowledge Transfer Player
+                </h3>
+                <div class="preview-actions">
+                    <a href="#" id="btnDownloadKtModal" class="btn btn-sm btn-primary" download>
+                        <i class="fa-solid fa-download"></i> Download Media
+                    </a>
+                    <button class="modal-close" id="btnCloseKtModal" style="color: #94a3b8;"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+            <div class="modal-body" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; background: #030816;">
+                <div id="ktMediaContainer" style="width: 100%; border-radius: 12px; overflow: hidden; background: #000; display: flex; align-items: center; justify-content: center; min-height: 360px;">
+                    <!-- Dynamically populated video or audio tag -->
+                </div>
+                <div id="ktModalDetails" style="padding: 0.5rem 0;">
+                    <div style="display: flex; gap: 0.6rem; align-items: center; margin-bottom: 0.5rem;">
+                        <span class="badge" id="ktModalBadge" style="background: rgba(59, 130, 246, 0.2); color: #93c5fd; padding: 0.25rem 0.6rem; border-radius: 6px; font-weight: 700; font-size: 0.75rem;">Suite</span>
+                        <span id="ktModalFormat" style="color: #94a3b8; font-size: 0.85rem;">Format</span>
+                        <span style="color: #94a3b8;">&bull;</span>
+                        <span id="ktModalSize" style="color: #94a3b8; font-size: 0.85rem;">Size</span>
+                    </div>
+                    <p id="ktModalDesc" style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.5; margin-bottom: 0.8rem;"></p>
+                    <div id="ktModalTopicsList" style="display: flex; flex-direction: column; gap: 0.3rem;"></div>
+                </div>
             </div>
         </div>
     </div>

@@ -228,9 +228,44 @@ def scan_brochures():
     brochures.sort(key=lambda x: (x['category'], x['title']))
     return brochures
 
+KT_VIDEOS_FILE = BASE_DIR / 'kt_videos.json'
+VIDEOS_DIR = BASE_DIR / 'videos'
+VIDEOS_DIR.mkdir(parents=True, exist_ok=True)
+
+def load_kt_videos():
+    if not KT_VIDEOS_FILE.exists():
+        return []
+    try:
+        with open(KT_VIDEOS_FILE, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"Error loading kt_videos.json: {e}")
+        return []
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/presentation')
+def presentation():
+    return send_from_directory(BASE_DIR, 'presentation.html')
+
+@app.route('/IngeneroX360AI_Suite_Presentation.pptx')
+@app.route('/download-presentation-pptx')
+def download_presentation_pptx():
+    return send_from_directory(BASE_DIR, 'IngeneroX360AI_Suite_Presentation.pptx', as_attachment=True)
+
+@app.route('/videos/<path:filename>')
+def serve_video(filename):
+    return send_from_directory(VIDEOS_DIR, filename)
+
+@app.route('/api/kt-videos')
+def api_kt_videos():
+    return jsonify({
+        'status': 'success',
+        'count': len(load_kt_videos()),
+        'videos': load_kt_videos()
+    })
 
 @app.route('/favicon.ico')
 def favicon():

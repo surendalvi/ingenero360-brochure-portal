@@ -1126,6 +1126,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 "category": "Live Dashboard",
                 "suite": "Olefin & Cracking",
                 "product": "FurnaceX360",
+                "thumbnail": "static/thumbnails/thumb_demo_furnace_live.jpg",
                 "description": "Interactive real-time furnace optimization and process monitoring AI dashboard for plant operations."
         },
         {
@@ -1138,6 +1139,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 "suite": "Ammonia & Methanol",
                 "product": "AmmoniaX360",
                 "filename": "Ammonia_Dashboard.mp4",
+                "thumbnail": "static/thumbnails/thumb_demo_ammonia.jpg",
                 "description": "Interactive demonstration of real-time operational optimization, synthesis loop monitoring, reformer heat balance, and energy intensity management for Ammonia plants."
         },
         {
@@ -1150,6 +1152,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 "suite": "Maintenance & Reliability",
                 "product": "ReliabilityX360",
                 "filename": "ARM.mp4",
+                "thumbnail": "static/thumbnails/thumb_demo_arm.jpg",
                 "description": "Physics-informed predictive reliability platform demonstrating rotating machinery fault signature detection, bearing thermal alerts, and multi-week pre-trip warning."
         },
         {
@@ -1162,6 +1165,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 "suite": "Petrochemicals",
                 "product": "CatofinX360",
                 "filename": "Catofin Agentic AI.mp4",
+                "thumbnail": "static/thumbnails/thumb_demo_catofin.jpg",
                 "description": "Autonomous Agentic AI decision support for Catofin propane/isobutane dehydrogenation reactors, balancing evacuation cycles, regeneration temperatures, and propylene selectivity."
         },
         {
@@ -1174,6 +1178,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 "suite": "Refinery Upgrading",
                 "product": "DCUX360",
                 "filename": "DCU demo.mp4",
+                "thumbnail": "static/thumbnails/thumb_demo_dcu.jpg",
                 "description": "Delayed Coker Unit (DCU) cycle acceleration, quench water thermal stress mitigation, overhead vapor line fouling prevention, and HCGO yield boost co-pilot."
         },
         {
@@ -1186,6 +1191,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 "suite": "Olefin & Cracking",
                 "product": "FurnaceX360",
                 "filename": "Furnace_Optimizer.mp4",
+                "thumbnail": "static/thumbnails/thumb_demo_furnace.jpg",
                 "description": "Real-time ethylene cracking furnace optimization, balancing coil outlet temperatures (COT), radiant tube metal temperatures (TMT), and extending decoking run-length."
         },
         {
@@ -1198,6 +1204,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 "suite": "Diagnostic & Agentic AI Tools",
                 "product": "OutlierX360",
                 "filename": "Generic Outlier Detection.mp4",
+                "thumbnail": "static/thumbnails/thumb_demo_generic_outlier.jpg",
                 "description": "Multivariate sensor data validation and gross error detection, distinguishing true process anomalies from instrument drift across 10,000+ DCS tags with 80%+ alarm reduction."
         },
         {
@@ -1210,6 +1217,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 "suite": "Ammonia & Methanol",
                 "product": "GenX360",
                 "filename": "genX360_Methanol.mp4",
+                "thumbnail": "static/thumbnails/thumb_demo_genx360_methanol.jpg",
                 "description": "First-principles simulation and operational co-pilot for methanol synthesis loops, syngas composition swings, reformer balancing, and carbon efficiency tracking."
         },
         {
@@ -1222,6 +1230,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 "suite": "Industrial GenAI",
                 "product": "GenX360",
                 "filename": "Ingenero GenAI.mp4",
+                "thumbnail": "static/thumbnails/thumb_demo_ingenero_genai.jpg",
                 "description": "Conversational generative AI assistant grounded on plant documentation, P&IDs, SOPs, and DCS trends, generating automated shift logs and root-cause summaries."
         },
         {
@@ -1234,6 +1243,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 "suite": "Enterprise Operations",
                 "product": "IngeneroX360AI",
                 "filename": "IngeneroX360AI Dashboard.mp4",
+                "thumbnail": "static/thumbnails/thumb_demo_ingenerox360ai_dashboard.jpg",
                 "description": "Executive tour of the IngeneroX360AI multi-unit operations cockpit, autonomous agent orchestration, supervisory advisory control, and enterprise margin rollups."
         },
         {
@@ -1246,6 +1256,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 "suite": "Ammonia & Methanol",
                 "product": "MethanolX360",
                 "filename": "Methanol Synthesis.mp4",
+                "thumbnail": "static/thumbnails/thumb_demo_methanol_synthesis.jpg",
                 "description": "Deep dive into kinetic modeling and yield maximization of catalytic methanol converters, heat recovery steam generators, and the crude distillation train."
         },
         {
@@ -1258,6 +1269,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 "suite": "Polymers & Resins",
                 "product": "PolymerX360",
                 "filename": "Polymer demo.mp4",
+                "thumbnail": "static/thumbnails/thumb_demo_polymer.jpg",
                 "description": "Real-time polymer reactor grade transition acceleration, continuous melt index (MI) soft sensor, and off-spec product minimization across slurry and gas-phase loops."
         },
         {
@@ -1270,16 +1282,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 "suite": "Diagnostic & Agentic AI Tools",
                 "product": "WorkflowX360",
                 "filename": "Workflow_AI.mp4",
+                "thumbnail": "static/thumbnails/thumb_demo_workflow_ai.jpg",
                 "description": "Autonomous multi-agent industrial workflow orchestration, alert triage, automated first-principles engineering calculations, and closed-loop supervisory actions."
-        },
-        {
-                "id": "demo-video-library",
-                "title": "Ingenero360 Video Library Portal",
-                "url": "https://demos.ingenero360.ai/public/",
-                "category": "Video Portals",
-                "suite": "Platform Overview",
-                "product": "IngeneroX360AI Suite",
-                "description": "Library of public product walkthrough videos, AI feature demonstrations, and solution walkthroughs."
         }
 ];
 
@@ -1563,7 +1567,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!demosGrid) return;
         
         if (demosCountNumber) {
-            demosCountNumber.textContent = `${demos.length} Demos & Videos`;
+            demosCountNumber.textContent = `${demos.length} Demo Videos & Prototypes`;
         }
 
         // Render category filter pills for Demos
@@ -1571,7 +1575,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const categories = ['ALL', ...Array.from(new Set(demos.map(d => d.category || 'Demo Videos')))];
             demosCategoryPills.innerHTML = categories.map(cat => {
                 const count = cat === 'ALL' ? demos.length : demos.filter(d => (d.category || 'Demo Videos') === cat).length;
-                const label = cat === 'ALL' ? 'All Demos' : cat;
+                const label = cat === 'ALL' ? 'All Demo Videos' : cat;
                 const activeClass = activeDemoCategory === cat ? 'active' : '';
                 return `
                     <button class="pill-btn ${activeClass}" data-category="${cat}">
@@ -1595,9 +1599,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (filtered.length === 0) {
             demosGrid.innerHTML = `
                 <div class="empty-state" style="grid-column: 1 / -1;">
-                    <i class="fa-solid fa-desktop empty-icon"></i>
-                    <h3>No Demo Links Found</h3>
-                    <p>No demos found in this category.</p>
+                    <i class="fa-solid fa-film empty-icon"></i>
+                    <h3>No Demo Videos Found</h3>
+                    <p>No video walkthroughs found in this category.</p>
                 </div>
             `;
             return;
@@ -1608,6 +1612,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const isVideo = (demo.category || '').toLowerCase().includes('video') || hasEmbed;
             const iconClass = isVideo ? 'fa-film' : 'fa-gauge-high';
             const actionPlayText = isVideo ? 'Watch Video' : 'Launch Demo';
+            const thumbnailSrc = demo.thumbnail || 'static/thumbnails/thumb_demo_furnace_live.jpg';
 
             const adminButtons = isAdminLoggedIn ? `
                 <button class="btn btn-sm btn-warning btn-edit-demo" data-id="${demo.id}" title="Edit Demo Link">
@@ -1620,6 +1625,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             return `
                 <div class="demo-card" id="card-${demo.id}">
+                    <div class="demo-card-thumb-wrapper btn-play-demo" data-id="${demo.id}" title="Click to watch ${demo.title}">
+                        <img src="${thumbnailSrc}" alt="${demo.title}" class="demo-card-thumb" onerror="this.src='static/thumbnails/furnaceX360.png'">
+                        <div class="demo-card-play-overlay">
+                            <div class="demo-play-circle">
+                                <i class="fa-solid ${hasEmbed ? 'fa-play' : 'fa-arrow-up-right-from-square'}"></i>
+                            </div>
+                        </div>
+                        <span class="demo-thumb-tag"><i class="fa-solid ${isVideo ? 'fa-film' : 'fa-desktop'}"></i> ${isVideo ? 'Demo Video' : 'Live Prototype'}</span>
+                    </div>
+
                     <div>
                         <div class="demo-card-top">
                             <span class="demo-category-badge">${demo.category}</span>
@@ -1637,7 +1652,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <i class="fa-solid fa-circle-play"></i> Watch Video
                             </button>
                             <a href="${demo.embed_url || demo.url}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" title="Open in Microsoft Stream / SharePoint">
-                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Open
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Tab
                             </a>
                         ` : `
                             <a href="${demo.url}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
@@ -1650,12 +1665,19 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }).join('');
 
-        // Attach listeners for watch video buttons
+        // Attach listeners for watch video buttons and thumbnail clicks
         demosGrid.querySelectorAll('.btn-play-demo').forEach(btn => {
-            btn.addEventListener('click', () => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
                 const demoId = btn.getAttribute('data-id');
                 const demo = demos.find(d => d.id === demoId);
-                if (demo) openDemoVideoModal(demo);
+                if (demo) {
+                    if (demo.embed_url || demo.embed_code) {
+                        openDemoVideoModal(demo);
+                    } else if (demo.url) {
+                        window.open(demo.url, '_blank');
+                    }
+                }
             });
         });
 

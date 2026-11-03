@@ -13,7 +13,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/static/css/style.css">
-
+    <!-- PDF.js for Instant Cover Thumbnail Generation on Upload -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        if (typeof pdfjsLib !== 'undefined') {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        }
+    </script>
 </head>
 <body>
     <!-- Navbar -->
@@ -26,6 +32,10 @@
             </div>
             
             <div class="nav-actions">
+                <a href="/presentation" class="btn btn-secondary" title="Interactive Fullscreen Presentation Deck for Marketing">
+                    <i class="fa-solid fa-chalkboard-user"></i>
+                    <span>Presentation Deck</span>
+                </a>
                 <button class="btn btn-secondary" id="btnSync" title="Sync now with GitHub">
                     <i class="fa-solid fa-rotate"></i>
                     <span class="sync-text">Refresh & Sync</span>
@@ -52,8 +62,11 @@
             <button class="main-tab-btn active" id="tabBrochures">
                 <i class="fa-solid fa-folder-open"></i> Product Brochures
             </button>
+            <button class="main-tab-btn" id="tabKtVideos">
+                <i class="fa-solid fa-video"></i> KT Videos
+            </button>
             <button class="main-tab-btn" id="tabDemos">
-                <i class="fa-solid fa-laptop-code"></i> Demos & Video Portals
+                <i class="fa-solid fa-circle-play"></i> Demo Videos
             </button>
         </div>
 
@@ -77,8 +90,8 @@
                     <div class="stat-card">
                         <div class="stat-icon icon-teal"><i class="fa-solid fa-layer-group"></i></div>
                         <div class="stat-info">
-                            <span class="stat-value" id="statProducts">0</span>
-                            <span class="stat-label">Product Lines</span>
+                            <span class="stat-value" id="statProducts">8</span>
+                            <span class="stat-label">Industry Sectors</span>
                         </div>
                     </div>
                     <div class="stat-card">
@@ -200,17 +213,49 @@
             </section>
         </div>
 
+        <!-- KT VIDEOS SECTION -->
+        <div id="ktVideosSection" style="display: none;">
+            <section class="demos-header-card" style="border-color: rgba(59, 130, 246, 0.4);">
+                <div class="demos-header-info">
+                    <h2><i class="fa-solid fa-graduation-cap" style="color: #60a5fa;"></i> Knowledge Transfer (KT) & Technical Walkthroughs</h2>
+                    <p>Comprehensive engineering walkthroughs, model mechanics, and deep-dive technical transfer sessions for IngeneroX360AI Suite products. Watch online or stream high-definition recordings via Microsoft OneDrive / Stream.</p>
+                </div>
+                <div class="kt-header-badges" style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+                    <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.4); padding: 0.5rem 1rem; border-radius: 20px; font-weight: 700;">
+                        <i class="fa-solid fa-film"></i> <span id="ktVideoCountBadge">5 Sessions</span>
+                    </span>
+                    <a href="https://ingenero0-my.sharepoint.com/:f:/g/personal/sdalvi_ingenero_com/IgCDbuyBG5dHRIGc04CqPmuHAQ5OoguLQwiHg3spGTobzRc?e=FdLckG" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; padding: 0.5rem 1.1rem; font-size: 0.88rem; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);">
+                        <i class="fa-solid fa-folder-open"></i> Open All in OneDrive
+                    </a>
+                </div>
+            </section>
+
+            <section class="demos-grid" id="ktVideosGrid">
+                <!-- Dynamic KT Video Cards -->
+            </section>
+        </div>
+
         <!-- DEMOS SECTION -->
         <div id="demosSection" style="display: none;">
             <section class="demos-header-card">
                 <div class="demos-header-info">
-                    <h2><i class="fa-solid fa-desktop"></i> Interactive Demos & Video Portals</h2>
-                    <p>Access live prototype environments, real-time dashboard demos, and public video walkthroughs for ingeneroX360AI solutions. All links are backed up to GitHub.</p>
+                    <h2><i class="fa-solid fa-circle-play"></i> IngeneroX360AI Interactive Demo Videos</h2>
+                    <p>Access live prototype environments and high-definition solution walkthroughs for ingeneroX360AI applications. Watch demo videos directly within the portal or launch live environments.</p>
+                    <div style="margin-top: 0.6rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                        <span class="badge" id="demosCountBadge" style="background: rgba(255, 107, 0, 0.15); color: var(--primary); font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 20px;">
+                            <i class="fa-solid fa-film"></i> <span id="demosCountNumber">13 Demo Videos & Prototypes</span>
+                        </span>
+                    </div>
                 </div>
                 <button class="btn btn-primary" id="btnOpenAddDemo">
                     <i class="fa-solid fa-plus"></i> Add Demo Link
                 </button>
             </section>
+
+            <!-- Demos Filter Pills -->
+            <div class="category-pills" id="demosCategoryPills" style="margin-bottom: 1.5rem;">
+                <!-- Dynamically rendered filter pills -->
+            </div>
 
             <section class="demos-grid" id="demosGrid">
                 <!-- Dynamic Demo Cards -->
@@ -237,8 +282,8 @@
                     <i class="fa-solid fa-file-circle-plus drop-icon"></i>
                     <p class="drop-text">Drag & drop your brochure file here</p>
                     <span class="drop-subtext">Supports PDF and PowerPoint (.pptx) up to 100MB</span>
-                    <input type="file" id="fileInput" accept=".pdf,.pptx,.ppt,.doc,.docx" style="display:none;">
-                    <button class="btn btn-secondary btn-browse" onclick="document.getElementById('fileInput').click()">Browse File</button>
+                    <input type="file" id="fileInput" accept=".pdf,.pptx,.ppt,.doc,.docx,*/*" style="display:none;">
+                    <button class="btn btn-secondary btn-browse" type="button">Browse File</button>
                 </div>
 
                 <div class="file-preview-area" id="selectedFileArea" style="display:none;">
@@ -397,9 +442,93 @@
         </div>
     </div>
 
+    <!-- GitHub PAT Configuration Modal -->
+    <div class="modal-overlay" id="githubTokenModal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3><i class="fa-brands fa-github"></i> GitHub Auto-Sync Setup</h3>
+                <button class="modal-close" id="btnCloseGitHubToken"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size:0.9rem; color:var(--slate-600); margin-bottom:1rem;">
+                    Enter your GitHub Personal Access Token to enable <strong>automatic background uploads & deletions</strong> directly to GitHub Pages for all visitors worldwide.
+                </p>
+                <div class="form-group">
+                    <label style="font-weight:600; font-size:0.85rem;">GitHub Personal Access Token (PAT)</label>
+                    <input type="password" class="form-control" id="githubTokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" style="width:100%; padding:0.6rem; border:1px solid var(--slate-300); border-radius:6px; margin-top:0.4rem;">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btnCancelGitHubToken">Cancel</button>
+                <button class="btn btn-primary" id="btnSaveGitHubToken">Save Token & Enable Sync</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- KT Video / Audio Player Modal -->
+    <div class="modal-overlay" id="ktVideoPlayerModal">
+        <div class="modal-content modal-large" style="max-width: 900px; background: #08152e; border: 1px solid rgba(59, 130, 246, 0.4);">
+            <div class="modal-header" style="background: #030816; border-bottom: 1px solid rgba(59, 130, 246, 0.3);">
+                <h3 id="ktModalTitle" style="color: #ffffff; display: flex; align-items: center; gap: 0.6rem; font-size: 1.15rem;">
+                    <i class="fa-solid fa-play" style="color: #60a5fa;"></i> Knowledge Transfer Player
+                </h3>
+                <div class="preview-actions">
+                    <a href="#" id="btnDownloadKtModal" class="btn btn-sm btn-primary" download>
+                        <i class="fa-solid fa-download"></i> Download Media
+                    </a>
+                    <button class="modal-close" id="btnCloseKtModal" style="color: #94a3b8;"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+            <div class="modal-body" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; background: #030816;">
+                <div id="ktMediaContainer" style="width: 100%; border-radius: 12px; overflow: hidden; background: #000; display: flex; align-items: center; justify-content: center; min-height: 360px;">
+                    <!-- Dynamically populated video or audio tag -->
+                </div>
+                <div id="ktModalDetails" style="padding: 0.5rem 0;">
+                    <div style="display: flex; gap: 0.6rem; align-items: center; margin-bottom: 0.5rem;">
+                        <span class="badge" id="ktModalBadge" style="background: rgba(59, 130, 246, 0.2); color: #93c5fd; padding: 0.25rem 0.6rem; border-radius: 6px; font-weight: 700; font-size: 0.75rem;">Suite</span>
+                        <span id="ktModalFormat" style="color: #94a3b8; font-size: 0.85rem;">Format</span>
+                        <span style="color: #94a3b8;">&bull;</span>
+                        <span id="ktModalSize" style="color: #94a3b8; font-size: 0.85rem;">Size</span>
+                    </div>
+                    <p id="ktModalDesc" style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.5; margin-bottom: 0.8rem;"></p>
+                    <div id="ktModalTopicsList" style="display: flex; flex-direction: column; gap: 0.3rem;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo Video Player Modal -->
+    <div class="modal-overlay" id="demoVideoPlayerModal">
+        <div class="modal-content modal-large" style="max-width: 960px; background: #08152e; border: 1px solid rgba(255, 107, 0, 0.4); box-shadow: 0 25px 60px rgba(0,0,0,0.7);">
+            <div class="modal-header" style="background: #030816; border-bottom: 1px solid rgba(255, 107, 0, 0.3);">
+                <h3 id="demoVideoModalTitle" style="color: #ffffff; display: flex; align-items: center; gap: 0.6rem; font-size: 1.15rem;">
+                    <i class="fa-solid fa-circle-play" style="color: var(--primary);"></i> <span id="demoModalVideoHeading">Demo Video Player</span>
+                </h3>
+                <div class="preview-actions">
+                    <a href="#" id="btnOpenExternalDemoModal" class="btn btn-sm btn-primary" target="_blank" rel="noopener noreferrer">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Open in New Tab
+                    </a>
+                    <button class="modal-close" id="btnCloseDemoVideoModal" style="color: #94a3b8;"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+            <div class="modal-body" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; background: #030816;">
+                <div id="demoVideoMediaContainer" style="width: 100%; border-radius: 10px; overflow: hidden; background: #000; position: relative; padding-bottom: 56.25%; height: 0;">
+                    <!-- Dynamically populated iframe -->
+                </div>
+                <div id="demoVideoModalDetails" style="padding: 0.5rem 0;">
+                    <div style="display: flex; gap: 0.6rem; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap;">
+                        <span class="badge" id="demoVideoModalBadge" style="background: rgba(255, 107, 0, 0.2); color: #ff8533; padding: 0.25rem 0.6rem; border-radius: 6px; font-weight: 700; font-size: 0.75rem;">Category</span>
+                        <span id="demoVideoModalSuite" style="color: #60a5fa; font-size: 0.85rem; font-weight: 600;">Suite</span>
+                    </div>
+                    <p id="demoVideoModalDesc" style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.5; margin-bottom: 0;"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Notification Toast -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <script src="/static/js/app.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>

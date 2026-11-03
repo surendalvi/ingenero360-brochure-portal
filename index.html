@@ -240,12 +240,22 @@
             <section class="demos-header-card">
                 <div class="demos-header-info">
                     <h2><i class="fa-solid fa-desktop"></i> Interactive Demos & Video Portals</h2>
-                    <p>Access live prototype environments, real-time dashboard demos, and public video walkthroughs for ingeneroX360AI solutions. All links are backed up to GitHub.</p>
+                    <p>Access live prototype environments, real-time dashboard demos, and high-definition solution walkthroughs for ingeneroX360AI applications. Watch demo videos directly within the portal or launch live environments.</p>
+                    <div style="margin-top: 0.6rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                        <span class="badge" id="demosCountBadge" style="background: rgba(255, 107, 0, 0.15); color: var(--primary); font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 20px;">
+                            <i class="fa-solid fa-film"></i> <span id="demosCountNumber">14 Demos & Videos</span>
+                        </span>
+                    </div>
                 </div>
                 <button class="btn btn-primary" id="btnOpenAddDemo">
                     <i class="fa-solid fa-plus"></i> Add Demo Link
                 </button>
             </section>
+
+            <!-- Demos Filter Pills -->
+            <div class="category-pills" id="demosCategoryPills" style="margin-bottom: 1.5rem;">
+                <!-- Dynamically rendered filter pills -->
+            </div>
 
             <section class="demos-grid" id="demosGrid">
                 <!-- Dynamic Demo Cards -->
@@ -487,9 +497,38 @@
         </div>
     </div>
 
+    <!-- Demo Video Player Modal -->
+    <div class="modal-overlay" id="demoVideoPlayerModal">
+        <div class="modal-content modal-large" style="max-width: 960px; background: #08152e; border: 1px solid rgba(255, 107, 0, 0.4); box-shadow: 0 25px 60px rgba(0,0,0,0.7);">
+            <div class="modal-header" style="background: #030816; border-bottom: 1px solid rgba(255, 107, 0, 0.3);">
+                <h3 id="demoVideoModalTitle" style="color: #ffffff; display: flex; align-items: center; gap: 0.6rem; font-size: 1.15rem;">
+                    <i class="fa-solid fa-circle-play" style="color: var(--primary);"></i> <span id="demoModalVideoHeading">Demo Video Player</span>
+                </h3>
+                <div class="preview-actions">
+                    <a href="#" id="btnOpenExternalDemoModal" class="btn btn-sm btn-primary" target="_blank" rel="noopener noreferrer">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Open in New Tab
+                    </a>
+                    <button class="modal-close" id="btnCloseDemoVideoModal" style="color: #94a3b8;"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+            <div class="modal-body" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; background: #030816;">
+                <div id="demoVideoMediaContainer" style="width: 100%; border-radius: 10px; overflow: hidden; background: #000; position: relative; padding-bottom: 56.25%; height: 0;">
+                    <!-- Dynamically populated iframe -->
+                </div>
+                <div id="demoVideoModalDetails" style="padding: 0.5rem 0;">
+                    <div style="display: flex; gap: 0.6rem; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap;">
+                        <span class="badge" id="demoVideoModalBadge" style="background: rgba(255, 107, 0, 0.2); color: #ff8533; padding: 0.25rem 0.6rem; border-radius: 6px; font-weight: 700; font-size: 0.75rem;">Category</span>
+                        <span id="demoVideoModalSuite" style="color: #60a5fa; font-size: 0.85rem; font-weight: 600;">Suite</span>
+                    </div>
+                    <p id="demoVideoModalDesc" style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.5; margin-bottom: 0;"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Notification Toast -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <script src="static/js/app.js?v=20261014_5"></script>
+    <script src="static/js/app.js?v=20261103_demo_videos"></script>
 </body>
 </html>

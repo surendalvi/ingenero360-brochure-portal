@@ -638,6 +638,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const ktModalDesc = document.getElementById('ktModalDesc');
     const ktModalTopicsList = document.getElementById('ktModalTopicsList');
 
+    // Demo Video Player Modal Elements
+    const demoVideoPlayerModal = document.getElementById('demoVideoPlayerModal');
+    const btnCloseDemoVideoModal = document.getElementById('btnCloseDemoVideoModal');
+    const btnOpenExternalDemoModal = document.getElementById('btnOpenExternalDemoModal');
+    const demoModalVideoHeading = document.getElementById('demoModalVideoHeading');
+    const demoVideoMediaContainer = document.getElementById('demoVideoMediaContainer');
+    const demoVideoModalBadge = document.getElementById('demoVideoModalBadge');
+    const demoVideoModalSuite = document.getElementById('demoVideoModalSuite');
+    const demoVideoModalDesc = document.getElementById('demoVideoModalDesc');
+    const demosCountNumber = document.getElementById('demosCountNumber');
+    const demosCategoryPills = document.getElementById('demosCategoryPills');
+
     const gridView = document.getElementById('brochuresGrid');
     const listViewWrapper = document.getElementById('brochuresListWrapper');
     const tableBody = document.getElementById('brochuresTableBody');
@@ -1106,6 +1118,171 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    const staticDemosFallback = [
+        {
+                "id": "demo-furnace-live",
+                "title": "Furnace Dashboard Demo (Live Prototype)",
+                "url": "https://furnace.ingenero360.ai/",
+                "category": "Live Dashboard",
+                "suite": "Olefin & Cracking",
+                "product": "FurnaceX360",
+                "description": "Interactive real-time furnace optimization and process monitoring AI dashboard for plant operations."
+        },
+        {
+                "id": "demo-ammonia",
+                "title": "AmmoniaX360 AI Dashboard Demo",
+                "url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=43914589-5261-4055-9704-eb541bf6ffc9&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
+                "embed_url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=43914589-5261-4055-9704-eb541bf6ffc9&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
+                "embed_code": "<iframe src=\"https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=43914589-5261-4055-9704-eb541bf6ffc9&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create\" width=\"640\" height=\"360\" frameborder=\"0\" scrolling=\"no\" allowfullscreen title=\"Ammonia_Dashboard.mp4\"></iframe>",
+                "category": "Demo Videos",
+                "suite": "Ammonia & Methanol",
+                "product": "AmmoniaX360",
+                "filename": "Ammonia_Dashboard.mp4",
+                "description": "Interactive demonstration of real-time operational optimization, synthesis loop monitoring, reformer heat balance, and energy intensity management for Ammonia plants."
+        },
+        {
+                "id": "demo-arm",
+                "title": "Asset Reliability Management (ARM) Demo",
+                "url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=0a7f83f7-0caf-4eee-8056-f758caae6ea7&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
+                "embed_url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=0a7f83f7-0caf-4eee-8056-f758caae6ea7&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
+                "embed_code": "<iframe src=\"https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=0a7f83f7-0caf-4eee-8056-f758caae6ea7&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create\" width=\"640\" height=\"360\" frameborder=\"0\" scrolling=\"no\" allowfullscreen title=\"ARM.mp4\"></iframe>",
+                "category": "Demo Videos",
+                "suite": "Maintenance & Reliability",
+                "product": "ReliabilityX360",
+                "filename": "ARM.mp4",
+                "description": "Physics-informed predictive reliability platform demonstrating rotating machinery fault signature detection, bearing thermal alerts, and multi-week pre-trip warning."
+        },
+        {
+                "id": "demo-catofin",
+                "title": "Catofin Dehydrogenation Agentic AI Demo",
+                "url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=918054c9-d183-45e8-8fbd-82da3dc6022b&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
+                "embed_url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=918054c9-d183-45e8-8fbd-82da3dc6022b&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
+                "embed_code": "<iframe src=\"https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=918054c9-d183-45e8-8fbd-82da3dc6022b&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create\" width=\"640\" height=\"360\" frameborder=\"0\" scrolling=\"no\" allowfullscreen title=\"Catofin Agentic AI.mp4\"></iframe>",
+                "category": "Demo Videos",
+                "suite": "Petrochemicals",
+                "product": "CatofinX360",
+                "filename": "Catofin Agentic AI.mp4",
+                "description": "Autonomous Agentic AI decision support for Catofin propane/isobutane dehydrogenation reactors, balancing evacuation cycles, regeneration temperatures, and propylene selectivity."
+        },
+        {
+                "id": "demo-dcu",
+                "title": "DCUX360 Delayed Coking Unit Demo",
+                "url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=932569bb-b5ac-4f47-abc3-e8c7bee8ca8d&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
+                "embed_url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=932569bb-b5ac-4f47-abc3-e8c7bee8ca8d&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
+                "embed_code": "<iframe src=\"https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=932569bb-b5ac-4f47-abc3-e8c7bee8ca8d&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create\" width=\"640\" height=\"360\" frameborder=\"0\" scrolling=\"no\" allowfullscreen title=\"DCU demo.mp4\"></iframe>",
+                "category": "Demo Videos",
+                "suite": "Refinery Upgrading",
+                "product": "DCUX360",
+                "filename": "DCU demo.mp4",
+                "description": "Delayed Coker Unit (DCU) cycle acceleration, quench water thermal stress mitigation, overhead vapor line fouling prevention, and HCGO yield boost co-pilot."
+        },
+        {
+                "id": "demo-furnace",
+                "title": "FurnaceX360 Cracking Fleet Optimizer Demo",
+                "url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=ab2a1597-f2fd-4d27-8949-8de1d02dd31a&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
+                "embed_url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=ab2a1597-f2fd-4d27-8949-8de1d02dd31a&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
+                "embed_code": "<iframe src=\"https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=ab2a1597-f2fd-4d27-8949-8de1d02dd31a&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create\" width=\"640\" height=\"360\" frameborder=\"0\" scrolling=\"no\" allowfullscreen title=\"Furnace_Optimizer.mp4\"></iframe>",
+                "category": "Demo Videos",
+                "suite": "Olefin & Cracking",
+                "product": "FurnaceX360",
+                "filename": "Furnace_Optimizer.mp4",
+                "description": "Real-time ethylene cracking furnace optimization, balancing coil outlet temperatures (COT), radiant tube metal temperatures (TMT), and extending decoking run-length."
+        },
+        {
+                "id": "demo-generic-outlier",
+                "title": "OutlierX360 Sensor Diagnostics & Cleansing Demo",
+                "url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=4181de35-16a3-4c38-9605-be0fe49ba6b6&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
+                "embed_url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=4181de35-16a3-4c38-9605-be0fe49ba6b6&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
+                "embed_code": "<iframe src=\"https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=4181de35-16a3-4c38-9605-be0fe49ba6b6&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create\" width=\"640\" height=\"360\" frameborder=\"0\" scrolling=\"no\" allowfullscreen title=\"Generic Outlier Detection.mp4\"></iframe>",
+                "category": "Demo Videos",
+                "suite": "Diagnostic & Agentic AI Tools",
+                "product": "OutlierX360",
+                "filename": "Generic Outlier Detection.mp4",
+                "description": "Multivariate sensor data validation and gross error detection, distinguishing true process anomalies from instrument drift across 10,000+ DCS tags with 80%+ alarm reduction."
+        },
+        {
+                "id": "demo-genx360-simulation-methanol",
+                "title": "GenX360 Methanol Synthesis Simulation Demo",
+                "url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=38ec17e9-774f-4e29-8715-0a81eff99ace&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
+                "embed_url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=38ec17e9-774f-4e29-8715-0a81eff99ace&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
+                "embed_code": "<iframe src=\"https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=38ec17e9-774f-4e29-8715-0a81eff99ace&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create\" width=\"640\" height=\"360\" frameborder=\"0\" scrolling=\"no\" allowfullscreen title=\"genX360_Methanol.mp4\"></iframe>",
+                "category": "Demo Videos",
+                "suite": "Ammonia & Methanol",
+                "product": "GenX360",
+                "filename": "genX360_Methanol.mp4",
+                "description": "First-principles simulation and operational co-pilot for methanol synthesis loops, syngas composition swings, reformer balancing, and carbon efficiency tracking."
+        },
+        {
+                "id": "demo-ingenero-genai",
+                "title": "Ingenero Industrial GenAI Co-Pilot Demo",
+                "url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=8a517e44-f806-4190-853e-f75325952170&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
+                "embed_url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=8a517e44-f806-4190-853e-f75325952170&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
+                "embed_code": "<iframe src=\"https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=8a517e44-f806-4190-853e-f75325952170&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create\" width=\"640\" height=\"360\" frameborder=\"0\" scrolling=\"no\" allowfullscreen title=\"Ingenero GenAI.mp4\"></iframe>",
+                "category": "Demo Videos",
+                "suite": "Industrial GenAI",
+                "product": "GenX360",
+                "filename": "Ingenero GenAI.mp4",
+                "description": "Conversational generative AI assistant grounded on plant documentation, P&IDs, SOPs, and DCS trends, generating automated shift logs and root-cause summaries."
+        },
+        {
+                "id": "demo-ingenerox360ai-dashboard",
+                "title": "IngeneroX360AI Flagship Platform Cockpit Demo",
+                "url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=81d0ee45-e89c-4d87-952d-97121acc6c76&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
+                "embed_url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=81d0ee45-e89c-4d87-952d-97121acc6c76&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
+                "embed_code": "<iframe src=\"https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=81d0ee45-e89c-4d87-952d-97121acc6c76&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create\" width=\"640\" height=\"360\" frameborder=\"0\" scrolling=\"no\" allowfullscreen title=\"IngeneroX360AI Dashboard.mp4\"></iframe>",
+                "category": "Demo Videos",
+                "suite": "Enterprise Operations",
+                "product": "IngeneroX360AI",
+                "filename": "IngeneroX360AI Dashboard.mp4",
+                "description": "Executive tour of the IngeneroX360AI multi-unit operations cockpit, autonomous agent orchestration, supervisory advisory control, and enterprise margin rollups."
+        },
+        {
+                "id": "demo-methanol-synthesis",
+                "title": "Methanol Synthesis Loop Optimization Demo",
+                "url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=93882705-ca2d-428b-8d38-ee096d5e53ca&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
+                "embed_url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=93882705-ca2d-428b-8d38-ee096d5e53ca&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
+                "embed_code": "<iframe src=\"https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=93882705-ca2d-428b-8d38-ee096d5e53ca&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create\" width=\"640\" height=\"360\" frameborder=\"0\" scrolling=\"no\" allowfullscreen title=\"Methanol Synthesis.mp4\"></iframe>",
+                "category": "Demo Videos",
+                "suite": "Ammonia & Methanol",
+                "product": "MethanolX360",
+                "filename": "Methanol Synthesis.mp4",
+                "description": "Deep dive into kinetic modeling and yield maximization of catalytic methanol converters, heat recovery steam generators, and the crude distillation train."
+        },
+        {
+                "id": "demo-polymer",
+                "title": "PolymerX360 Grade Transition & Quality Demo",
+                "url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=95e1897f-714b-45e2-85f2-4392fdadc1ba&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
+                "embed_url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=95e1897f-714b-45e2-85f2-4392fdadc1ba&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
+                "embed_code": "<iframe src=\"https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=95e1897f-714b-45e2-85f2-4392fdadc1ba&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create\" width=\"640\" height=\"360\" frameborder=\"0\" scrolling=\"no\" allowfullscreen title=\"Polymer demo.mp4\"></iframe>",
+                "category": "Demo Videos",
+                "suite": "Polymers & Resins",
+                "product": "PolymerX360",
+                "filename": "Polymer demo.mp4",
+                "description": "Real-time polymer reactor grade transition acceleration, continuous melt index (MI) soft sensor, and off-spec product minimization across slurry and gas-phase loops."
+        },
+        {
+                "id": "demo-workflow-ai",
+                "title": "WorkflowX360 Agentic Automation Demo",
+                "url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=57a1d7ec-d217-4cfe-b119-21c4baa5f253&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
+                "embed_url": "https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=57a1d7ec-d217-4cfe-b119-21c4baa5f253&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create",
+                "embed_code": "<iframe src=\"https://ingenero0-my.sharepoint.com/personal/sdalvi_ingenero_com/_layouts/15/embed.aspx?UniqueId=57a1d7ec-d217-4cfe-b119-21c4baa5f253&embed=%7B%22ust%22%3Atrue%2C%22hv%22%3A%22CopyEmbedCode%22%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create\" width=\"640\" height=\"360\" frameborder=\"0\" scrolling=\"no\" allowfullscreen title=\"Workflow_AI.mp4\"></iframe>",
+                "category": "Demo Videos",
+                "suite": "Diagnostic & Agentic AI Tools",
+                "product": "WorkflowX360",
+                "filename": "Workflow_AI.mp4",
+                "description": "Autonomous multi-agent industrial workflow orchestration, alert triage, automated first-principles engineering calculations, and closed-loop supervisory actions."
+        },
+        {
+                "id": "demo-video-library",
+                "title": "Ingenero360 Video Library Portal",
+                "url": "https://demos.ingenero360.ai/public/",
+                "category": "Video Portals",
+                "suite": "Platform Overview",
+                "product": "IngeneroX360AI Suite",
+                "description": "Library of public product walkthrough videos, AI feature demonstrations, and solution walkthroughs."
+        }
+];
+
     async function fetchDemos() {
         try {
             let res = await fetch('/api/demos');
@@ -1116,9 +1293,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await res.json();
                 demos = Array.isArray(data) ? data : (data.demos || []);
                 renderDemos();
+                return;
             }
+            throw new Error('Fallback to static demos');
         } catch (err) {
-            console.error('Error fetching demos:', err);
+            demos = staticDemosFallback;
+            renderDemos();
         }
     }
 
@@ -1342,19 +1522,93 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join('');
     }
 
+    let activeDemoCategory = 'ALL';
+
+    function openDemoVideoModal(demo) {
+        if (!demoVideoPlayerModal) return;
+        if (demoModalVideoHeading) demoModalVideoHeading.textContent = demo.title;
+        if (demoVideoModalBadge) demoVideoModalBadge.textContent = demo.category || 'Demo Video';
+        if (demoVideoModalSuite) demoVideoModalSuite.textContent = demo.suite || 'IngeneroX360AI';
+        if (demoVideoModalDesc) demoVideoModalDesc.textContent = demo.description || '';
+        
+        if (btnOpenExternalDemoModal) {
+            btnOpenExternalDemoModal.href = demo.embed_url || demo.url;
+        }
+
+        const embedUrl = demo.embed_url || demo.url;
+        if (demoVideoMediaContainer) {
+            demoVideoMediaContainer.innerHTML = `
+                <iframe src="${embedUrl}" 
+                        style="position: absolute; top:0; left:0; width:100%; height:100%; border:0;" 
+                        frameborder="0" 
+                        scrolling="no" 
+                        allowfullscreen 
+                        allow="autoplay; fullscreen"
+                        title="${demo.title}">
+                </iframe>
+            `;
+        }
+        demoVideoPlayerModal.classList.add('active');
+    }
+
+    function closeDemoVideoModal() {
+        if (!demoVideoPlayerModal) return;
+        demoVideoPlayerModal.classList.remove('active');
+        if (demoVideoMediaContainer) {
+            demoVideoMediaContainer.innerHTML = '';
+        }
+    }
+
     function renderDemos() {
-        if (demos.length === 0) {
+        if (!demosGrid) return;
+        
+        if (demosCountNumber) {
+            demosCountNumber.textContent = `${demos.length} Demos & Videos`;
+        }
+
+        // Render category filter pills for Demos
+        if (demosCategoryPills) {
+            const categories = ['ALL', ...Array.from(new Set(demos.map(d => d.category || 'Demo Videos')))];
+            demosCategoryPills.innerHTML = categories.map(cat => {
+                const count = cat === 'ALL' ? demos.length : demos.filter(d => (d.category || 'Demo Videos') === cat).length;
+                const label = cat === 'ALL' ? 'All Demos' : cat;
+                const activeClass = activeDemoCategory === cat ? 'active' : '';
+                return `
+                    <button class="pill-btn ${activeClass}" data-category="${cat}">
+                        ${label} <span class="pill-count">${count}</span>
+                    </button>
+                `;
+            }).join('');
+
+            demosCategoryPills.querySelectorAll('.pill-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    activeDemoCategory = btn.getAttribute('data-category');
+                    renderDemos();
+                });
+            });
+        }
+
+        const filtered = activeDemoCategory === 'ALL' 
+            ? demos 
+            : demos.filter(d => (d.category || 'Demo Videos') === activeDemoCategory);
+
+        if (filtered.length === 0) {
             demosGrid.innerHTML = `
                 <div class="empty-state" style="grid-column: 1 / -1;">
                     <i class="fa-solid fa-desktop empty-icon"></i>
                     <h3>No Demo Links Found</h3>
-                    <p>Click "Add Demo Link" to configure live dashboard or video portal links.</p>
+                    <p>No demos found in this category.</p>
                 </div>
             `;
             return;
         }
 
-        demosGrid.innerHTML = demos.map(demo => {
+        demosGrid.innerHTML = filtered.map(demo => {
+            const hasEmbed = !!(demo.embed_url || demo.embed_code);
+            const isVideo = (demo.category || '').toLowerCase().includes('video') || hasEmbed;
+            const iconClass = isVideo ? 'fa-film' : 'fa-gauge-high';
+            const actionPlayText = isVideo ? 'Watch Video' : 'Launch Demo';
+
             const adminButtons = isAdminLoggedIn ? `
                 <button class="btn btn-sm btn-warning btn-edit-demo" data-id="${demo.id}" title="Edit Demo Link">
                     <i class="fa-solid fa-pen-to-square"></i>
@@ -1364,29 +1618,62 @@ document.addEventListener('DOMContentLoaded', () => {
                 </button>
             ` : '';
 
-            const iconClass = demo.category.includes('Video') ? 'fa-video' : 'fa-gauge-high';
-            const actionText = demo.category.includes('Video') ? 'Watch Video Portal' : 'Launch Live Demo';
-
             return `
-                <div class="demo-card">
+                <div class="demo-card" id="card-${demo.id}">
                     <div>
                         <div class="demo-card-top">
                             <span class="demo-category-badge">${demo.category}</span>
-                            <i class="fa-solid ${iconClass}" style="color: var(--primary); font-size: 1.3rem;"></i>
+                            <span class="badge" style="background: rgba(255, 107, 0, 0.12); color: var(--primary); font-size: 0.72rem; padding: 0.2rem 0.5rem; border-radius: 6px; font-weight: 700;">
+                                <i class="fa-solid ${iconClass}"></i> ${demo.suite || 'Platform'}
+                            </span>
                         </div>
                         <h3 class="demo-card-title">${demo.title}</h3>
                         <p class="demo-card-desc">${demo.description || 'Access live dashboard and prototype walkthrough.'}</p>
                     </div>
 
                     <div class="demo-card-actions">
-                        <a href="${demo.url}" target="_blank" class="btn btn-primary">
-                            <i class="fa-solid fa-arrow-up-right-from-square"></i> ${actionText}
-                        </a>
+                        ${hasEmbed ? `
+                            <button class="btn btn-primary btn-play-demo" data-id="${demo.id}" title="Watch video inside portal">
+                                <i class="fa-solid fa-circle-play"></i> Watch Video
+                            </button>
+                            <a href="${demo.embed_url || demo.url}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" title="Open in Microsoft Stream / SharePoint">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Open
+                            </a>
+                        ` : `
+                            <a href="${demo.url}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> ${actionPlayText}
+                            </a>
+                        `}
                         ${adminButtons}
                     </div>
                 </div>
             `;
         }).join('');
+
+        // Attach listeners for watch video buttons
+        demosGrid.querySelectorAll('.btn-play-demo').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const demoId = btn.getAttribute('data-id');
+                const demo = demos.find(d => d.id === demoId);
+                if (demo) openDemoVideoModal(demo);
+            });
+        });
+
+        // Attach admin listeners
+        if (isAdminLoggedIn) {
+            demosGrid.querySelectorAll('.btn-edit-demo').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const demoId = btn.getAttribute('data-id');
+                    openEditDemoModal(demoId);
+                });
+            });
+            demosGrid.querySelectorAll('.btn-delete-demo').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const demoId = btn.getAttribute('data-id');
+                    handleDeleteDemo(demoId);
+                });
+            });
+        }
     }
 
     function updateSelectionUI() {
@@ -1463,6 +1750,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (btnCloseKtModal) btnCloseKtModal.addEventListener('click', closeKtVideoModal);
+        if (btnCloseDemoVideoModal) btnCloseDemoVideoModal.addEventListener('click', closeDemoVideoModal);
+        if (demoVideoPlayerModal) {
+            demoVideoPlayerModal.addEventListener('click', (e) => {
+                if (e.target === demoVideoPlayerModal) closeDemoVideoModal();
+            });
+        }
         if (ktVideoPlayerModal) {
             ktVideoPlayerModal.addEventListener('click', (e) => {
                 if (e.target === ktVideoPlayerModal) closeKtVideoModal();
@@ -1810,16 +2103,19 @@ document.addEventListener('DOMContentLoaded', () => {
         btnDownloadSelected.addEventListener('click', downloadSelectedZIP);
         btnDownloadAll.addEventListener('click', downloadAllZIP);
 
-        document.getElementById('btnResetFilters')?.addEventListener('click', () => {
-            activeCategory = 'ALL';
-            activeFormat = 'ALL';
-            searchQuery = '';
-            searchInput.value = '';
-            formatFilter.value = 'ALL';
-            sortSelect.value = 'newest';
-            renderCategoryPills();
-            renderBrochures();
-        });
+        const btnResetFilters = document.getElementById('btnResetFilters');
+        if (btnResetFilters) {
+            btnResetFilters.addEventListener('click', () => {
+                activeCategory = 'ALL';
+                activeFormat = 'ALL';
+                searchQuery = '';
+                searchInput.value = '';
+                formatFilter.value = 'ALL';
+                sortSelect.value = 'newest';
+                renderCategoryPills();
+                renderBrochures();
+            });
+        }
 
         btnOpenUpload.addEventListener('click', () => uploadModal.classList.add('active'));
         btnCloseUpload.addEventListener('click', closeUploadModal);
